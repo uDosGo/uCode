@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Kiosk mode optimizations */
+        body {
+            -webkit-user-select: none; /* Disable text selection */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overscroll-behavior: contain;
+        }
+        
+        /* Large touch targets for kiosk */
+        .touch-target {
+            min-height: 3rem;
+            min-width: 3rem;
+        }
+        
+        /* Animation for interactive elements */
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s ease;
+        }
+        
+        /* Custom scrollbar for kiosk */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Kiosk Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold">{{ page_title }}</h1>
+                    <span class="bg-blue-700 px-3 py-1 rounded-full text-sm">v{{ version }}</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">{{ system_status.services }}</span>
+                    <span class="text-sm">CPU: {{ system_status.cpu }}</span>
+                    <span class="text-sm">Mem: {{ system_status.memory }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto p-2">
+            <div class="flex space-x-1 overflow-x-auto">
+                {% for item in nav_items %}
+                <a href="{{ item.url }}" class="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg hover-scale touch-target">
+                    <span class="text-xl mb-1">{{ item.icon }}</span>
+                    <span class="text-sm font-medium">{{ item.label }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 py-6">
+        <!-- Quick Actions Grid -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Quick Actions</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {% for action in quick_actions %}
+                <a href="{{ action.url }}" class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow hover-scale border border-gray-100">
+                    <div class="flex flex-col items-center">
+                        <div class="text-3xl mb-3">{{ action.icon }}</div>
+                        <h3 class="font-medium text-gray-800 mb-1">{{ action.title }}</h3>
+                        <p class="text-sm text-gray-500 text-center">{{ action.description }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        
+        <!-- System Status Overview -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">System Status</h2>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="space-y-3">
+                    {% for item in recent_activity %}
+                    <div class="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg">
+                        <div class="text-xl">{{ item.icon }}</div>
+                        <div>
+                            <div class="font-medium text-gray-800">{{ item.action }}</div>
+                            <div class="text-xs text-gray-400">{{ item.time }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        
+        <!-- Additional Info -->
+        <section class="text-center text-gray-500 text-sm">
+            <p>uHomeNest Kiosk Interface | Touch screen optimized</p>
+            <p class="mt-1">Press ESC to exit kiosk mode (if enabled)</p>
+        </section>
+    </main>
+    
+    <!-- Kiosk Mode Script -->
+    <script>
+        // Prevent context menu in kiosk mode
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Handle touch events for better kiosk experience
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Auto-refresh every 5 minutes to keep data current
+        setTimeout(function() {
+            location.reload();
+        }, 300000); // 5 minutes
+        
+        // Fullscreen mode detection
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            document.body.classList.add('fullscreen-mode');
+        }
+    </script>
+</body>
+</html>

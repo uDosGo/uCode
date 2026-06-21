@@ -1,0 +1,48 @@
+[workspace]
+members = [
+    "homenest-mcp",
+    "homenest-spec",
+    "homenest-media",
+    "homenest-tv",
+    "homenest-feed",
+    "homenest-automation",
+    "homenest-voice",
+    "homenest-docs",
+    "homenest-flatpak",
+    "homenest-debian",
+    "homenest-grid",
+    "beta2-core",
+    "beta2-mcp",
+    "beta2-vault-bridge",
+    "beta2-spatial",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/uDosGo/uCode3.git"
+homepage = "https://github.com/uDosGo/uCode3"
+authors = ["uDos Team <team@udos.io>"]
+ucode-version = "3"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+clap = { version = "4.0", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1.0"
+thiserror = "1.0"
+log = "0.4"
+env_logger = "0.11"
+lazy_static = "1.4"
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1

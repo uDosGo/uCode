@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-running { background-color: #10b981; }
+        .status-completed { background-color: #3b82f6; }
+        .status-queued { background-color: #f59e0b; }
+        .status-failed { background-color: #ef4444; }
+        
+        .automation-card {
+            transition: all 0.2s ease;
+        }
+        .automation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-green-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold">{{ page_title }}</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-running"></span>
+                        <span class="text-sm">{{ automation_stats.active_jobs }} Active</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="status-indicator status-queued"></span>
+                        <span class="text-sm">{{ automation_stats.queued_jobs }} Queued</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto p-2">
+            <div class="flex space-x-1 overflow-x-auto">
+                <a href="/api/runtime/thin/home" class="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg">
+                    <span class="text-xl mb-1">🏠</span>
+                    <span class="text-sm font-medium">Home</span>
+                </a>
+                <a href="/api/runtime/thin/media" class="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg">
+                    <span class="text-xl mb-1">🎬</span>
+                    <span class="text-sm font-medium">Media</span>
+                </a>
+                <a href="/api/runtime/thin/automation" class="flex flex-col items-center p-3 bg-green-100 rounded-lg font-bold">
+                    <span class="text-xl mb-1">🤖</span>
+                    <span class="text-sm font-medium">Automation</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 py-6">
+        <!-- Automation Stats -->
+        <section class="mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <div class="text-3xl mb-2">📋</div>
+                    <div class="text-2xl font-bold">{{ automation_stats.active_jobs }}</div>
+                    <div class="text-gray-500">Active Jobs</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <div class="text-3xl mb-2">✅</div>
+                    <div class="text-2xl font-bold">{{ automation_stats.completed_jobs }}</div>
+                    <div class="text-gray-500">Completed</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <div class="text-3xl mb-2">⏳</div>
+                    <div class="text-2xl font-bold">{{ automation_stats.queued_jobs }}</div>
+                    <div class="text-gray-500">Queued</div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border">
+                    <div class="text-3xl mb-2">❌</div>
+                    <div class="text-2xl font-bold">{{ automation_stats.failed_jobs }}</div>
+                    <div class="text-gray-500">Failed</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Actions -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Quick Actions</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {% for action in quick_actions %}
+                <a href="{{ action.url }}" class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-100 automation-card">
+                    <div class="flex flex-col items-center">
+                        <div class="text-3xl mb-3">{{ action.icon }}</div>
+                        <h3 class="font-medium text-gray-800 mb-1">{{ action.title }}</h3>
+                        <p class="text-sm text-gray-500 text-center">{{ action.description }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        
+        <!-- Recent Automation Activity -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Recent Activity</h2>
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <div class="divide-y divide-gray-100">
+                    {% for activity in recent_automation %}
+                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="text-2xl mr-3">{{ activity.icon }}</div>
+                                <div>
+                                    <div class="font-medium text-gray-800">{{ activity.action }}</div>
+                                    <div class="text-sm text-gray-400">{{ activity.time }}</div>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 rounded-full text-xs font-medium 
+                                {% if activity.status == 'success' %}bg-green-100 text-green-800
+                                {% elif activity.status == 'warning' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-red-100 text-red-800{% endif %}">
+                                {{ activity.status|capitalize }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        
+        <!-- Job Queue Status -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Job Queue Status</h2>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Queue Workers:</span>
+                        <span class="font-mono">{{ job_queue_status.workers }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Running:</span>
+                        <span class="font-mono text-green-600">{{ job_queue_status.running|string|upper }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Total Jobs Processed:</span>
+                        <span class="font-mono">{{ automation_stats.active_jobs + automation_stats.completed_jobs + automation_stats.queued_jobs + automation_stats.failed_jobs }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Navigation Links -->
+        <section class="text-center">
+            <div class="flex justify-center space-x-4">
+                <a href="/api/runtime/thin/automation/jobs" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    View Job Queue
+                </a>
+                <a href="/api/runtime/thin/automation/status" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                    Detailed Status
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // Auto-refresh automation status
+        setTimeout(function() {
+            location.reload();
+        }, 30000); // 30 seconds
+        
+        // Add real-time updates if WebSocket is available
+        if (window.WebSocket) {
+            console.log("WebSocket available for real-time updates");
+            // In a real implementation, you would connect to a WebSocket endpoint
+            // and update the UI dynamically when job status changes
+        }
+    </script>
+</body>
+</html>

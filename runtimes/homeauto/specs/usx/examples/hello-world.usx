@@ -1,0 +1,210 @@
+{
+  "$schema": "https://usx.dev/schema/bundle-v1",
+  "version": "1.0.0",
+  "id": "hello-world-001",
+  "name": "Hello World",
+  "description": "A simple USX bundle demonstrating basic rendering with LENS variables and SKIN theming",
+  "source": {
+    "tool": "manual",
+    "version": "1.0.0",
+    "exported_at": "2026-05-17T10:00:00Z",
+    "exported_by": "USX Phase 1"
+  },
+  "lens": {
+    "version": "1.0.0",
+    "variables": {
+      "userName": {
+        "type": "string",
+        "default": "World",
+        "description": "Name to greet"
+      },
+      "count": {
+        "type": "number",
+        "default": 0,
+        "min": 0,
+        "description": "Click counter"
+      },
+      "isLoggedIn": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "components": {
+      "greetingCard": {
+        "type": "card",
+        "states": {
+          "default": { "props": { "title": "Welcome" } },
+          "loggedIn": { "props": { "title": "Dashboard" } }
+        },
+        "current_state": "default"
+      }
+    },
+    "runtime": {
+      "session_id": "demo-session",
+      "connection_status": "connected",
+      "last_sync": "2026-05-17T10:00:00Z",
+      "unsaved_changes": false
+    },
+    "features": {
+      "dark_mode": false,
+      "animations": true
+    }
+  },
+  "skin": {
+    "version": "1.0.0",
+    "id": "hello-world-skin",
+    "name": "Hello World Theme",
+    "framework": "tailwind",
+    "colors": {
+      "background": { "light": "#f0f4ff", "dark": "#1a1a2e", "css_variable": "--usx-bg" },
+      "surface": { "light": "#ffffff", "dark": "#16213e", "css_variable": "--usx-surface" },
+      "text": { "light": "#1a1a2e", "dark": "#e0e0e0", "css_variable": "--usx-text" },
+      "primary": { "light": "#4361ee", "dark": "#4cc9f0", "css_variable": "--usx-primary" },
+      "accent": { "light": "#f72585", "dark": "#f72585", "css_variable": "--usx-accent" }
+    },
+    "typography": {
+      "body": { "font_family": "Inter, system-ui", "font_size": "16px", "font_weight": 400, "line_height": 1.6 },
+      "h1": { "font_family": "Inter, system-ui", "font_size": "32px", "font_weight": 700, "line_height": 1.2 },
+      "h2": { "font_family": "Inter, system-ui", "font_size": "24px", "font_weight": 600, "line_height": 1.3 },
+      "caption": { "font_family": "Inter, system-ui", "font_size": "14px", "font_weight": 400, "line_height": 1.4 }
+    },
+    "spacing": {
+      "sm": { "value": "8px" },
+      "md": { "value": "16px" },
+      "lg": { "value": "24px" }
+    },
+    "effects": {
+      "shadow_sm": { "type": "shadow", "value": "0 1px 3px rgba(0,0,0,0.1)", "css": "box-shadow: 0 1px 3px rgba(0,0,0,0.1);" },
+      "shadow_md": { "type": "shadow", "value": "0 4px 6px rgba(0,0,0,0.1)", "css": "box-shadow: 0 4px 6px rgba(0,0,0,0.1);" }
+    },
+    "components": {
+      "button": {
+        "base": "display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s;",
+        "variants": {
+          "primary": "background: var(--usx-primary); color: white;",
+          "secondary": "background: var(--usx-surface); color: var(--usx-text); border: 1px solid var(--usx-primary);"
+        },
+        "states": {
+          "disabled": "opacity: 0.5; cursor: not-allowed;",
+          "hover": "transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+        }
+      },
+      "card": {
+        "base": "background: var(--usx-surface); border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px;",
+        "variants": {
+          "elevated": "box-shadow: 0 4px 6px rgba(0,0,0,0.1);",
+          "flat": "box-shadow: none;"
+        }
+      }
+    }
+  },
+  "layout": {
+    "version": "1.0.0",
+    "type": "surface",
+    "title": "Hello World Demo",
+    "viewport": {
+      "width": "100%",
+      "height": "100%",
+      "max_width": "600px"
+    },
+    "root": {
+      "id": "root",
+      "type": "container",
+      "skin_ref": "components.card",
+      "props": {
+        "style": "margin: 40px auto;"
+      },
+      "children": [
+        {
+          "id": "title",
+          "type": "heading",
+          "content": { "text": "Hello, {{variables.userName}}!" },
+          "skin_ref": "typography.h1",
+          "props": { "level": 1, "style": "text-align: center; margin-bottom: 8px;" }
+        },
+        {
+          "id": "subtitle",
+          "type": "text",
+          "content": { "text": "Welcome to USX — the Universal Surface Exchange format." },
+          "skin_ref": "typography.body",
+          "props": { "style": "text-align: center; color: var(--usx-text); margin-bottom: 24px; display: block;" }
+        },
+        {
+          "id": "counter-section",
+          "type": "container",
+          "props": { "style": "display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;" },
+          "children": [
+            {
+              "id": "counter-label",
+              "type": "text",
+              "content": { "text": "Count: {{variables.count}}" },
+              "skin_ref": "typography.h2"
+            },
+            {
+              "id": "increment-btn",
+              "type": "button",
+              "content": { "label": "+1" },
+              "skin_ref": "components.button.primary",
+              "events": {
+                "onClick": { "action": "increment", "payload": {} }
+              }
+            }
+          ]
+        },
+        {
+          "id": "login-section",
+          "type": "container",
+          "condition": "!variables.isLoggedIn",
+          "props": { "style": "text-align: center;" },
+          "children": [
+            {
+              "id": "login-btn",
+              "type": "button",
+              "content": { "label": "Log In" },
+              "skin_ref": "components.button.secondary",
+              "events": {
+                "onClick": { "action": "login", "payload": {} }
+              }
+            }
+          ]
+        },
+        {
+          "id": "logged-in-section",
+          "type": "container",
+          "condition": "variables.isLoggedIn",
+          "props": { "style": "text-align: center;" },
+          "children": [
+            {
+              "id": "welcome-back",
+              "type": "text",
+              "content": { "text": "You are logged in! 🎉" },
+              "skin_ref": "typography.body",
+              "props": { "style": "color: var(--usx-primary); display: block; margin-bottom: 8px;" }
+            },
+            {
+              "id": "logout-btn",
+              "type": "button",
+              "content": { "label": "Log Out" },
+              "skin_ref": "components.button.secondary",
+              "events": {
+                "onClick": { "action": "logout", "payload": {} }
+              }
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "type": "text",
+          "content": { "text": "Built with USX v1.0.0" },
+          "skin_ref": "typography.caption",
+          "props": { "style": "text-align: center; margin-top: 32px; color: #999; display: block;" }
+        }
+      ]
+    }
+  },
+  "meta": {
+    "tags": ["demo", "hello-world", "tutorial"],
+    "categories": ["example"],
+    "preview_image": ""
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "uhome-ha-bridge-v1",
+  "version": "0.1.0",
+  "status": "active",
+  "description": "Home Assistant REST/WebSocket gateway for uHOME Server",
+  "organization": "uHOME / Home Assistant",
+  "last_updated": "2026-03-07",
+  "gateway": {
+    "type": "container",
+    "protocol": ["REST", "WebSocket"],
+    "base_url": "/api/ha",
+    "websocket_url": "ws://localhost:8765/ws/ha",
+    "service_module": "uhome_server.services.home_assistant"
+  },
+  "routes": {
+    "status": {"method": "GET", "path": "/status", "description": "Get gateway status and health", "auth": "optional"},
+    "discover": {"method": "GET", "path": "/discover", "description": "Trigger device discovery"},
+    "list_devices": {"method": "GET", "path": "/devices", "description": "List all discovered devices"},
+    "list_entities": {"method": "GET", "path": "/entities", "description": "List all entities"},
+    "call_service": {"method": "POST", "path": "/services/{domain}/{service}", "description": "Call Home Assistant service"}
+  },
+  "websocket": {
+    "enabled": true,
+    "url": "ws://localhost:8765/ws/ha",
+    "events": ["state_changed", "discovery", "error"],
+    "subscriptions": ["device:*", "entity:*"]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "rollback_token": "rb-standalone-example-001",
+  "snapshot_paths": [
+    "/opt/uhome/jellyfin",
+    "/opt/uhome/comskip",
+    "/opt/uhome/udos_uhome"
+  ],
+  "pre_install_hashes": {},
+  "notes": "Example rollback record for standalone staging."
+}

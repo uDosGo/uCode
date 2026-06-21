@@ -1,0 +1,21 @@
+{
+  "name": "@usx/renderer",
+  "version": "1.0.0",
+  "description": "HTML/CSS renderer for USX bundles with live preview server",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js --watch",
+    "render": "node src/cli.js",
+    "preview": "node src/preview.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0",
+    "chokidar": "^3.6.0"
+  },
+  "files": [
+    "src/",
+    "public/"
+  ]
+}

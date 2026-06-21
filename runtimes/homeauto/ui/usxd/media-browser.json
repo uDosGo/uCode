@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "surface": "uhome-media-browser",
+  "layout": { "type": "list" },
+  "bindings": {
+    "open": "a",
+    "back": "b",
+    "details": "x",
+    "menu": "y"
+  }
+}

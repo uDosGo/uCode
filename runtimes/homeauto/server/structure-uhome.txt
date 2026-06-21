@@ -1,0 +1,304 @@
+fredbook@FredBookAir uHOME-server % tree
+.
+├── apps
+│   ├── dashboard
+│   │   └── README.md
+│   ├── README.md
+│   └── tablet-kiosk
+│       └── README.md
+├── CHANGELOG.md
+├── config
+│   └── README.md
+├── courses
+│   ├── 01-local-network-systems
+│   │   └── README.md
+│   ├── 02-media-infrastructure
+│   │   └── README.md
+│   ├── 03-home-automation
+│   │   └── README.md
+│   ├── 04-multi-device-systems
+│   │   └── README.md
+│   └── README.md
+├── defaults
+│   ├── README.md
+│   └── workspace
+│       └── settings
+│           └── settings-uhome.json
+├── docker-compose.yml
+├── docs
+│   ├── architecture
+│   │   ├── PHASE-1-CHECKLIST.md
+│   │   ├── PHASE-1-IA-MAP.md
+│   │   ├── PHASE-2-BOUNDARY-KICKOFF.md
+│   │   ├── PHASE-2-CHECKLIST.md
+│   │   ├── PHASE-3-CHECKLIST.md
+│   │   ├── PHASE-3-LAN-KICKOFF.md
+│   │   ├── PHASE-4-CHECKLIST.md
+│   │   ├── PHASE-4-COMPLETION.md
+│   │   ├── PHASE-4-HOST-PROFILES-KICKOFF.md
+│   │   ├── PHASE-5-CHECKLIST.md
+│   │   ├── PHASE-5-KICKOFF.md
+│   │   ├── PHASE-5-SESSION-SUMMARY.md
+│   │   ├── PHASE-6-CHECKLIST.md
+│   │   ├── PHASE-6-KICKOFF.md
+│   │   ├── PHASE-6-SESSION-1-REPORT.md
+│   │   ├── PHASE-6-SESSION-2-REPORT.md
+│   │   ├── ROOT-POLICY.md
+│   │   └── UHOME-SERVER-DEV-PLAN.md
+│   ├── clients
+│   │   ├── CLIENT-CAPABILITIES.md
+│   │   ├── HOUSEHOLD-API.md
+│   │   ├── INTEGRATION-GUIDE.md
+│   │   ├── LAUNCHER-API.md
+│   │   ├── PLAYBACK-API.md
+│   │   └── README.md
+│   ├── courses
+│   │   └── README.md
+│   ├── decisions
+│   │   ├── HOME-ASSISTANT-BRIDGE.md
+│   │   ├── UHOME-home-profile-decision.md
+│   │   ├── v1-5-3-UHOME-KIOSK.md
+│   │   └── v1-5-4-REPO-BOUNDARIES.md
+│   ├── DEPLOYMENT-GUIDE.md
+│   ├── howto
+│   │   ├── DEPENDENCY-MANAGEMENT.md
+│   │   ├── JELLYFIN-INTEGRATION.md
+│   │   ├── SONIC-STANDALONE-RELEASE-AND-INSTALL.md
+│   │   └── UHOME-INSTALL-LANES.md
+│   ├── MIGRATION-STATUS.md
+│   ├── operations
+│   │   ├── CLEAN-SHUTDOWN-RUNBOOK.md
+│   │   ├── GRACEFUL-DEGRADATION-RUNBOOK.md
+│   │   ├── LIBRARY-CACHE-REBUILD-RUNBOOK.md
+│   │   ├── OBSERVABILITY-GUIDE.md
+│   │   ├── OFFLINE-NODE-RUNBOOK.md
+│   │   ├── README.md
+│   │   ├── REGISTRY-CORRUPTION-RUNBOOK.md
+│   │   └── STORAGE-DEGRADATION-RUNBOOK.md
+│   ├── pathway
+│   │   ├── BUILD.md
+│   │   ├── LEARN.md
+│   │   ├── README.md
+│   │   ├── REPO-FAMILY.md
+│   │   └── USE.md
+│   ├── README.md
+│   ├── RELEASE-POLICY.md
+│   ├── ROADMAP-V4.md
+│   ├── services
+│   │   └── home-assistant
+│   │       ├── PROVISIONING-SUMMARY.md
+│   │       └── README.md
+│   ├── specs
+│   │   └── UHOME-v1.5.md
+│   ├── STATUS.md
+│   ├── UHOME-DEV-ROADMAP.md
+│   ├── contributor-dev-brief.md
+│   ├── education-dev-brief.md
+│   ├── uHOME-spec.md
+│   ├── ui
+│   │   └── UHOME-DASHBOARD.md
+│   └── workspace
+│       ├── instructions
+│       │   └── uhome.md
+│       └── settings
+│           └── uhome.md
+├── examples
+│   ├── installer
+│   │   ├── bundles
+│   │   │   ├── dual-boot
+│   │   │   │   ├── components
+│   │   │   │   │   ├── comskip
+│   │   │   │   │   │   └── payload.tar.gz
+│   │   │   │   │   ├── hdhomerun_config
+│   │   │   │   │   │   └── payload.tar.gz
+│   │   │   │   │   ├── jellyfin
+│   │   │   │   │   │   └── payload.tar.gz
+│   │   │   │   │   └── udos_uhome
+│   │   │   │   │       └── payload.tar.gz
+│   │   │   │   ├── rollback
+│   │   │   │   │   └── rollback.json
+│   │   │   │   └── uhome-bundle.json
+│   │   │   └── standalone
+│   │   │       ├── components
+│   │   │       │   ├── comskip
+│   │   │       │   │   └── payload.tar.gz
+│   │   │       │   ├── hdhomerun_config
+│   │   │       │   │   └── payload.tar.gz
+│   │   │       │   ├── jellyfin
+│   │   │       │   │   └── payload.tar.gz
+│   │   │       │   └── udos_uhome
+│   │   │       │       └── payload.tar.gz
+│   │   │       ├── rollback
+│   │   │       │   └── rollback.json
+│   │   │       └── uhome-bundle.json
+│   │   └── probes
+│   │       ├── dual-boot-steam-node.json
+│   │       └── standalone-linux.json
+│   └── README.md
+├── FIRST-TIME-INSTALL.md
+├── library
+│   ├── container.schema.json
+│   ├── home-assistant
+│   │   ├── bridge.json
+│   │   └── container.json
+│   └── README.md
+├── LICENSE
+├── memory
+│   ├── bank
+│   │   └── uhome
+│   │       └── playback_queue.json
+│   └── wizard
+│       └── uhome
+├── modules
+│   ├── dvr
+│   │   └── README.md
+│   ├── home-assistant-bridge
+│   │   └── README.md
+│   ├── home-ops
+│   │   └── README.md
+│   ├── media
+│   │   └── README.md
+│   ├── README.md
+│   └── steam-surface
+│       └── README.md
+├── pyproject.toml
+├── QUICKSTART.md
+├── README.md
+├── requirements.lock
+├── scripts
+│   ├── linux
+│   │   └── README.md
+│   ├── README.md
+│   └── validate-install.sh
+├── services
+│   ├── bridge
+│   │   └── README.md
+│   ├── lan-discovery
+│   │   └── README.md
+│   ├── launcher
+│   │   └── README.md
+│   ├── playback
+│   │   └── README.md
+│   ├── README.md
+│   └── scheduling
+│       └── README.md
+├── src
+│   ├── README.md
+│   ├── uhome_server
+│   │   ├── __init__.py
+│   │   ├── __main__.py
+│   │   ├── app.py
+│   │   ├── backup.py
+│   │   ├── cli.py
+│   │   ├── cluster
+│   │   │   ├── __init__.py
+│   │   │   └── registry.py
+│   │   ├── config.py
+│   │   ├── installer
+│   │   │   ├── __init__.py
+│   │   │   ├── bundle.py
+│   │   │   ├── executor.py
+│   │   │   ├── health.py
+│   │   │   ├── linux_assets.py
+│   │   │   ├── live_apply.py
+│   │   │   ├── plan.py
+│   │   │   ├── preflight.py
+│   │   │   ├── promotion.py
+│   │   │   ├── service_manifest.py
+│   │   │   └── staging.py
+│   │   ├── library
+│   │   │   ├── __init__.py
+│   │   │   ├── catalog.py
+│   │   │   └── clone_manager.py
+│   │   ├── routes
+│   │   │   ├── __init__.py
+│   │   │   ├── containers.py
+│   │   │   ├── dashboard.py
+│   │   │   ├── health.py
+│   │   │   ├── home_assistant.py
+│   │   │   ├── household.py
+│   │   │   ├── launcher.py
+│   │   │   ├── library.py
+│   │   │   ├── network.py
+│   │   │   ├── platform.py
+│   │   │   ├── playback.py
+│   │   │   └── runtime.py
+│   │   ├── services
+│   │   │   ├── __init__.py
+│   │   │   ├── home_assistant
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── __main__.py
+│   │   │   │   ├── api
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── rest.py
+│   │   │   │   │   └── websocket.py
+│   │   │   │   ├── devices.py
+│   │   │   │   ├── gateway
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   └── manager.py
+│   │   │   │   ├── schemas
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── device.py
+│   │   │   │   │   ├── entity.py
+│   │   │   │   │   └── gateway.py
+│   │   │   │   └── service.py
+│   │   │   ├── home_assistant_service.py
+│   │   │   ├── household_service.py
+│   │   │   ├── playback_service.py
+│   │   │   ├── uhome_command_handlers.py
+│   │   │   └── uhome_presentation_service.py
+│   │   ├── sonic
+│   │   │   ├── __init__.py
+│   │   │   ├── executor.py
+│   │   │   ├── health.py
+│   │   │   ├── linux_assets.py
+│   │   │   ├── live_apply.py
+│   │   │   ├── promotion.py
+│   │   │   ├── staging.py
+│   │   │   ├── uhome_bundle.py
+│   │   │   ├── uhome_installer.py
+│   │   │   └── uhome_preflight.py
+│   │   └── workspace.py
+│   └── uhome_server.egg-info
+├── tests
+│   ├── README.md
+│   ├── test_backup_restore.py
+│   ├── test_cli.py
+│   ├── test_config.py
+│   ├── test_dashboard_routes.py
+│   ├── test_example_installer_artifacts.py
+│   ├── test_executor.py
+│   ├── test_health_endpoints.py
+│   ├── test_home_assistant_routes.py
+│   ├── test_household_routes.py
+│   ├── test_installer_bundle.py
+│   ├── test_jellyfin_integration.py
+│   ├── test_launcher_routes.py
+│   ├── test_legacy_sonic_wrappers.py
+│   ├── test_library_runtime.py
+│   ├── test_live_apply.py
+│   ├── test_network_registry.py
+│   ├── test_playback_routes.py
+│   ├── test_promotion.py
+│   ├── test_runtime_routes.py
+│   ├── test_staging.py
+│   ├── test_uhome_presentation_routes.py
+│   └── test_uhome_presentation_service.py
+├── uHOME-server.code-workspace
+└── vault
+    ├── devices
+    │   └── living-room-tv.md
+    ├── homes
+    │   └── example-home.md
+    ├── media
+    │   └── family-library.md
+    ├── notes
+    │   └── topology.md
+    ├── README.md
+    ├── rooms
+    │   └── lounge.md
+    └── schedules
+        └── movie-night.md
+
+88 directories, 212 files
+fredbook@FredBookAir uHOME-server % 

@@ -1,0 +1,8 @@
+name: beta2-mcp
+version: 0.1.0
+description: "MCP (Model Context Protocol) server for uCode2 — AI agent integration via Unix socket"
+type: library
+language: rust
+homepage: https://github.com/uDosGo/uCode2
+license: MIT
+tags: [mcp, ai-agent, unix-socket, rust]

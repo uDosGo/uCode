@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uhome-server"
+version = "0.2.0"
+description = "uHomeNest — uHOME server Python package (uhome-server CLI)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [
+    { name = "uDos Team", email = "team@udos.io" },
+]
+keywords = ["uhome", "homelab", "server", "automation", "smarthome"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Home Automation",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+  "fastapi>=0.115,<1",
+  "httpx>=0.28,<1",
+  "markdown>=3.5,<4",
+  "pydantic>=2.8,<3",
+  "uvicorn>=0.30,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/uDosGo/uCode3"
+Repository = "https://github.com/uDosGo/uCode3.git"
+Documentation = "https://github.com/uDosGo/uCode3#readme"
+
+[project.scripts]
+uhome = "uhome_server.cli:main"
+uhome-launcher = "uhome_server.cli:launcher_main"
+uhome-installer = "uhome_server.cli:installer_main"
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1",
+  "pytest>=8.3,<9",
+  "ruff>=0.1.0",
+  "mypy>=1.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.mypy]
+python_version = "3.9"
+strict = false
+ignore_missing_imports = true
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+uhome_server = ["contracts/*.json", "static/thin/*.css"]

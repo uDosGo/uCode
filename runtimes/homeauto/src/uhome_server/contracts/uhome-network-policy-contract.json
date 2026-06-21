@@ -1,0 +1,129 @@
+{
+  "version": "v2.0.4",
+  "owner": "uHOME-server",
+  "package": "uhome-network-policy-contract",
+  "networking_model": "regular-lan",
+  "future_integration": "A later uHOME release may align or extend these profiles with uDOS-ubuntu command-centre networking.",
+  "deployment": {
+    "default_profile": "lan",
+    "description": "Run uHOME on a conventional home or office LAN (Wi‑Fi/Ethernet, existing router). No uDOS-wizard checkout is required."
+  },
+  "routes": {
+    "contract": {
+      "method": "GET",
+      "path": "/api/runtime/contracts/uhome-network-policy"
+    },
+    "schema": {
+      "method": "GET",
+      "path": "/api/runtime/contracts/uhome-network-policy/schema"
+    },
+    "validate": {
+      "method": "POST",
+      "path": "/api/runtime/contracts/uhome-network-policy/validate"
+    }
+  },
+  "policy_payload_contract": {
+    "contract_version": "v2.0.4",
+    "required_fields": [
+      "contract_version",
+      "profile_id",
+      "network_scope",
+      "visibility",
+      "auth_mode",
+      "vault_access",
+      "internet_sharing",
+      "runtime_owner",
+      "policy_owner",
+      "consumer_repos",
+      "secret_refs"
+    ],
+    "field_docs": {
+      "contract_version": "Version of the uHOME household networking policy payload.",
+      "profile_id": "Named profile: lan (default), beacon, crypt, tomb, home.",
+      "network_scope": "Visibility and trust class of the network lane from the household point of view.",
+      "visibility": "Whether the network should be visible or hidden.",
+      "auth_mode": "Expected access mode for the network profile.",
+      "vault_access": "Vault access rule exposed to the local runtime. Current policy is local-only.",
+      "internet_sharing": "Whether the profile may share public internet. Current policy is disabled for all profiles.",
+      "runtime_owner": "Local runtime owner that hosts household services under the policy.",
+      "policy_owner": "Repo that ships this contract (uHOME-server for the standalone stream).",
+      "consumer_repos": "Sibling repos allowed to consume the policy artifact without taking ownership of it.",
+      "secret_refs": "Symbolic secret references only. The payload must not contain raw secret values."
+    }
+  },
+  "profiles": {
+    "lan": {
+      "network_scope": "private",
+      "visibility": "visible",
+      "auth_mode": "password-protected",
+      "vault_access": "local-only",
+      "internet_sharing": "disabled",
+      "runtime_owner": "uHOME-server",
+      "policy_owner": "uHOME-server",
+      "consumer_repos": [
+        "uHOME-server",
+        "sonic-screwdriver"
+      ],
+      "notes": "Default for a typical LAN behind a consumer router. Use for normal Wi‑Fi/Ethernet operation."
+    },
+    "beacon": {
+      "network_scope": "public",
+      "visibility": "visible",
+      "auth_mode": "open",
+      "vault_access": "local-only",
+      "internet_sharing": "disabled",
+      "runtime_owner": "uHOME-server",
+      "policy_owner": "uHOME-server",
+      "consumer_repos": [
+        "uHOME-server",
+        "sonic-screwdriver"
+      ],
+      "notes": "Visible public-facing lane with local vault access only and no internet sharing."
+    },
+    "crypt": {
+      "network_scope": "private",
+      "visibility": "visible",
+      "auth_mode": "password-protected",
+      "vault_access": "local-only",
+      "internet_sharing": "disabled",
+      "runtime_owner": "uHOME-server",
+      "policy_owner": "uHOME-server",
+      "consumer_repos": [
+        "uHOME-server",
+        "sonic-screwdriver"
+      ],
+      "notes": "Visible protected lane with local vault access only and no internet sharing."
+    },
+    "tomb": {
+      "network_scope": "private",
+      "visibility": "hidden",
+      "auth_mode": "discovery-based",
+      "vault_access": "local-only",
+      "internet_sharing": "disabled",
+      "runtime_owner": "uHOME-server",
+      "policy_owner": "uHOME-server",
+      "consumer_repos": [
+        "uHOME-server",
+        "sonic-screwdriver"
+      ],
+      "notes": "Hidden discovery-based lane with no public internet access."
+    },
+    "home": {
+      "network_scope": "household",
+      "visibility": [
+        "visible",
+        "hidden"
+      ],
+      "auth_mode": "password-protected",
+      "vault_access": "local-only",
+      "internet_sharing": "disabled",
+      "runtime_owner": "uHOME-server",
+      "policy_owner": "uHOME-server",
+      "consumer_repos": [
+        "uHOME-server",
+        "sonic-screwdriver"
+      ],
+      "notes": "Household lane that may be hidden or visible, while remaining password-protected and locally hosted."
+    }
+  }
+}

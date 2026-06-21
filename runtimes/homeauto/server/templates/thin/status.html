@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">{{ page_title }}</h1>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto p-2">
+            <div class="flex space-x-1 overflow-x-auto">
+                <a href="/api/runtime/thin/home" class="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg">
+                    <span class="text-xl mb-1">🏠</span>
+                    <span class="text-sm font-medium">Home</span>
+                </a>
+                <a href="/api/runtime/thin/media" class="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg">
+                    <span class="text-xl mb-1">🎬</span>
+                    <span class="text-sm font-medium">Media</span>
+                </a>
+                <a href="/api/runtime/thin/automation" class="flex flex-col items-center p-3 hover:bg-gray-100 rounded-lg">
+                    <span class="text-xl mb-1">🤖</span>
+                    <span class="text-sm font-medium">Automation</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 py-6">
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">System Information</h2>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Version:</span>
+                        <span class="font-mono">{{ system_info.version }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Uptime:</span>
+                        <span class="font-mono">{{ system_info.uptime }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Last Update:</span>
+                        <span class="font-mono">{{ system_info.last_update }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Services Status</h2>
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <div class="divide-y divide-gray-100">
+                    {% for service in services %}
+                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="mr-3">{{ service.icon }}</span>
+                                <span class="font-medium text-gray-800">{{ service.name }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    {{ service.status|capitalize }}
+                                </span>
+                                <span class="ml-2 text-sm text-gray-500">{{ service.uptime }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Resource Usage</h2>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">CPU Usage:</span>
+                        <span class="font-mono">{{ resource_usage.cpu.value }}{{ resource_usage.cpu.unit }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Memory Usage:</span>
+                        <span class="font-mono">{{ resource_usage.memory.value }}{{ resource_usage.memory.unit }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Storage Usage:</span>
+                        <span class="font-mono">{{ resource_usage.storage.value }}{{ resource_usage.storage.unit }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">Network Speed:</span>
+                        <span class="font-mono">{{ resource_usage.network.value }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="text-center">
+            <a href="/api/runtime/thin/home" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Return to Home
+            </a>
+        </section>
+    </main>
+    
+    <script>
+        // Auto-refresh status
+        setTimeout(function() {
+            location.reload();
+        }, 60000); // 1 minute
+    </script>
+</body>
+</html>

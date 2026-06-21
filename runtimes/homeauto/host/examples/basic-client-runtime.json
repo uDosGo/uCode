@@ -1,0 +1,8 @@
+{
+  "profile": "shared-mobile-runtime",
+  "transport": "local-network",
+  "server_contract": "uhome-server",
+  "capability_profile": [
+    "controller.navigate"
+  ]
+}

@@ -1,0 +1,151 @@
+# CI/CD Configuration Example for uHomeNest
+
+# This file contains example configuration for CI/CD services
+# Copy to config/ci-config.yml and update with your actual values
+
+# PyPI Configuration
+pypi:
+  # PyPI repository URL (use test.pypi.org for testing)
+  repository_url: "https://upload.pypi.org/legacy/"
+  # PyPI test repository URL
+  test_repository_url: "https://test.pypi.org/legacy/"
+  # Package name
+  package_name: "uhome-server"
+  # Package version (will be overridden by tag)
+  package_version: "0.1.0"
+
+# Codecov Configuration
+codecov:
+  # Codecov upload URL
+  upload_url: "https://codecov.io/upload"
+  # Codecov API endpoint
+  api_url: "https://api.codecov.io"
+  # Coverage report flags
+  flags: "unittests"
+  # Coverage report name
+  name: "codecov-umbrella"
+
+# GitHub Configuration
+github:
+  # GitHub API endpoint
+  api_url: "https://api.github.com"
+  # GitHub repository
+  repository: "fredporter/uHomeNest"
+  # Default branch
+  default_branch: "main"
+
+# Testing Configuration
+testing:
+  # Python versions to test
+  python_versions: ["3.9", "3.10", "3.11"]
+  # Test directories
+  test_directories: ["tests/"]
+  # Test coverage threshold (percentage)
+  coverage_threshold: 80
+  # Linting tools
+  linting_tools:
+    - "flake8"
+    - "black"
+    - "isort"
+
+# Build Configuration
+build:
+  # Build output directory
+  output_directory: "dist/"
+  # Build artifacts
+  artifacts:
+    - "dist/*.tar.gz"
+    - "dist/*.whl"
+
+# Release Configuration
+release:
+  # Release tag pattern
+  tag_pattern: "v*"
+  # Release types
+  release_types:
+    - "patch"
+    - "minor"
+    - "major"
+  # Pre-release identifiers
+  pre_release_identifiers:
+    - "alpha"
+    - "beta"
+    - "rc"
+
+# Environment Variables (will be set as GitHub secrets)
+environment:
+  # PyPI API token secret name
+  pypi_token_secret: "PYPI_API_TOKEN"
+  # Codecov token secret name
+  codecov_token_secret: "CODECOV_TOKEN"
+  # GitHub token secret name
+  github_token_secret: "GITHUB_TOKEN"
+
+# Notification Configuration
+notifications:
+  # Email notifications
+  email:
+    enabled: false
+    recipients: []
+  # Slack notifications
+  slack:
+    enabled: false
+    webhook_url: ""
+    channel: "#ci-cd"
+
+# Artifact Retention
+artifacts:
+  # Days to retain build artifacts
+  retention_days: 30
+  # Maximum number of artifacts to retain
+  max_artifacts: 10
+
+# Cache Configuration
+cache:
+  # Cache dependencies
+  dependencies:
+    enabled: true
+    # Cache key prefix
+    key_prefix: "uhome-deps"
+    # Cache paths
+    paths:
+      - ".venv"
+      - "~/.cache/pip"
+  # Cache build outputs
+  build:
+    enabled: true
+    # Cache key prefix
+    key_prefix: "uhome-build"
+    # Cache paths
+    paths:
+      - "dist/"
+      - "build/"
+
+# Security Configuration
+security:
+  # Dependency scanning
+  dependency_scanning:
+    enabled: true
+    # Fail on vulnerabilities
+    fail_on_vulnerabilities: true
+    # Severity threshold
+    severity_threshold: "high"
+  # Secret scanning
+  secret_scanning:
+    enabled: true
+    # Fail on secrets
+    fail_on_secrets: true
+
+# Performance Configuration
+performance:
+  # Test parallelization
+  parallel_tests:
+    enabled: true
+    # Number of parallel jobs
+    jobs: 4
+  # Resource limits
+  resource_limits:
+    # Maximum memory (MB)
+    memory: 4096
+    # Maximum CPU cores
+    cpu: 2

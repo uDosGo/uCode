@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "surface": "uhome-now-playing",
+  "layout": { "type": "overlay" },
+  "widgets": ["artwork", "timeline", "controls", "target-device"]
+}

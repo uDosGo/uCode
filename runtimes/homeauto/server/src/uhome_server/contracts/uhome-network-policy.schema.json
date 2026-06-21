@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "uhome-network-policy.schema.json",
+  "title": "UHomeNetworkPolicy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "profile_id",
+    "network_scope",
+    "visibility",
+    "auth_mode",
+    "vault_access",
+    "internet_sharing",
+    "runtime_owner",
+    "policy_owner",
+    "consumer_repos",
+    "secret_refs"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "v2.0.4"
+    },
+    "profile_id": {
+      "enum": [
+        "lan",
+        "beacon",
+        "crypt",
+        "tomb",
+        "home"
+      ]
+    },
+    "network_scope": {
+      "enum": [
+        "public",
+        "private",
+        "household"
+      ]
+    },
+    "visibility": {
+      "enum": [
+        "visible",
+        "hidden"
+      ]
+    },
+    "auth_mode": {
+      "enum": [
+        "open",
+        "password-protected",
+        "discovery-based"
+      ]
+    },
+    "vault_access": {
+      "const": "local-only"
+    },
+    "internet_sharing": {
+      "const": "disabled"
+    },
+    "runtime_owner": {
+      "const": "uHOME-server"
+    },
+    "policy_owner": {
+      "const": "uHOME-server"
+    },
+    "consumer_repos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "uHOME-server",
+          "sonic-screwdriver"
+        ]
+      }
+    },
+    "secret_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

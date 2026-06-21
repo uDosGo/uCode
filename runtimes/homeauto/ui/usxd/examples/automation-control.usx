@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Automation Control",
+    "description": "Monitor and control home automation, job queue, and scenes",
+    "surface": "both",
+    "version": "1.0.0",
+    "author": "uDos HomeNest",
+    "tags": ["automation", "ha", "scenes", "jobs"]
+  },
+  "udo": {
+    "theme": "dark",
+    "layout": "grid",
+    "components": [
+      {
+        "type": "hero",
+        "id": "automation-header",
+        "title": "Automation Center",
+        "subtitle": "3 active jobs · 42 completed today",
+        "icon": "zap",
+        "color": "#4CAF50"
+      },
+      {
+        "type": "status",
+        "id": "job-queue",
+        "title": "Job Queue",
+        "items": [
+          { "label": "Active", "value": "1", "status": "active" },
+          { "label": "Queued", "value": "2", "status": "inactive" },
+          { "label": "Completed", "value": "42", "status": "success" },
+          { "label": "Failed", "value": "0", "status": "success" }
+        ]
+      },
+      {
+        "type": "grid",
+        "id": "scenes",
+        "columns": 2,
+        "items": [
+          { "title": "Movie Night", "icon": "film", "subtitle": "8 devices", "color": "#E91E63", "onClick": { "type": "ha", "command": "scene", "parameters": { "scene": "movie_night" } } },
+          { "title": "Good Morning", "icon": "sun", "subtitle": "6 devices", "color": "#FF9800", "onClick": { "type": "ha", "command": "scene", "parameters": { "scene": "good_morning" } } },
+          { "title": "Away Mode", "icon": "home", "subtitle": "12 devices", "color": "#607D8B", "onClick": { "type": "ha", "command": "scene", "parameters": { "scene": "away_mode" } } },
+          { "title": "Sleep Mode", "icon": "moon", "subtitle": "5 devices", "color": "#3F51B5", "onClick": { "type": "ha", "command": "scene", "parameters": { "scene": "sleep_mode" } } }
+        ]
+      },
+      {
+        "type": "list",
+        "id": "active-jobs",
+        "title": "Active Jobs",
+        "items": [
+          { "title": "Post-Processing", "subtitle": "65% · Started 10:45 AM", "icon": "refresh", "status": "active" },
+          { "title": "Metadata Extraction", "subtitle": "Queued · Est. start soon", "icon": "search", "status": "inactive" }
+        ]
+      },
+      {
+        "type": "card",
+        "id": "ha-status",
+        "title": "Home Assistant",
+        "subtitle": "Bridge connected · 24 entities",
+        "icon": "activity",
+        "status": "success",
+        "onClick": { "type": "navigate", "command": "ha" }
+      }
+    ]
+  },
+  "udx": {
+    "grid": "40x24",
+    "font": "Teletext50",
+    "palette": "green",
+    "content": [
+      "┌────────────────────────────────────────┐",
+      "│        Automation Center               │",
+      "│  3 active · 42 completed today        │",
+      "├────────────────────────────────────────┤",
+      "│ Job Queue:                             │",
+      "│  Active: 1   Queued: 2                 │",
+      "│  Completed: 42  Failed: 0              │",
+      "├────────────────────────────────────────┤",
+      "│ Scenes:                                 │",
+      "│ [1] Movie Night   [2] Good Morning     │",
+      "│ [3] Away Mode     [4] Sleep Mode       │",
+      "├────────────────────────────────────────┤",
+      "│ Active: Post-Processing [========> ]65%│",
+      "│ Queued: Metadata Extraction            │",
+      "├────────────────────────────────────────┤",
+      "│ HA: Bridge connected · 24 entities     │",
+      "└────────────────────────────────────────┘"
+    ]
+  },
+  "actions": {
+    "on_load": [
+      { "type": "api", "command": "GET /api/runtime/thin/automation/", "parameters": {} }
+    ],
+    "on_timer": [
+      { "delay": 15000, "action": { "type": "api", "command": "GET /api/runtime/thin/automation/jobs", "parameters": {} } }
+    ]
+  }
+}

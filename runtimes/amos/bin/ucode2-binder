@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# uCode2 Binder CLI wrapper
+# Usage: ucode2-binder <command> [options]
+#
+# uCode2 is a thin shim that provides the ProseUI surface.
+# Canonical source: https://github.com/uDosGo/uConnect
+# ProseUI surface: uConnect/ui/src/surfaces/proseui/
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+echo "uCode2 v1.0.0 — ProseUI Markdown Learning Environment"
+echo "Canonical source: https://github.com/uDosGo/uConnect"
+echo ""
+echo "To launch ProseUI, run the UI Hub from uConnect:"
+echo "  cd /path/to/uConnect && npm run dev"
+echo ""
+echo "Or install uCode2:"
+echo "  pip install ucode2"
+echo "  ucode2"

@@ -1,0 +1,14 @@
+{
+  "extension": "uHOME-matter",
+  "transport": "local-network",
+  "runtime_owner": "uHOME-server",
+  "targets": [
+    "matter",
+    "home-assistant"
+  ],
+  "capabilities": [
+    "device.discover",
+    "device.control",
+    "automation.bridge"
+  ]
+}

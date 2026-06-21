@@ -1,0 +1,14 @@
+{
+  "cpu_cores": 6,
+  "ram_gb": 16.0,
+  "storage_gb": 512.0,
+  "media_storage_gb": 4000.0,
+  "has_gigabit": true,
+  "has_hdmi": true,
+  "tuner_count": 2,
+  "has_usb_ports": 4,
+  "has_bluetooth": true,
+  "game_storage_gb": 0,
+  "os_disk_id": "disk-linux-root-001",
+  "media_volume_ids": ["media-array-a", "media-array-b"]
+}

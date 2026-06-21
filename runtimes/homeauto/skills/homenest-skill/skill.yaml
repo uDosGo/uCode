@@ -1,0 +1,63 @@
+name: homenest
+description: "HomeNest — media playback, automation, TV/DVR control"
+version: "0.1.0"
+commands:
+  - name: status
+    description: "Show HomeNest system status"
+    script: "bin/udo-home status"
+  - name: media
+    description: "Media playback commands"
+    subcommands:
+      - name: list
+        description: "List media files"
+        script: "bin/udo-home media list"
+      - name: play
+        description: "Play a media file"
+        args:
+          - name: id
+            required: true
+        script: "bin/udo-home media play {{id}}"
+      - name: pause
+        description: "Pause playback"
+        script: "bin/udo-home media pause"
+      - name: stop
+        description: "Stop playback"
+        script: "bin/udo-home media stop"
+  - name: scene
+    description: "Automation scene commands"
+    subcommands:
+      - name: list
+        description: "List available scenes"
+        script: "bin/udo-home scene list"
+      - name: trigger
+        description: "Trigger an automation scene"
+        args:
+          - name: name
+            required: true
+        script: "bin/udo-home scene trigger {{name}}"
+  - name: tv
+    description: "TV/DVR commands"
+    subcommands:
+      - name: epg
+        description: "Show TV guide"
+        script: "bin/udo-home tv epg"
+      - name: tune
+        description: "Tune to a channel"
+        args:
+          - name: channel
+            required: true
+        script: "bin/udo-home tv tune {{channel}}"
+      - name: record
+        description: "Record a channel"
+        args:
+          - name: channel
+            required: true
+          - name: duration
+            required: false
+        script: "bin/udo-home tv record {{channel}} {{duration}}"
+  - name: compile
+    description: "Compile a USX bundle"
+    args:
+      - name: path
+        required: true
+    script: "bin/udo-home compile {{path}}"

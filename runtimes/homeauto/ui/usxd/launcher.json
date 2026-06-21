@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "surface": "uhome-launcher",
+  "layout": {
+    "type": "grid",
+    "columns": 4,
+    "rows": 3,
+    "gap": 16
+  },
+  "tiles": [
+    { "id": "media", "label": "Media Library", "icon": "film", "action": "navigate:/media" },
+    { "id": "now-playing", "label": "Now Playing", "icon": "play", "action": "navigate:/now-playing" },
+    { "id": "search", "label": "Search", "icon": "search", "action": "focus:search" },
+    { "id": "settings", "label": "Settings", "icon": "gear", "action": "navigate:/settings" }
+  ],
+  "theme": "dark-console",
+  "controller": {
+    "dpad": true,
+    "a": "select",
+    "b": "back",
+    "x": "info",
+    "y": "menu"
+  }
+}

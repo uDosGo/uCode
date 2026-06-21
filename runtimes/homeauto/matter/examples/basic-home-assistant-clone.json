@@ -1,0 +1,12 @@
+{
+  "extension": "uHOME-matter",
+  "transport": "lan",
+  "runtime_owner": "uHOME-server",
+  "targets": [
+    "ha-local-primary"
+  ],
+  "capabilities": [
+    "home-assistant",
+    "automation-clone"
+  ]
+}

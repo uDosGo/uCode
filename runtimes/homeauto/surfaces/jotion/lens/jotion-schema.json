@@ -1,0 +1,46 @@
+{
+  "$schema": "https://usx.dev/schema/lens-v1",
+  "version": "1.0.0",
+  "lens": {
+    "id": "jotion-document-workspace",
+    "name": "Notion-Style Document Workspace",
+    "description": "Collaborative document editing with block-based editor",
+    "source": "jotion",
+    "variables": {
+      "snack_box": {
+        "document": {
+          "id": "string",
+          "title": "string",
+          "content": "object",
+          "icon": "string",
+          "cover_image": "string",
+          "is_published": "boolean",
+          "parent_document": "string | null"
+        },
+        "workspace": {
+          "sidebar_open": "boolean",
+          "current_view": "document | trash | settings",
+          "search_query": "string",
+          "theme": "light | dark"
+        },
+        "features": {
+          "real_time_sync": "boolean",
+          "infinite_children": "boolean",
+          "file_upload": "boolean",
+          "web_publishing": "boolean"
+        }
+      },
+      "runtime": {
+        "user": {
+          "id": "string",
+          "email": "string",
+          "name": "string",
+          "avatar": "string"
+        },
+        "connection_status": "connected | disconnected | reconnecting",
+        "last_sync": "ISO-8601",
+        "unsaved_changes": "boolean"
+      }
+    }
+  }
+}

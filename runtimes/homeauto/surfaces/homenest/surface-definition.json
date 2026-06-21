@@ -1,0 +1,28 @@
+{
+  "surface": "homenest",
+  "version": "1.0.0",
+  "title": "HomeNest Surface",
+  "description": "HomeNest USX/UDO/UDX surface for media, automation, and system control",
+  "type": "usxd-surface",
+  "port": 5182,
+  "routes": {
+    "dashboard": "/usx/homenest-dashboard",
+    "media": "/usx/media-browser",
+    "automation": "/usx/automation-control"
+  },
+  "renderers": {
+    "udo": "UDORenderer",
+    "udx": "UDXRenderer"
+  },
+  "controller": {
+    "dpad": true,
+    "a": "select",
+    "b": "back",
+    "x": "info",
+    "y": "menu"
+  },
+  "theme": {
+    "udo": "dark",
+    "udx": "green"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "uHOME Library Container Manifest",
+  "type": "object",
+  "required": ["container"],
+  "properties": {
+    "container": {
+      "type": "object",
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "type": {"type": "string"},
+        "source": {"type": "string"},
+        "ref": {"type": "string"},
+        "cloned_at": {"type": ["string", "null"]},
+        "last_update": {"type": ["string", "null"]},
+        "commit": {"type": ["string", "null"]},
+        "version": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

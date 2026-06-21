@@ -1,0 +1,16 @@
+{
+  "name": "@usx/udos-loader",
+  "version": "1.0.0",
+  "description": "USX surface loader for uDosGo engine",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node src/test.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  },
+  "files": [
+    "src/"
+  ]
+}

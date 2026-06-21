@@ -1,0 +1,48 @@
+name: Binder-backed work item
+description: Track a binder-scoped change in the v2 repo family.
+title: "[binder] "
+labels: ["binder"]
+body:
+  - type: input
+    id: binder
+    attributes:
+      label: Binder ID
+      description: Use #binder/<repo-or-stream>-<objective>
+      placeholder: "#binder/uhome-matter-bridge-catalog"
+    validations:
+      required: true
+  - type: dropdown
+    id: repo
+    attributes:
+      label: Owning repo
+      options:
+        - uDOS-core
+        - uDOS-shell
+        - sonic-screwdriver
+        - uDOS-plugin-index
+        - uDOS-wizard
+        - uDOS-gameplay
+        - uHOME-matter
+        - uDOS-dev
+        - uDOS-themes
+        - uDOS-docs
+        - uDOS-alpine
+        - uHOME-client
+        - uHOME-server
+        - omd-mac-osx-app
+        - uHOME-app-android
+        - uHOME-app-ios
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true

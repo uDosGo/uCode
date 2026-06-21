@@ -1,0 +1,11 @@
+{
+  "extension": "uHOME-matter",
+  "transport": "local-network",
+  "runtime_owner": "uHOME-server",
+  "targets": [
+    "matter"
+  ],
+  "capabilities": [
+    "device.discover"
+  ]
+}

@@ -1,0 +1,13 @@
+# uHomeNest auto-install preseed
+uhome:
+  version: 1.0.0
+  install_path: /opt/uhome
+  media_vault: /home/uhome/media
+  integrations:
+    matter: true
+    home-assistant: false
+  network:
+    api_port: 7890
+  udev:
+    enable_rules: true
+    reload_on_install: true

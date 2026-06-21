@@ -1,0 +1,15 @@
+name: github
+version: 1
+description: "github adaptor scaffold"
+kind: sync
+
+capabilities:
+  - import
+
+config:
+  required: []
+  optional: []
+
+commands:
+  - name: sync
+    action: "describe sync behavior"

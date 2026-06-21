@@ -1,0 +1,191 @@
+REM ============================================================
+REM amos_shim.bbc — AMOS to BBCSDL Command Mapping
+REM ============================================================
+REM
+REM Maps AMOS-style sprite, BOB, collision, and sound commands
+REM to BBCSDL's built-in libraries (gfxlib, imglib, audiolib).
+REM
+REM Usage:
+REM   INSTALL "amos_shim.bbc"
+REM   SPRITE 1, 100, 50, 1
+REM   BOB 1, 200, 100, "animation.gif"
+REM   MOVE 1, 300, 200, 10
+REM   IF =COLL(1, 2) THEN PRINT "Hit!"
+REM   SOUND 1, 100, 200, 50
+REM
+REM ============================================================
+
+REM Load required BBCSDL libraries
+INSTALL @lib$ + "gfxlib"
+INSTALL @lib$ + "imglib"
+INSTALL @lib$ + "audiolib"
+
+REM ============================================================
+REM Initialisation
+REM ============================================================
+
+REM Initialise graphics (640x480, 32-bit colour)
+PROC_gfx_init(640, 480, 32)
+
+REM Initialise audio
+PROC_audiolib_init
+
+PRINT "AMOS Shim v1.0 loaded. BBCSDL ready."
+PRINT ""
+
+REM ============================================================
+REM Sprite Commands (AMOS → BBCSDL)
+REM ============================================================
+
+REM SPRITE id, x, y, bank
+REM Creates or moves a hardware sprite
+DEF PROC_sprite(id%, x%, y%, bank%)
+  LOCAL grid_x%, grid_y%
+  
+  REM AMOS uses 16px sprites; BBCSDL uses pixel coordinates
+  grid_x% = x%
+  grid_y% = y%
+  
+  REM Place sprite at position
+  PROC_gfx_sprite_place(id%, grid_x%, grid_y%)
+  
+  REM Set sprite bank (image source)
+  IF bank% >= 0 THEN
+    PROC_gfx_sprite_set_bank(id%, bank%)
+  ENDIF
+ENDPROC
+
+REM MOVE id, x, y, steps
+REM Animates sprite movement over N steps
+DEF PROC_move(id%, x%, y%, steps%)
+  LOCAL i%, step_x%, step_y%
+  
+  IF steps% <= 0 THEN steps% = 1
+  
+  REM Calculate step increments
+  step_x% = (x% - FN_gfx_sprite_x(id%)) DIV steps%
+  step_y% = (y% - FN_gfx_sprite_y(id%)) DIV steps%
+  
+  REM Animate
+  FOR i% = 1 TO steps%
+    PROC_gfx_sprite_place(id%, FN_gfx_sprite_x(id%) + step_x%, FN_gfx_sprite_y(id%) + step_y%)
+    PROC_gfx_update
+    WAIT 1
+  NEXT i%
+ENDPROC
+
+REM AUTOPATH id, x, y
+REM Sets automatic pathfinding for sprite
+DEF PROC_autopath(id%, x%, y%)
+  REM Simple linear pathfinding
+  PROC_move(id%, x%, y%, 20)
+ENDPROC
+
+REM ============================================================
+REM BOB Commands (Blitter Objects — GIF animations)
+REM ============================================================
+
+REM BOB id, x, y, gif_file$
+REM Creates a BOB from an animated GIF
+DEF PROC_bob(id%, x%, y%, gif_file$)
+  REM Load animated GIF
+  PROC_imglib_load_animation(id%, gif_file$)
+  
+  REM Display at position
+  PROC_imglib_display(id%, x%, y%)
+ENDPROC
+
+REM BOB_OFF id
+REM Hides a BOB
+DEF PROC_bob_off(id%)
+  PROC_imglib_hide(id%)
+ENDPROC
+
+REM BOB_UPDATE
+REM Updates all BOB animations
+DEF PROC_bob_update
+  PROC_imglib_update_all
+ENDPROC
+
+REM ============================================================
+REM Collision Commands
+REM ============================================================
+
+REM =COLL(id1, id2)
+REM Returns TRUE if two sprites collide
+DEF FN_coll(id1%, id2%)
+  = FN_gfx_sprite_collide(id1%, id2%)
+
+REM =ZONE(id, x1, y1, x2, y2)
+REM Returns TRUE if sprite is within zone
+DEF FN_zone(id%, x1%, y1%, x2%, y2%)
+  LOCAL sx%, sy%
+  sx% = FN_gfx_sprite_x(id%)
+  sy% = FN_gfx_sprite_y(id%)
+  = (sx% >= x1% AND sx% <= x2% AND sy% >= y1% AND sy% <= y2%)
+
+REM ============================================================
+REM Sound Commands
+REM ============================================================
+
+REM SOUND channel, volume, pitch, duration
+REM Plays a sound effect
+DEF PROC_sound(ch%, vol%, pitch%, dur%)
+  PROC_audiolib_play(ch%, vol%, pitch%, dur%)
+ENDPROC
+
+REM MUSIC filename$
+REM Plays background music
+DEF PROC_music(filename$)
+  PROC_audiolib_play_file(filename$)
+ENDPROC
+
+REM MUSIC_OFF
+REM Stops background music
+DEF PROC_music_off
+  PROC_audiolib_stop_all
+ENDPROC
+
+REM ============================================================
+REM Screen Commands
+REM ============================================================
+
+REM SCREEN mode
+REM Sets screen mode (AMOS compatibility)
+DEF PROC_screen(mode%)
+  IF mode% = 0 THEN PROC_gfx_init(320, 256, 8)
+  IF mode% = 1 THEN PROC_gfx_init(640, 512, 2)
+  IF mode% = 2 THEN PROC_gfx_init(640, 512, 4)
+  IF mode% = 3 THEN PROC_gfx_init(640, 512, 16)
+  IF mode% = 13 THEN PROC_gfx_init(320, 256, 32)
+ENDPROC
+
+REM WAIT frames
+REM Waits for N frames (50Hz = 20ms per frame)
+DEF PROC_wait(frames%)
+  LOCAL i%
+  FOR i% = 1 TO frames%
+    PROC_gfx_update
+    WAIT 1
+  NEXT i%
+ENDPROC
+
+REM ============================================================
+REM Utility Commands
+REM ============================================================
+
+REM CLS
+REM Clears the screen
+DEF PROC_cls
+  PROC_gfx_clear
+ENDPROC
+
+REM =RND(range)
+REM Returns random number (BBCSDL already has RND, but AMOS uses RND(range))
+DEF FN_rnd(range%)
+  = RND(range%)
+
+PRINT "AMOS Shim initialised. Commands available:"
+PRINT "  SPRITE, MOVE, AUTOPATH, BOB, BOB_OFF, BOB_UPDATE"
+PRINT "  =COLL, =ZONE, SOUND, MUSIC, MUSIC_OFF"
+PRINT "  SCREEN, WAIT, CLS, =RND"

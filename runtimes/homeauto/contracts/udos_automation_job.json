@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "uDOS Automation Job",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the automation job"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of automation job"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Payload for the automation job"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the job was created"
+    }
+  },
+  "required": ["id", "type", "payload", "created_at"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@usx/converter-core",
+  "version": "1.0.0",
+  "description": "Core converter module for transforming design tool exports into USX bundles",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "validate": "node src/validate.js",
+    "convert:figma": "node src/converters/figma-to-usx.js",
+    "convert:xd": "node src/converters/xd-to-usx.js",
+    "convert:monodraw": "node src/converters/monodraw-to-usx.js",
+    "watch": "node src/watcher.js"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "chokidar": "^3.6.0",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "uvu": "^0.5.6"
+  },
+  "files": [
+    "src/",
+    "schemas/"
+  ]
+}

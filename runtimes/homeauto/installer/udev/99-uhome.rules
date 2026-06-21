@@ -1,0 +1,11 @@
+# uHomeNest udev rules
+# Auto-detect media drives, USB installers, Matter devices
+
+# USB installer detection
+SUBSYSTEM=="block", ENV{ID_FS_LABEL}=="UHOME_INSTALL", SYMLINK+="uhome-install"
+
+# Media drive detection
+SUBSYSTEM=="block", ENV{ID_FS_LABEL}=="MEDIA*", SYMLINK+="uhome-media-$env{ID_FS_LABEL}"
+
+# Matter fabric detection (example)
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="matter-device"

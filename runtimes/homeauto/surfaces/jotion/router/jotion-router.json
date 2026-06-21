@@ -1,0 +1,52 @@
+{
+  "$schema": "https://usx.dev/schema/router-v1",
+  "version": "1.0.0",
+  "router": {
+    "id": "jotion-router",
+    "source": "lens://jotion-document-workspace/variables",
+    "target": "skin://jotion-notion-skin/output",
+    "mappings": [
+      {
+        "lens_var": "snack_box.document",
+        "skin_output": "document_view",
+        "transform": "document_to_editor",
+        "fields": ["id", "title", "content", "icon", "cover_image"]
+      },
+      {
+        "lens_var": "snack_box.workspace.theme",
+        "skin_output": "color_mode",
+        "transform": "theme_to_tailwind",
+        "values": {
+          "light": "light",
+          "dark": "dark"
+        }
+      },
+      {
+        "lens_var": "snack_box.workspace.sidebar_open",
+        "skin_output": "sidebar_visible",
+        "transform": "boolean_to_class",
+        "true": "sidebar-expanded",
+        "false": "sidebar-collapsed"
+      },
+      {
+        "lens_var": "runtime.user",
+        "skin_output": "user_context",
+        "transform": "user_to_profile"
+      },
+      {
+        "lens_var": "snack_box.features",
+        "skin_output": "feature_flags",
+        "transform": "features_to_toggles"
+      }
+    ],
+    "render": {
+      "engine": "next.js",
+      "components": {
+        "document": "DocumentPage",
+        "sidebar": "NavigationSidebar",
+        "editor": "BlockEditor"
+      },
+      "output": "web"
+    }
+  }
+}

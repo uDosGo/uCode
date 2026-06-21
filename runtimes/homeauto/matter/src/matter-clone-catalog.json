@@ -1,0 +1,21 @@
+{
+  "extension": "uHOME-matter",
+  "catalog_version": "v2",
+  "runtime_owner": "uHOME-server",
+  "clones": [
+    {
+      "id": "home-assistant-bridge",
+      "adapter": "home-assistant",
+      "runtime_owner": "uHOME-server",
+      "contract": "matter-bridge-contract.json",
+      "profile": "ha-local-primary"
+    },
+    {
+      "id": "matter-fabric-clone",
+      "adapter": "matter",
+      "runtime_owner": "uHOME-server",
+      "contract": "matter-bridge-contract.json",
+      "profile": "fabric-lan-default"
+    }
+  ]
+}

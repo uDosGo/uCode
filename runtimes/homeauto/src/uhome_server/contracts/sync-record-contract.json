@@ -1,0 +1,15 @@
+{
+  "version": "v2.0.4",
+  "owner": "uHOME-server",
+  "package": "uhome-sync-record-contract",
+  "description": "Sync-record envelope contract bundled with uHOME-server (LAN-first home media stack).",
+  "record_types": [
+    { "key": "canonical_contact", "title": "Canonical contact" },
+    { "key": "activity", "title": "Activity" },
+    { "key": "binder_project", "title": "Binder project" },
+    { "key": "sync_metadata", "title": "Sync metadata" }
+  ],
+  "envelope": {
+    "required_collections": ["contacts", "activities", "binders", "sync_metadata"]
+  }
+}

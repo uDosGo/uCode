@@ -1,0 +1,20 @@
+{
+  "name": "ucode4-3dworld",
+  "version": "0.1.0",
+  "description": "3D World Engine for uCode4 — Three.js/WebGL frontend",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["ucode4", "3d", "world", "engine", "threejs", "webgl"],
+  "author": "uDos Team",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.163.0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}

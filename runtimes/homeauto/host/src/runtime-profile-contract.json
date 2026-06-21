@@ -1,0 +1,9 @@
+{
+  "profile": "shared-tablet-runtime",
+  "transport": "local-network",
+  "server_contract": "uhome-server",
+  "capability_profile": [
+    "media.browse",
+    "session.launch"
+  ]
+}

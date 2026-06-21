@@ -1,0 +1,18 @@
+{
+  "targets": [
+    {
+      "id": "ha-local-primary",
+      "adapter": "home-assistant",
+      "host": "homeassistant.local",
+      "port": 8123,
+      "transport": "lan"
+    },
+    {
+      "id": "fabric-lan-default",
+      "adapter": "matter",
+      "host": "matter-gateway.local",
+      "port": 5540,
+      "transport": "lan"
+    }
+  ]
+}

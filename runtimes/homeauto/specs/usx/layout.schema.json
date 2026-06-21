@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://usx.dev/schema/layout-v1",
+  "title": "USX Layout Schema",
+  "description": "Defines the structural layout of a USX surface — the grid, containers, widgets, and their spatial relationships.",
+  "type": "object",
+  "version": "1.0.0",
+  "definitions": {
+    "bounds": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "unit": {
+          "type": "string",
+          "enum": ["px", "rem", "em", "%", "fr", "auto"],
+          "default": "px"
+        }
+      },
+      "required": ["x", "y", "width", "height"],
+      "additionalProperties": false
+    },
+    "widget": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "container", "text", "button", "input", "image", "icon",
+            "list", "table", "card", "form", "heading", "divider",
+            "code_block", "quote", "callout", "todo", "toggle",
+            "mermaid", "chart", "map", "video", "audio", "iframe",
+            "custom"
+          ]
+        },
+        "bounds": { "$ref": "#/definitions/bounds" },
+        "content": {
+          "type": "object",
+          "description": "Widget-specific content (text, src, etc.)",
+          "additionalProperties": true
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/widget" },
+          "description": "Nested child widgets"
+        },
+        "lens_ref": {
+          "type": "string",
+          "description": "Reference to a LENS variable (e.g., 'variables.userName')"
+        },
+        "skin_ref": {
+          "type": "string",
+          "description": "Reference to a SKIN component (e.g., 'components.button')"
+        },
+        "props": {
+          "type": "object",
+          "description": "Widget-specific properties",
+          "additionalProperties": true
+        },
+        "events": {
+          "type": "object",
+          "description": "Event handlers mapped to actions",
+          "patternProperties": {
+            "^(onClick|onChange|onSubmit|onHover|onFocus|onBlur|onDrag|onDrop)$": {
+              "type": "object",
+              "properties": {
+                "action": { "type": "string" },
+                "payload": { "type": "object" }
+              }
+            }
+          }
+        },
+        "condition": {
+          "type": "string",
+          "description": "Conditional expression for showing/hiding this widget"
+        },
+        "repeat": {
+          "type": "object",
+          "description": "Repeat this widget for each item in a data source",
+          "properties": {
+            "source": { "type": "string", "description": "LENS variable path to iterate over" },
+            "as": { "type": "string", "description": "Variable name for each item" }
+          },
+          "required": ["source", "as"]
+        }
+      },
+      "required": ["id", "type"],
+      "additionalProperties": false
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "height": { "type": "string" },
+              "gap": { "type": "string" }
+            }
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "width": { "type": "string" },
+              "gap": { "type": "string" }
+            }
+          }
+        },
+        "gap": { "type": "string" },
+        "template_rows": { "type": "string" },
+        "template_columns": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "default": "1.0.0"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["page", "surface", "modal", "popup", "curtain", "toast"],
+      "default": "surface"
+    },
+    "title": { "type": "string" },
+    "viewport": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "string", "default": "100%" },
+        "height": { "type": "string", "default": "100%" },
+        "min_width": { "type": "string" },
+        "max_width": { "type": "string" }
+      }
+    },
+    "grid": { "$ref": "#/definitions/grid" },
+    "root": { "$ref": "#/definitions/widget" },
+    "widgets": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/widget" },
+      "description": "Top-level widgets (alternative to root)"
+    },
+    "lp_number": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 99,
+      "description": "Local Page number (LP00-LP99) for fallback routing"
+    }
+  },
+  "oneOf": [
+    { "required": ["root"] },
+    { "required": ["widgets"] }
+  ],
+  "additionalProperties": false
+}

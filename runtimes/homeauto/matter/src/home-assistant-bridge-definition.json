@@ -1,0 +1,82 @@
+{
+  "extension": "uHOME-matter",
+  "bridge": "uhome-ha",
+  "version": "0.1.0",
+  "runtime_owner": "uHOME-server",
+  "command_allowlist": [
+    "system.capabilities",
+    "system.info",
+    "uhome.ad_processing.get_mode",
+    "uhome.ad_processing.set_mode",
+    "uhome.dvr.cancel",
+    "uhome.dvr.list_rules",
+    "uhome.dvr.schedule",
+    "uhome.launcher.menu",
+    "uhome.launcher.start",
+    "uhome.launcher.status",
+    "uhome.launcher.stop",
+    "uhome.playback.handoff",
+    "uhome.playback.status",
+    "uhome.tuner.discover",
+    "uhome.tuner.status"
+  ],
+  "entities": [
+    {
+      "id": "uhome.system",
+      "type": "service",
+      "name": "uHOME System",
+      "capabilities": [
+        "info",
+        "capabilities"
+      ]
+    },
+    {
+      "id": "uhome.tuner",
+      "type": "media_source",
+      "name": "uHOME Broadcast Tuner",
+      "capabilities": [
+        "discover",
+        "status"
+      ]
+    },
+    {
+      "id": "uhome.dvr",
+      "type": "recorder",
+      "name": "uHOME DVR",
+      "capabilities": [
+        "list_rules",
+        "schedule",
+        "cancel"
+      ]
+    },
+    {
+      "id": "uhome.ad_processing",
+      "type": "processor",
+      "name": "uHOME Ad Processing",
+      "capabilities": [
+        "get_mode",
+        "set_mode"
+      ]
+    },
+    {
+      "id": "uhome.playback",
+      "type": "media_player",
+      "name": "uHOME Playback",
+      "capabilities": [
+        "status",
+        "handoff"
+      ]
+    },
+    {
+      "id": "uhome.launcher",
+      "type": "service",
+      "name": "uHOME Launcher",
+      "capabilities": [
+        "status",
+        "start",
+        "stop",
+        "menu"
+      ]
+    }
+  ]
+}
