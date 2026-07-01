@@ -1,0 +1,14 @@
+{
+  "name": "ucode",
+  "private": true,
+  "version": "1.0.0",
+  "description": "uCode monorepo",
+  "workspaces": [
+    "packages/*",
+    "agents/*"
+  ],
+  "scripts": {
+    "build": "npm run -ws build",
+    "test": "npm run -ws test"
+  }
+}

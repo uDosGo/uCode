@@ -1,0 +1,88 @@
+# uCode Dev Flow — sprint.2026-07-02
+version: "1.0.0"
+created: "2026-07-01T21:00:00Z"
+status: active
+
+sprint:
+  name: "sprint.2026-07-02"
+  goals:
+    - "GridSmith Node agent build (CLI + MCP + npm)"
+    - "BBCSDL runtime migration (v2 spec)"
+    - "uCode surface in uCore developer view"
+    - "ucode.code-workspace — unified workspace"
+  items:
+    - id: "task-001"
+      title: "Build GridSmith core class"
+      file: "agents/gridsmith/src/index.ts"
+      status: pending
+      priority: high
+    - id: "task-002"
+      title: "Wire GridSmith CLI commands"
+      file: "agents/gridsmith/src/cli.ts"
+      status: pending
+      priority: high
+    - id: "task-003"
+      title: "Create BASIC importer"
+      file: "agents/gridsmith/src/importers/"
+      status: pending
+      priority: medium
+    - id: "task-004"
+      title: "Create AMOS importer"
+      file: "agents/gridsmith/src/importers/"
+      status: pending
+      priority: medium
+    - id: "task-005"
+      title: "Build MCP tools for Cline"
+      file: "agents/gridsmith/src/mcp/"
+      status: pending
+      priority: medium
+    - id: "task-006"
+      title: "Package BBCSDL engine"
+      file: "runtimes/basic/bbcsdl/"
+      status: pending
+      priority: high
+    - id: "task-007"
+      title: "Write Python bridge (bbcsdl_bridge.py)"
+      file: "runtimes/basic/bridge/"
+      status: pending
+      priority: high
+    - id: "task-008"
+      title: "Write LENS/SKIN modules"
+      file: "runtimes/basic/bridge/"
+      status: pending
+      priority: medium
+    - id: "task-009"
+      title: "Write variable manager"
+      file: "runtimes/basic/bridge/variables.py"
+      status: pending
+      priority: medium
+    - id: "task-010"
+      title: "Create .runtime nugget format"
+      file: "runtimes/basic/"
+      status: pending
+      priority: low
+    - id: "task-011"
+      title: "One-line installer script"
+      file: "runtimes/basic/"
+      status: pending
+      priority: low
+    - id: "task-012"
+      title: "Register uCode surface in uCore"
+      file: "uCore backend + frontend"
+      status: pending
+      priority: medium
+    - id: "task-013"
+      title: "Update ucode.code-workspace"
+      file: "ucode.code-workspace"
+      status: complete
+      completed: "2026-07-01"
+    - id: "task-014"
+      title: "Docs: GridSmith dev plan"
+      file: "docs/GRIDSMITH_DEV_PLAN.md"
+      status: complete
+      completed: "2026-07-01"
+    - id: "task-015"
+      title: "Docs: Runtime spec"
+      file: "docs/UCODE_RUNTIME_SPEC.md"
+      status: complete
+      completed: "2026-07-01"

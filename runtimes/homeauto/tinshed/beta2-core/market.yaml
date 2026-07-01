@@ -1,8 +1,0 @@
-name: beta2-core
-version: 0.1.0
-description: "Core types, traits, and utilities for the uCode2 ecosystem"
-type: library
-language: rust
-homepage: https://github.com/uDosGo/uCode2
-license: MIT
-tags: [core, types, utilities, rust]

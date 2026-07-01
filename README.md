@@ -5,13 +5,14 @@
 uCode/
 ├── runtimes/
 │   ├── basic/       - BASIC runtime (from uCode1)
-│   ├── amos/        - AMOS runtime (from uCode2)
-│   ├── homeauto/    - Home automation runtime (from uCode3)
-│   └── multimedia/  - Multimedia runtime (from uCode4)
+│   └── amos/        - AMOS runtime (from uCode2)
 ├── shared/          - Shared code across runtimes
 ├── tests/           - Integration tests
 └── README.md        - This file
 ```
+
+Note: `homeauto` and `multimedia` runtimes have been moved to the
+[HomeNest](https://github.com/uDosGo/HomeNest) repository.
 
 ## Quick Start
 ```bash

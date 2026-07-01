@@ -1,0 +1,8 @@
+{
+  "id": "dungeon-alpha",
+  "name": "Dungeon Alpha",
+  "type": "dungeon",
+  "seed": 42,
+  "source": "generated",
+  "layers": ["terrain", "details", "collision", "entities"]
+}

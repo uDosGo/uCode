@@ -1,8 +1,0 @@
-name: beta2-spatial
-version: 0.1.0
-description: "Spatial indexing and geo operations for uCode2 — R-tree, geo types, coordinate systems"
-type: library
-language: rust
-homepage: https://github.com/uDosGo/uCode2
-license: MIT
-tags: [spatial, geo, r-tree, indexing, rust]

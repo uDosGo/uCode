@@ -1,0 +1,19 @@
+# Devlog — uCode
+version: "1.0.0"
+updated: "2026-07-01T21:00:00Z"
+round: "sprint.2026-07-02 setup"
+
+## Recent Changes (2026-07-01)
+
+- Docs: imported GRIDSMITH_DEV_PLAN.md and UCODE_RUNTIME_SPEC.md
+- Tasker: created .tasker/dev-flow.yaml with 15 sprint items
+- Rules: created .clinerules for Cline/uCode workflow
+- Workspace: ucode.code-workspace updated with dev flow context
+
+## Current Dev Flow
+
+- GridSmith Node agent build (agents/gridsmith/)
+- BBCSDL runtime migration (runtimes/basic/)
+- uCode surface registration in uCore
+- GridCore display library (packages/gridcore/)
+- Viewport renderer (packages/viewport-renderer/)

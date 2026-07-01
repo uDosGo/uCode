@@ -1,9 +1,0 @@
-{
-  "profile": "uhome-downstream-services",
-  "runtime_owner": "uDOS-ubuntu",
-  "mode": "ubuntu-attached-uhome",
-  "services": [
-    "lan-discovery",
-    "launcher"
-  ]
-}

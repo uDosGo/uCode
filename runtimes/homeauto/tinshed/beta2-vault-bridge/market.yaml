@@ -1,8 +1,0 @@
-name: beta2-vault-bridge
-version: 0.1.0
-description: "SQLite-backed vault storage bridge for uCode2 — encrypted document store"
-type: library
-language: rust
-homepage: https://github.com/uDosGo/uCode2
-license: MIT
-tags: [vault, storage, sqlite, encrypted, rust]

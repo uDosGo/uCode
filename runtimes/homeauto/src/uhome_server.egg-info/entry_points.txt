@@ -1,4 +1,0 @@
-[console_scripts]
-uhome = uhome_server.cli:main
-uhome-installer = uhome_server.cli:installer_main
-uhome-launcher = uhome_server.cli:launcher_main

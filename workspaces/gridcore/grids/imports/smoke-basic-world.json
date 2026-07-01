@@ -1,0 +1,15 @@
+{
+  "worldId": "smoke-basic-world",
+  "preview": [
+    {
+      "row": 0,
+      "lineNumber": 10,
+      "text": "PRINT \"HI\""
+    },
+    {
+      "row": 1,
+      "lineNumber": 20,
+      "text": "GOTO 10"
+    }
+  ]
+}

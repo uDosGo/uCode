@@ -1,0 +1,163 @@
+{
+  "folders": [
+    {
+      "name": "uCode (root)",
+      "path": "/Users/fredbook/Code/uCode",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "gridcore",
+      "path": "/Users/fredbook/Code/uCode/packages/gridcore",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "viewport-renderer",
+      "path": "/Users/fredbook/Code/uCode/packages/viewport-renderer",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "agents",
+      "path": "/Users/fredbook/Code/uCode/agents",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "shared",
+      "path": "/Users/fredbook/Code/uCode/shared",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "runtimes",
+      "path": "/Users/fredbook/Code/uCode/runtimes",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "uCore",
+      "path": "/Users/fredbook/Code/uCore",
+      "git": {
+        "checkoutType": "auto"
+      }
+    },
+    {
+      "name": "HomeNest",
+      "path": "/Users/fredbook/Code/HomeNest",
+      "git": {
+        "checkoutType": "auto"
+      }
+    }
+  ],
+  "settings": {
+    // Python settings
+    "python.defaultInterpreterPath": "/Users/fredbook/Code/uCore/backend/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length=100"],
+
+    // TypeScript/JavaScript settings
+    "typescript.preferences.includePackageJson": true,
+    "javascript.preferences.includePackageJson": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+
+    // ESLint configuration
+    "eslint.workingDirectories": ["./"],
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+
+    // Vitest configuration
+    "vitest.enable": true,
+
+    // File exclusions
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.venv": false,
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.git": true
+    },
+
+    // Search exclusions
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.git": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true
+    },
+
+    // Terminal settings
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    "terminal.integrated.cursorBlinking": true,
+
+    // Editor settings
+    "editor.rulers": [80, 100, 120],
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "boundary",
+    "editor.wordWrap": "on",
+
+    // Emmet settings
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact",
+      "typescript": "html",
+      "typescriptreact": "html"
+    },
+
+    // Files associations
+    "files.associations": {
+      "*.module.css": "css",
+      "*.css": "css"
+    },
+
+    // Search settings
+    "search.followSymlinks": false
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-python.black-formatter",
+      "ms-python.flake8",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next",
+      "ms-vscode.vscode-json",
+      "formulahendry.auto-rename-tag",
+      "abusaidm.html-snippets",
+      "ChristianKohler.PathIntellisense",
+      "ms-vscode.vscode-node-azure-pack",
+      "ms-azuretools.vscode-docker",
+      "github.copilot",
+      "github.copilot-chat",
+      "ms-vscode.vscode-git",
+      "github.vscode-pull-request-github",
+      "ms-vscode.vscode-markdown",
+      "redhat.vscode-yaml",
+      "mechatroner.codesnap"
+    ]
+  }
+}

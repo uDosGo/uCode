@@ -1,0 +1,37 @@
+{
+  "name": "@udos/viewport-renderer",
+  "version": "1.0.0",
+  "description": "Canvas and DOM viewport renderer for gridcore",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@udos/gridcore": "^1.0.0",
+    "fontkit": "^2.0.4"
+  },
+  "optionalDependencies": {
+    "canvas": "^2.11.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.2.4",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

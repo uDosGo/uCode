@@ -1,2 +1,0 @@
-[console_scripts]
-ucode4 = ucode4.cli:main
