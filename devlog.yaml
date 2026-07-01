@@ -5,10 +5,12 @@ round: "sprint.2026-07-02 setup"
 
 ## Recent Changes (2026-07-01)
 
-- Docs: imported GRIDSMITH_DEV_PLAN.md and UCODE_RUNTIME_SPEC.md
-- Tasker: created .tasker/dev-flow.yaml with 15 sprint items
-- Rules: created .clinerules for Cline/uCode workflow
-- Workspace: ucode.code-workspace updated with dev flow context
+- Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md
+- Config: Hivemind env, MCP server config, Vault, OpenRouter
+- Tasker: .tasker/dev-flow.yaml with 19 sprint items (7 complete)
+- Rules: .clinerules updated with config, secrets, LLM routing rules
+- Workspace: ucode.code-workspace with agents, runtimes, uCore, HomeNest
+- IDE: PyCharm run configs (.idea/runConfigurations/), cleaned stale modules
 
 ## Current Dev Flow
 

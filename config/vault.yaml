@@ -1,0 +1,63 @@
+# uCode Vault Configuration
+# Variables, secrets, and runtime state
+# Persisted to ~/.local/share/udos/Vault/
+
+vault:
+  path: "~/.local/share/udos/Vault/"
+  
+  variables:
+    user:
+      description: "User-level variables (persistent)"
+      file: "variables/user.yaml"
+      examples:
+        - "theme: dark"
+        - "editor_font_size: 14"
+        - "last_world: test-dungeon"
+    global:
+      description: "System-wide variables"
+      file: "variables/global.yaml"
+      examples:
+        - "runtime_version: 2.0"
+        - "engine: bbcsdl"
+    snack:
+      description: "Per-snack container state"
+      file: null  # stored in snack manifest
+      examples:
+        - "level: 3"
+        - "player_hp: 100"
+    system:
+      description: "Runtime-only state (not persisted)"
+      file: null
+
+  secrets:
+    description: "Sensitive values (API keys, tokens)"
+    store: "macOS Keychain / file-encrypted"
+    keys:
+      - "OPENROUTER_API_KEY"
+      - "ANTHROPIC_API_KEY"
+      - "OPENAI_API_KEY"
+      - "GITHUB_TOKEN"
+
+  programs:
+    path: "~/.local/share/udos/programs/"
+    description: "User .ucode scripts"
+
+  snacks:
+    path: "~/.local/share/udos/snacks/"
+    description: "Self-contained program + assets bundles"
+
+  stories:
+    path: "~/.local/share/udos/stories/"
+    description: "Marp story forms"
+
+  assets:
+    path: "~/.local/share/udos/assets/"
+    subdirs: ["sprites", "bobs", "sounds", "maps"]
+
+  config:
+    path: "~/.local/share/udos/.config/"
+    files:
+      - "ucode.yaml"
+      - "skins/classic.yaml"
+      - "skins/dark.yaml"
+      - "skins/retro.yaml"

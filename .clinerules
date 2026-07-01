@@ -40,3 +40,7 @@ Use this repository in local-first, auditable mode.
 6. **Workspace** at `workspaces/gridcore/` — worlds, grids, layers, maps.
 7. **Specs** in `docs/` — GRIDSMITH_DEV_PLAN.md and UCODE_RUNTIME_SPEC.md.
 8. **Dev flow** in `.tasker/dev-flow.yaml` — sprint tracking.
+9. **Integration configs** in `config/` — Hivemind env, MCP, Vault, OpenRouter.
+10. **PyCharm run configs** in `.idea/runConfigurations/` — Basic Runtime, GridSmith CLI.
+11. **Secrets** via macOS Keychain or `config/vault.yaml` — never commit real keys.
+12. **LLM routing** via `config/openrouter.yaml` — fallback chain: Ollama → OpenRouter.

@@ -1,0 +1,38 @@
+{
+  "mcpServers": {
+    "uCore": {
+      "command": "python3",
+      "args": ["-m", "app"],
+      "cwd": "/Users/fredbook/Code/uCore/backend",
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": false
+    },
+    "gridsmith": {
+      "command": "node",
+      "args": ["./agents/gridsmith/dist/cli.js", "mcp"],
+      "cwd": "/Users/fredbook/Code/uCode",
+      "env": {
+        "UCORE_ENDPOINT": "http://localhost:8484"
+      },
+      "disabled": false
+    },
+    "hivemind": {
+      "command": "python3",
+      "args": ["-m", "app.mcp.hivemind_server"],
+      "cwd": "/Users/fredbook/Code/uCore/backend",
+      "env": {
+        "HIVE_LLM_MODEL": "openrouter/glm-5.1"
+      },
+      "disabled": false
+    },
+    "feed": {
+      "command": "python3",
+      "args": ["-m", "app.mcp.feed.feed_server"],
+      "cwd": "/Users/fredbook/Code/uCore/backend",
+      "env": {},
+      "disabled": false
+    }
+  }
+}

@@ -1,4 +1,4 @@
-# uCode Dev Flow — sprint.2026-07-02
+/# uCode Dev Flow — sprint.2026-07-02
 version: "1.0.0"
 created: "2026-07-01T21:00:00Z"
 status: active
@@ -84,5 +84,25 @@ sprint:
     - id: "task-015"
       title: "Docs: Runtime spec"
       file: "docs/UCODE_RUNTIME_SPEC.md"
+      status: complete
+      completed: "2026-07-01"
+    - id: "task-016"
+      title: "PyCharm IDE integration (run configs)"
+      file: ".idea/runConfigurations/"
+      status: complete
+      completed: "2026-07-01"
+    - id: "task-017"
+      title: "Config: Hivemind, MCP, Vault, OpenRouter"
+      file: "config/"
+      status: complete
+      completed: "2026-07-01"
+    - id: "task-018"
+      title: "Docs: Integration reference"
+      file: "docs/INTEGRATION.md"
+      status: complete
+      completed: "2026-07-01"
+    - id: "task-019"
+      title: "Clean stale PyCharm modules (ucode4, uhome-server)"
+      file: ".idea/"
       status: complete
       completed: "2026-07-01"
