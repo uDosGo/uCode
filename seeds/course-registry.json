@@ -1,0 +1,587 @@
+{
+  "version": "1.0.0",
+  "description": "Course Registry — rated inventory of all uCode docs/ content",
+  "updated": "2026-07-01T21:20:00Z",
+  "courses": {
+    "basic": [
+      {
+        "file": "UCODE1_USER_GUIDE.md",
+        "title": "uCode1 BASIC User Guide",
+        "completeness": 90,
+        "level": "beginner",
+        "relevance": 100,
+        "topics": ["BBC BASIC", "MODE 7", "teletext", "graphics", "CLI"],
+        "notes": "Comprehensive user guide for uCode1 BASIC runtime"
+      },
+      {
+        "file": "CHARACTER_SET_REFERENCE.md",
+        "title": "Character Set / 128 Collection Reference",
+        "completeness": 85,
+        "level": "beginner",
+        "relevance": 95,
+        "topics": ["characters", "128 collection", "teletext", "font"],
+        "notes": "Reference for character sets and 128 collection"
+      },
+      {
+        "file": "SPATIAL_CHARACTER_INTEGRATION.md",
+        "title": "Spatial Character Integration",
+        "completeness": 70,
+        "level": "advanced",
+        "relevance": 90,
+        "topics": ["spatial", "characters", "grid algebra"],
+        "notes": "Integrates character mapping with spatial algebra"
+      },
+      {
+        "file": "SPATIAL_CHARACTER_MAPPING.md",
+        "title": "Spatial Character Mapping",
+        "completeness": 70,
+        "level": "advanced",
+        "relevance": 90,
+        "topics": ["spatial", "characters", "mapping", "grid"],
+        "notes": "Maps characters to spatial coordinates"
+      },
+      {
+        "file": "SPRITE_OBJECT_REFERENCE.md",
+        "title": "Sprite and BOB Object Reference",
+        "completeness": 80,
+        "level": "average",
+        "relevance": 95,
+        "topics": ["sprites", "BOBs", "animation", "collision"],
+        "notes": "Reference for sprite and BOB objects in games"
+      },
+      {
+        "file": "C_LAYER_CHEAT_SHEET.md",
+        "title": "C-Layer Cheat Sheet (Map/Layer Editor)",
+        "completeness": 60,
+        "level": "average",
+        "relevance": 85,
+        "topics": ["layers", "map editor", "grid", "terrain"],
+        "notes": "Quick reference for layer editing — could use expansion"
+      },
+      {
+        "file": "CLI_README.md",
+        "title": "CLI Overview",
+        "completeness": 75,
+        "level": "beginner",
+        "relevance": 95,
+        "topics": ["CLI", "commands", "tooling"],
+        "notes": "CLI tool overview for uCode runtime"
+      },
+      {
+        "file": "CLI_COMMANDS.md",
+        "title": "CLI Command Reference",
+        "completeness": 80,
+        "level": "beginner",
+        "relevance": 95,
+        "topics": ["CLI", "commands", "reference"],
+        "notes": "Complete CLI command reference"
+      },
+      {
+        "file": "QUICK_START.md",
+        "title": "uCode BASIC Quick Start",
+        "completeness": 85,
+        "level": "beginner",
+        "relevance": 100,
+        "topics": ["BBC BASIC", "quick start", "setup"],
+        "notes": "Getting started guide — high completeness"
+      },
+      {
+        "file": "MARKDOWN_STANDARDS.md",
+        "title": "Markdown Formatting Standards",
+        "completeness": 70,
+        "level": "beginner",
+        "relevance": 30,
+        "topics": ["markdown", "formatting", "docs"],
+        "notes": "Prose/markdown standard — belongs in uCore, low uCode relevance"
+      },
+      {
+        "file": "VAULT_DOCS_TEMPLATE.md",
+        "title": "Vault Documentation Template",
+        "completeness": 50,
+        "level": "average",
+        "relevance": 40,
+        "topics": ["vault", "template", "docs"],
+        "notes": "Template for vault docs — general purpose, low uCode specificity"
+      },
+      {
+        "file": "README.md",
+        "title": "Runtime Docs Overview",
+        "completeness": 60,
+        "level": "beginner",
+        "relevance": 80,
+        "topics": ["overview", "runtime", "basic"],
+        "notes": "Broad overview of runtime docs"
+      }
+    ],
+    "gridcore": [
+      {
+        "file": "GRID_ALGEBRA_COLUMN_SPECS.md",
+        "title": "Grid Algebra Column Specs (Canonical)",
+        "completeness": 95,
+        "level": "advanced",
+        "relevance": 100,
+        "topics": ["grid algebra", "columns", "breakpoints", "spec"],
+        "notes": "Canonical grid algebra column specification — complete and locked"
+      },
+      {
+        "file": "GRID_ALGEBRA_COLUMN_SPECS_DRAFT_2026-07-01.md",
+        "title": "Grid Algebra Column Specs (Draft)",
+        "completeness": 80,
+        "level": "advanced",
+        "relevance": 100,
+        "topics": ["grid algebra", "columns", "breakpoints", "draft"],
+        "notes": "Draft of new column algebra with breakpoint tables"
+      },
+      {
+        "file": "GRIDSMITH_WORKSPACE_ACTUAL_PATHS_PLAN.md",
+        "title": "GridSmith Workspace Actual Paths Plan",
+        "completeness": 70,
+        "level": "average",
+        "relevance": 85,
+        "topics": ["gridsmith", "workspace", "paths", "planning"],
+        "notes": "Maps actual vs planned workspace paths"
+      },
+      {
+        "file": "GRIDUI_GRIDCORE_EXTRACTION_PLAN.md",
+        "title": "GridUI GridCore Extraction Plan",
+        "completeness": 60,
+        "level": "advanced",
+        "relevance": 80,
+        "topics": ["gridui", "gridcore", "extraction", "architecture"],
+        "notes": "Plan for extracting GridCore from GridUI — partially complete"
+      },
+      {
+        "file": "HANDOVER_UCODE_GRIDSMITH_BUILDOUT.md",
+        "title": "Handover: uCode GridSmith Buildout",
+        "completeness": 75,
+        "level": "average",
+        "relevance": 90,
+        "topics": ["handover", "gridsmith", "buildout", "planning"],
+        "notes": "Handover notes for GridSmith build — useful context"
+      },
+      {
+        "file": "TERMINAL_TELETEXT_GRID_WORK_TAG.md",
+        "title": "Terminal Teletext Grid Work Tag",
+        "completeness": 50,
+        "level": "average",
+        "relevance": 75,
+        "topics": ["terminal", "teletext", "grid", "ceefax"],
+        "notes": "Teletext grid work tag — Ceefax integration notes"
+      },
+      {
+        "file": "12_v2_render_theme_and_gui_pipeline.md",
+        "title": "v2 Render Theme and GUI Pipeline",
+        "completeness": 65,
+        "level": "advanced",
+        "relevance": 85,
+        "topics": ["render", "theme", "GUI", "pipeline", "v2"],
+        "notes": "v2 rendering pipeline and theme system design"
+      },
+      {
+        "file": "13_v2_workflow_automation_runtime_split.md",
+        "title": "v2 Workflow Automation Runtime Split",
+        "completeness": 60,
+        "level": "advanced",
+        "relevance": 80,
+        "topics": ["workflow", "automation", "runtime", "split"],
+        "notes": "v2 workflow automation and runtime architecture split"
+      },
+      {
+        "file": "2026-03-16-core-spatial-vocabulary-planning.md",
+        "title": "Core Spatial Vocabulary Planning",
+        "completeness": 60,
+        "level": "advanced",
+        "relevance": 85,
+        "topics": ["spatial", "vocabulary", "planning", "algebra"],
+        "notes": "Planning doc for spatial vocabulary — useful reference"
+      },
+      {
+        "file": "2026-03-16-wizard-core-grid-v2-specs.md",
+        "title": "Wizard Core Grid v2 Specs",
+        "completeness": 70,
+        "level": "advanced",
+        "relevance": 90,
+        "topics": ["grid", "v2", "wizard", "spec"],
+        "notes": "Wizard Core Grid v2 specifications"
+      }
+    ],
+    "spatial": [
+      {
+        "file": "UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md",
+        "title": "Spatial Algebra Locked Spec v1.2",
+        "completeness": 95,
+        "level": "advanced",
+        "relevance": 100,
+        "topics": ["spatial algebra", "locked spec", "uCode", "coordinates"],
+        "notes": "Locked spatial algebra specification — canonical"
+      },
+      {
+        "file": "UDOS_UCELL_VOXEL_MAPPING_v1.md",
+        "title": "uCell Voxel Mapping v1",
+        "completeness": 90,
+        "level": "advanced",
+        "relevance": 100,
+        "topics": ["ucell", "voxel", "mapping", "spatial"],
+        "notes": "Locked uCell ↔ Voxel mapping spec — core spatial"
+      },
+      {
+        "file": "GRID_ALGEBRA_ARCHITECTURE.md",
+        "title": "Grid Algebra Architecture",
+        "completeness": 85,
+        "level": "advanced",
+        "relevance": 95,
+        "topics": ["grid algebra", "architecture", "design"],
+        "notes": "Architectural overview of grid algebra system"
+      },
+      {
+        "file": "GRIDUI_SPEC.md",
+        "title": "GridUI Canonical Specification",
+        "completeness": 80,
+        "level": "average",
+        "relevance": 90,
+        "topics": ["gridui", "spec", "interface"]
+      },
+      {
+        "file": "grid-spatial-event-model-candidate.md",
+        "title": "Grid Spatial Event Model Candidate",
+        "completeness": 40,
+        "level": "advanced",
+        "relevance": 70,
+        "topics": ["grid", "spatial", "events", "model"],
+        "notes": "Candidate design — incomplete, needs validation"
+      }
+    ],
+    "tutorials": [
+      {
+        "file": "lesson_01.md",
+        "title": "Lesson 1: uCode Basics",
+        "completeness": 85,
+        "level": "beginner",
+        "relevance": 100,
+        "topics": ["lesson", "BBC BASIC", "hello world", "MODE 7"],
+        "notes": "Core lesson 1 — essential beginner content"
+      },
+      {
+        "file": "lesson_02.md",
+        "title": "Lesson 2: Text and Graphics",
+        "completeness": 80,
+        "level": "beginner",
+        "relevance": 100,
+        "topics": ["lesson", "text", "graphics", "teletext"],
+        "notes": "Lesson 2 building on BASIC foundations"
+      },
+      {
+        "file": "lesson-0.5-from-spark-to-ucode.md",
+        "title": "Lesson 0.5: From Spark to uCode",
+        "completeness": 70,
+        "level": "beginner",
+        "relevance": 95,
+        "topics": ["intro", "spark", "ucode", "onboarding"],
+        "notes": "Onboarding lesson — good bridge for new students"
+      },
+      {
+        "file": "lesson-1-markdown-grimoire.md",
+        "title": "Lesson 1: Markdown Grimoire",
+        "completeness": 75,
+        "level": "beginner",
+        "relevance": 40,
+        "topics": ["markdown", "grimoire", "writing"],
+        "notes": "Markdown-focused lesson — low uCode relevance, belongs in prose/markdown domain"
+      },
+      {
+        "file": "game.md",
+        "title": "Game Demo Surface",
+        "completeness": 60,
+        "level": "average",
+        "relevance": 95,
+        "topics": ["game", "demo", "surface", "sprites"],
+        "notes": "Game demo surface — useful reference for game building"
+      },
+      {
+        "file": "demo-surface.md",
+        "title": "Demo Surface Example",
+        "completeness": 55,
+        "level": "average",
+        "relevance": 85,
+        "topics": ["demo", "surface", "example"],
+        "notes": "Generic demo surface — applicable to uCode UI"
+      },
+      {
+        "file": "ucode-mini-game.md",
+        "title": "uCode Mini-Game Learning Pathway",
+        "completeness": 70,
+        "level": "average",
+        "relevance": 100,
+        "topics": ["mini-game", "learning", "pathway", "tutorial"],
+        "notes": "Mini-game learning pathway — directly relevant"
+      },
+      {
+        "file": "AGENT_GUIDE.md",
+        "title": "Agent Guide (DevStudio)",
+        "completeness": 65,
+        "level": "average",
+        "relevance": 30,
+        "topics": ["agents", "DevStudio", "guide"],
+        "notes": "DevStudio agent guide — mostly out of scope for uCode"
+      },
+      {
+        "file": "USER_GUIDE.md",
+        "title": "User Guide (DevStudio)",
+        "completeness": 70,
+        "level": "beginner",
+        "relevance": 25,
+        "topics": ["user guide", "DevStudio"],
+        "notes": "DevStudio user guide — historical reference, low uCode relevance"
+      },
+      {
+        "file": "modules.md",
+        "title": "Modules Reference (DevStudio)",
+        "completeness": 50,
+        "level": "advanced",
+        "relevance": 35,
+        "topics": ["modules", "DevStudio", "architecture"],
+        "notes": "DevStudio modules — mostly legacy"
+      },
+      {
+        "file": "ucode-student-tutorials.md",
+        "title": "Student Tutorials Index",
+        "completeness": 60,
+        "level": "beginner",
+        "relevance": 85,
+        "topics": ["tutorials", "student", "index"],
+        "notes": "Index of student tutorials — needs updating for uCode v2"
+      },
+      {
+        "file": "README.md",
+        "title": "Lessons README (Legacy)",
+        "completeness": 40,
+        "level": "beginner",
+        "relevance": 60,
+        "topics": ["readme", "lessons", "index"],
+        "notes": "Legacy lessons index — mostly superseded by UCODE_STUDENT_PATHWAY.md"
+      }
+    ],
+    "learning-pathway": [
+      {
+        "file": "README.md",
+        "title": "Learning Pathway Overview (DevStudio)",
+        "completeness": 75,
+        "level": "beginner",
+        "relevance": 70,
+        "topics": ["learning", "pathway", "overview", "DevStudio"],
+        "notes": "Original DevStudio learning pathway overview"
+      },
+      {
+        "file": "overview.md",
+        "title": "Pathway Overview",
+        "completeness": 70,
+        "level": "beginner",
+        "relevance": 70,
+        "topics": ["overview", "pathway", "learning"],
+        "notes": "High-level pathway overview"
+      },
+      {
+        "file": "PHASES.md",
+        "title": "Learning Phases",
+        "completeness": 65,
+        "level": "beginner",
+        "relevance": 75,
+        "topics": ["phases", "learning", "progression"],
+        "notes": "Phased learning approach — useful for course design"
+      },
+      {
+        "file": "objectives.md",
+        "title": "Learning Objectives",
+        "completeness": 60,
+        "level": "beginner",
+        "relevance": 75,
+        "topics": ["objectives", "learning", "goals"]
+      },
+      {
+        "file": "prerequisites.md",
+        "title": "Prerequisites",
+        "completeness": 50,
+        "level": "beginner",
+        "relevance": 70,
+        "topics": ["prerequisites", "requirements"]
+      },
+      {
+        "file": "basic-ucode-session.md",
+        "title": "Basic uCode Session Guide",
+        "completeness": 65,
+        "level": "beginner",
+        "relevance": 90,
+        "topics": ["basic", "ucode", "session", "tutorial"],
+        "notes": "Guide for running a basic uCode session — directly relevant"
+      },
+      {
+        "file": "binders-and-publishing.md",
+        "title": "Binders and Publishing",
+        "completeness": 55,
+        "level": "average",
+        "relevance": 80,
+        "topics": ["binders", "publishing", "workflow"],
+        "notes": "Publishing workflow — relevant to snack publishing"
+      },
+      {
+        "file": "01-framework-and-boundaries.md",
+        "title": "01: Framework and Boundaries",
+        "completeness": 70,
+        "level": "beginner",
+        "relevance": 80,
+        "topics": ["framework", "boundaries", "scope"]
+      },
+      {
+        "file": "02-layout-manifest-and-dry-run.md",
+        "title": "02: Layout Manifest and Dry Run",
+        "completeness": 65,
+        "level": "average",
+        "relevance": 75,
+        "topics": ["layout", "manifest", "dry-run"]
+      },
+      {
+        "file": "03-apply-rescue-and-handoff.md",
+        "title": "03: Apply, Rescue, and Handoff",
+        "completeness": 60,
+        "level": "average",
+        "relevance": 70,
+        "topics": ["apply", "rescue", "handoff"]
+      },
+      {
+        "file": "04-troubleshooting.md",
+        "title": "04: Troubleshooting",
+        "completeness": 55,
+        "level": "average",
+        "relevance": 75,
+        "topics": ["troubleshooting", "debug"]
+      },
+      {
+        "file": "LEARNING-PATHS.md",
+        "title": "Learning Paths (DevStudio)",
+        "completeness": 60,
+        "level": "beginner",
+        "relevance": 65,
+        "topics": ["learning", "paths", "DevStudio"]
+      },
+      {
+        "file": "Education-Pathways.md",
+        "title": "Education Pathways",
+        "completeness": 55,
+        "level": "beginner",
+        "relevance": 65,
+        "topics": ["education", "pathways"]
+      },
+      {
+        "file": "general-knowledge-library.md",
+        "title": "General Knowledge Library",
+        "completeness": 40,
+        "level": "beginner",
+        "relevance": 30,
+        "topics": ["knowledge", "library", "general"],
+        "notes": "Generic knowledge library — low uCode relevance"
+      },
+      {
+        "file": "course-hooks-and-onboarding.md",
+        "title": "Course Hooks and Onboarding",
+        "completeness": 60,
+        "level": "beginner",
+        "relevance": 80,
+        "topics": ["onboarding", "hooks", "engagement"]
+      },
+      {
+        "file": "themes-and-display-modes.md",
+        "title": "Themes and Display Modes",
+        "completeness": 55,
+        "level": "average",
+        "relevance": 85,
+        "topics": ["themes", "display", "MODE 7", "teletext"],
+        "notes": "Themes and display modes reference — directly relevant to uCode"
+      },
+      {
+        "file": "v2.1-convergence-dev-pathway.md",
+        "title": "v2.1 Convergence Dev Pathway",
+        "completeness": 50,
+        "level": "advanced",
+        "relevance": 70,
+        "topics": ["convergence", "v2", "pathway", "dev"]
+      }
+    ],
+    "top-level": [
+      {
+        "file": "UCODE_STUDENT_PATHWAY.md",
+        "title": "uCode Student Pathway (v2)",
+        "completeness": 90,
+        "level": "beginner",
+        "relevance": 100,
+        "topics": ["student", "pathway", "v2", "BBC BASIC", "levels"],
+        "notes": "Complete 5-level student pathway adapted for uCode v2"
+      },
+      {
+        "file": "UCODE_RUNTIME_SPEC.md",
+        "title": "uCode Runtime Specification v2",
+        "completeness": 95,
+        "level": "advanced",
+        "relevance": 100,
+        "topics": ["runtime", "BBCSDL", "spec", "architecture"],
+        "notes": "Locked runtime specification — canonical uCode reference"
+      },
+      {
+        "file": "GRIDSMITH_DEV_PLAN.md",
+        "title": "GridSmith Developer Execution Plan",
+        "completeness": 85,
+        "level": "advanced",
+        "relevance": 100,
+        "topics": ["gridsmith", "dev plan", "buildout", "agent"],
+        "notes": "Ready-for-implementation GridSmith agent plan"
+      },
+      {
+        "file": "INTEGRATION.md",
+        "title": "uCode Integration Reference",
+        "completeness": 80,
+        "level": "average",
+        "relevance": 100,
+        "topics": ["integration", "uCore", "Hivemind", "MCP", "OpenRouter", "Vault"],
+        "notes": "Integration reference for uCode ecosystem"
+      },
+      {
+        "file": "GRID_ALGEBRA_RELEASE_COLLATION.md",
+        "title": "Grid Algebra Release Collation",
+        "completeness": 70,
+        "level": "advanced",
+        "relevance": 95,
+        "topics": ["grid algebra", "release", "collation"],
+        "notes": "Release notes and collation for grid algebra"
+      }
+    ]
+  },
+  "summary": {
+    "total_courses": 56,
+    "categories": {
+      "basic": 12,
+      "gridcore": 10,
+      "spatial": 5,
+      "tutorials": 12,
+      "learning-pathway": 17,
+      "top-level": 5
+    },
+    "rating_distribution": {
+      "relevance_high_90_plus": 24,
+      "relevance_medium_60_89": 19,
+      "relevance_low_below_60": 13
+    },
+    "top_by_relevance": [
+      "UCODE1_USER_GUIDE.md (100)",
+      "QUICK_START.md (100)",
+      "GRID_ALGEBRA_COLUMN_SPECS.md (100)",
+      "UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md (100)",
+      "UDOS_UCELL_VOXEL_MAPPING_v1.md (100)",
+      "lesson_01.md (100)",
+      "lesson_02.md (100)",
+      "ucode-mini-game.md (100)",
+      "UCODE_STUDENT_PATHWAY.md (100)",
+      "UCODE_RUNTIME_SPEC.md (100)",
+      "GRIDSMITH_DEV_PLAN.md (100)",
+      "INTEGRATION.md (100)"
+    ]
+  }
+}
