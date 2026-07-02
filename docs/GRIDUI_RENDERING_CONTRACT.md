@@ -199,18 +199,55 @@ The uCode backend runtime must produce `GridBuffer` objects. The runtime should:
 5. **Support `mosaic`** for 2×3 block graphics
 6. **Single Unicode code point per cell** — one character per GridCell
 
-### Canvas vs CSS Rendering Decision
+### Canvas vs CSS Rendering Decision — uCode Runtime Analysis
 
-| Factor | Canvas (current) | CSS DOM |
-|--------|-----------------|---------|
-| Performance | Single element, GPU composited | 1000s of `<span>` elements |
-| Anti-aliasing | `fillText` always AA | `-webkit-font-smoothing: none` — crisp |
-| G0 bitmaps | Possible via offscreen canvas + nearest-neighbour | Via @font-face (Galax approach) |
-| Per-pixel control | Full — blend modes, transforms | Limited |
-| Sprite overlay | Trivial — drawImage | Hard — absolute positioning |
-| Scrolling | Full canvas scroll | DOM handles naturally |
+#### Comparison
 
-**Current decision**: Canvas 2D (Web Component). CSS DOM rendering with `-webkit-font-smoothing: none` remains an option for the uCode runtime if pixel-crisp G0 text is a priority.
+| Factor | Canvas 2D (current) | CSS DOM (`<span>` per cell) | Hybrid |
+|--------|---------------------|---------------------------|--------|
+| **Text crispness** | `fillText` always anti-aliased | `-webkit-font-smoothing:none` = **pixel-crisp** ✅ | Canvas for graphics, CSS for text |
+| **G0 bitmap quality** | Via offscreen canvas + NN scaling = crisp | Via @font-face (Galax approach) = **native crisp** | CSS text + canvas overlay |
+| **Performance (static)** | Single element, GPU composited ✅ | 1000 spans = fine ✅ | Slightly more complex |
+| **Performance (animated)** | `setBuffer()` → `_render()` = direct pixel push ✅ | 1000 DOM updates = layout thrash ❌ | Canvas handles animation |
+| **Per-pixel control** | Full — blend modes, transforms, drawImage ✅ | None ❌ | Canvas overlay handles this |
+| **Sprite overlay** | `drawImage` = trivial ✅ | Absolute positioning = painful ❌ | Canvas overlay ✅ |
+| **Text selection** | None ❌ | Native browser selection ✅ | CSS layer handles this |
+| **Accessibility** | None ❌ | Screen readers see text ✅ | CSS layer handles this |
+| **Hit-testing** | Manual cell-from-coord math | Browser native (click on span) | Both available |
+| **Scrolling** | `ctx.scroll` or re-render | Native DOM scroll | Canvas in scroll container |
+| **Implementation** | 300-line Web Component ✅ | Template per cell, event delegation | Two layers, synced |
+
+#### Recommendation: Canvas for Runtime, CSS for Viewing
+
+The uCode runtime will produce two types of output:
+
+| Output type | Volume | Update rate | Best renderer |
+|-------------|--------|-------------|---------------|
+| **Running BASIC/AMOS program** | Streaming | Per-frame (e.g. 30fps) | **Canvas** — direct pixel buffer updates, no DOM churn |
+| **Teletext page** | Static/loaded | Once | **CSS** — pixel-crisp text, selectable, accessible |
+| **Sprites / game graphics** | Continuous | Per-frame | **Canvas** — drawImage, transforms |
+| **Grid editor** | Interactive | On click | **Canvas** — single buffer, instant redraw |
+
+**Decision**: The uCore frontend keeps **Canvas 2D** as the primary renderer. The `<gridui-canvas>` Web Component is designed to be embedded in any framework (Vue, React, plain HTML). For the uCode runtime specifically:
+
+1. **Canvas for active runtime output** — BASIC programs, game loops, sprites, scrolling terminal. Single buffer, direct pixel push, no DOM overhead.
+2. **G0 bitmap cache** — Pre-render MODE7GX3 characters to binary bitmaps (see planned enhancement below). This gives pixel-crisp teletext text on canvas, matching CSS quality.
+3. **CSS DOM for static viewing** — Optional render mode where the grid is rendered as CSS `<span>` elements with `-webkit-font-smoothing: none` for maximum readability. Used for teletext page browsing, documentation, etc.
+4. **Hybrid as future path** — CSS for text layer, canvas overlay for graphics. Requires position synchronization but gives the best of both worlds.
+
+**Planned: G0 Bitmap Renderer**
+
+```typescript
+// Future enhancement: pre-render G0 chars to 12×10 binary bitmaps
+class G0Renderer {
+  // 1. Render MODE7GX3 char at 48×40 (4×) on offscreen canvas
+  // 2. Read pixels, threshold at 50% → binary bitmap
+  // 3. Downscale 4× to 12×10 → pixel-crisp G0 glyph
+  // 4. Cache as Uint8Array (120 bytes per char, 96 chars = 11.5KB)
+  // 5. Render: NN-scale 2× to 24×20, blit to cell with fillRect per pixel
+  // Result: zero anti-aliasing, matches galax.xyz CSS quality
+}
+```
 
 ### Viewport Size Reference (24×24 base cell)
 
