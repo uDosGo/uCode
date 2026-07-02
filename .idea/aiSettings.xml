@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  JetBrains AI Settings — Shared project-level config
+  Primary: Ollama local (free, offline)
+  Fallback: OpenRouter (cloud, paid)
+-->
+<project version="4">
+  <component name="AISettings">
+    <option name="defaultProvider" value="custom" />
+    <option name="customProviderSettings">
+      <CustomProviderSettings>
+        <option name="endpoint" value="http://localhost:11434/v1" />
+        <option name="model" value="qwen2.5-coder:3b" />
+        <option name="name" value="Ollama Local (Free)" />
+      </CustomProviderSettings>
+    </option>
+    <option name="alternativeProviders">
+      <list>
+        <AlternativeProvider>
+          <option name="name" value="OpenRouter (qwen3.6-27b)" />
+          <option name="type" value="openrouter" />
+          <option name="model" value="qwen/qwen3.6-27b" />
+        </AlternativeProvider>
+        <AlternativeProvider>
+          <option name="name" value="OpenRouter (deepseek-v4)" />
+          <option name="type" value="openrouter" />
+          <option name="model" value="deepseek/deepseek-v4-flash" />
+        </AlternativeProvider>
+      </list>
+    </option>
+    <option name="enableLocalOllama" value="true" />
+    <option name="ollamaModels">
+      <list>
+        <OllamaModel>
+          <option name="name" value="qwen2.5-coder:3b" />
+          <option name="contextLength" value="32768" />
+          <option name="description" value="Primary dev model — 3B params, fast, local" />
+        </OllamaModel>
+        <OllamaModel>
+          <option name="name" value="qwen2.5-coder:7b-instruct" />
+          <option name="contextLength" value="32768" />
+          <option name="description" value="Upgrade model — 7B params, better reasoning" />
+        </OllamaModel>
+      </list>
+    </option>
+    <option name="autoStartOllama" value="true" />
+  </component>
+</project>

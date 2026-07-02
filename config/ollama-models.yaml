@@ -1,0 +1,94 @@
+# Ollama Local Maximizer — uCode AI Provider Config
+# ==============================================================================
+# This config prioritises LOCAL/ FREE Ollama models over cloud APIs.
+# OpenRouter and other paid providers are fallbacks only.
+#
+# Install:  brew install ollama
+# Start:    ollama serve
+# Models:   ollama pull qwen2.5-coder:3b   (3.1 GB — fast dev)
+#           ollama pull qwen2.5-coder:7b   (4.5 GB — smarter)
+#           ollama pull llama3.2:3b        (2.0 GB — lightweight)
+# ==============================================================================
+
+# ── Default provider ──────────────────────────────────────────────────────────
+default_provider: ollama
+default_model: qwen2.5-coder:3b
+
+# ── Model tiers (all local, all free) ─────────────────────────────────────────
+models:
+  fast:
+    name: "qwen2.5-coder:3b"
+    params: "3B"
+    ram_gb: 3.1
+    context: 32768
+    use_case: "Default — code gen, chat, quick edits, completions"
+    priority: 1
+
+  balanced:
+    name: "qwen2.5-coder:7b"
+    params: "7B"
+    ram_gb: 4.5
+    context: 32768
+    use_case: "Complex reasoning, review, refactoring, documentation"
+    priority: 2
+
+  lightweight:
+    name: "llama3.2:3b"
+    params: "3B"
+    ram_gb: 2.0
+    context: 8192
+    use_case: "Very fast completions, low-RAM fallback"
+    priority: 3
+
+  large:
+    name: "qwen2.5-coder:14b"
+    params: "14B"
+    ram_gb: 9.0
+    context: 32768
+    use_case: "Architecture, complex multi-file edits (needs 16GB+ RAM)"
+    priority: 4
+
+# ── Fallback chain (all local first, cloud last) ──────────────────────────────
+fallback_chain:
+  - "ollama:qwen2.5-coder:3b" # Local — free, fast
+  - "ollama:qwen2.5-coder:7b" # Local — smarter
+  - "ollama:llama3.2:3b" # Local — lightweight
+  - "openrouter:qwen/qwen3.6-27b" # Cloud — budget ($0.02/M)
+  - "openrouter:deepseek/deepseek-v4-flash" # Cloud — budget ($0.05/M)
+
+# ── Routing rules ────────────────────────────────────────────────────────────
+routing:
+  prefer_local: true # Always try Ollama first
+  cloud_only_when: # Only use cloud when:
+    - local_unavailable #   Ollama is not running
+    - model_not_found #   Required model not pulled
+    - user_explicit #   User explicitly requests premium
+    - task_requires_high_quality #   Architecture/critical review tasks
+  auto_fallback: true # Automatically fall back if local fails
+  auto_start_ollama: true # Attempt to start Ollama if not running
+  health_check_interval: 30 # Seconds between Ollama health checks
+  timeout_ms: 60000 # 60s timeout for local inference
+
+# ── Startup / health ──────────────────────────────────────────────────────────
+ollama:
+  endpoint: "http://localhost:11434"
+  openai_compat_endpoint: "http://localhost:11434/v1"
+  auto_pull_missing: true # Auto-pull model if not found
+  start_command: "ollama serve"
+  health_endpoint: "/api/tags"
+  # Recommended models to have pulled:
+  recommended_models:
+    - qwen2.5-coder:3b
+    - qwen2.5-coder:7b
+    - llama3.2:3b
+
+# ── Cost tracking (free tier) ────────────────────────────────────────────────
+costs:
+  ollama:
+    per_1k_tokens: "$0.00" # Free! Local inference
+    per_minute: "$0.00"
+    monthly_cap: "$0.00"
+  openrouter:
+    budget_alert_usd: 2.00
+    hard_limit_usd: 10.00
+    track_usage: true

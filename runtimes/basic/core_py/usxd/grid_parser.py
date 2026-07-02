@@ -18,7 +18,7 @@ from enum import Enum
 
 
 
-from grid_parser_other import *  # other
+from .grid_parser_other import *  # other
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215509_grid_parser.py

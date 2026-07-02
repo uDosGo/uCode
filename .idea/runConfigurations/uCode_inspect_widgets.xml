@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="uCode: inspect widgets" type="ShConfigurationType" factoryName="Shell Script">
+    <option name="SCRIPT_TEXT" value="find packages/viewport-renderer -iname '*widget*' -o -iname '*viewport*'" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+  </configuration>
+</component>

@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="uCode: self-check" type="ShConfigurationType" factoryName="Shell Script">
+    <option name="SCRIPT_TEXT" value="echo &quot;== npm ==&quot; &amp;&amp; npm install &amp;&amp; npm run build &amp;&amp; npm test &amp;&amp; echo &quot;== python ==&quot; &amp;&amp; source .venv/bin/activate &amp;&amp; python --version &amp;&amp; echo &quot;== package boundaries ==&quot; &amp;&amp; find packages agents runtimes shared -maxdepth 3 -type f | sort | head -100 &amp;&amp; echo &quot;== workflow docs ==&quot; &amp;&amp; find docs runtimes -name '*workflow*.md' -o -name '*workflows*.md' &amp;&amp; echo &quot;== git ==&quot; &amp;&amp; git status --short" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+  </configuration>
+</component>

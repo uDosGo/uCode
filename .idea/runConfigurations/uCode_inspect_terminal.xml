@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="uCode: inspect terminal" type="ShConfigurationType" factoryName="Shell Script">
+    <option name="SCRIPT_TEXT" value="find runtimes shared packages -iname '*terminal*' -o -iname '*teletext*' -o -iname '*renderer*'" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+  </configuration>
+</component>

@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="uCode: build" type="ShConfigurationType" factoryName="Shell Script">
+    <option name="SCRIPT_TEXT" value="npm run build" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+  </configuration>
+</component>

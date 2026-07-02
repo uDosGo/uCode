@@ -1,25 +1,27 @@
-# OpenRouter Configuration for uCode
-# Provider routing: local Ollama → OpenRouter cloud models
+# OpenRouter Configuration for uCode (Local-First Mode)
+# Provider routing: Ollama local (free) → OpenRouter cloud (paid fallback)
+# See config/ollama-models.yaml for local-only config.
+# See docs/AI_INTEGRATION.md for full setup guide.
 
 openrouter:
   endpoint: "https://openrouter.ai/api/v1"
-  
+
   models:
     primary:
-      name: "google/glm-5.1"
-      context_window: 128000
-      cost_per_1k_tokens: "$0.15"
-      use_case: "Complex reasoning, architecture, debugging"
-    secondary:
       name: "deepseek/deepseek-v4-flash"
       context_window: 128000
       cost_per_1k_tokens: "$0.05"
-      use_case: "Code generation, refactoring"
+      use_case: "Cloud fallback — code generation, refactoring"
+    secondary:
+      name: "google/glm-5.1"
+      context_window: 128000
+      cost_per_1k_tokens: "$0.15"
+      use_case: "Cloud — complex reasoning, architecture, debugging"
     tertiary:
       name: "qwen/qwen3.6-27b"
       context_window: 32000
       cost_per_1k_tokens: "$0.02"
-      use_case: "Simple tasks, templating"
+      use_case: "Cloud — simple tasks, templating"
     premium:
       name: "anthropic/claude-opus-4.7"
       context_window: 200000
@@ -27,12 +29,16 @@ openrouter:
       use_case: "Premium reasoning (opt-in only)"
 
   fallback_chain:
-    - "local:qwen2.5-coder:3b (Ollama, offline, free)"
+    - "ollama:qwen2.5-coder:3b (local, free)"
+    - "ollama:qwen2.5-coder:7b (local, free)"
+    - "ollama:llama3.2:3b (local, free)"
     - "deepseek/deepseek-v4-flash"
+    - "qwen/qwen3.6-27b"
     - "google/glm-5.1"
 
   routing:
-    budget_alert: 5.00  # USD — warn when approaching
-    budget_hard_limit: 20.00  # USD — block cloud requests
+    prefer_local: true # Always try Ollama first
+    budget_alert: 2.00 # USD — warn when approaching
+    budget_hard_limit: 10.00 # USD — block cloud requests
     track_usage: true
     log_to: "~/.local/share/udos/costs/openrouter-usage.yaml"

@@ -2,3 +2,22 @@ node_modules/
 packages/*/dist/
 coverage/
 *.log
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ai/
+.ai/mcp/
+*.egg-info/
+
+# Keep JetBrains AI settings and run configs (shared in VCS)
+.idea/*
+!.idea/aiSettings.xml
+!.idea/runConfigurations/
+!.idea/inspectionProfiles/
+!.idea/modules.xml
+!.idea/vcs.xml
+!.idea/.gitignore
+
+# Keep JetBrains project AI config
+!.jetbrains/

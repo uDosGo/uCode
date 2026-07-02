@@ -31,7 +31,7 @@ class GridFormat(Enum):
 
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GridCell:
     """Represents a cell in a grid"""
     char: str = " "

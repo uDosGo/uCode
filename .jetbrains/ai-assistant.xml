@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  JetBrains AI Assistant — Shared Project Config
+  Targets Ollama local endpoint as primary AI provider.
+  JetBrains AI Assistant uses OpenAI-compatible API format.
+-->
+<project version="4">
+  <component name="AIAssistantSettings">
+    <!-- Local Ollama endpoint (OpenAI-compatible) -->
+    <option name="customOpenAiEndpoint" value="http://localhost:11434/v1" />
+    <option name="customOpenAiKey" value="" />
+    <option name="customOpenAiModel" value="qwen2.5-coder:3b" />
+    <option name="defaultModel" value="custom" />
+
+    <!-- Fallback cloud models via OpenRouter -->
+    <option name="openRouterModel" value="deepseek/deepseek-v4-flash" />
+    <option name="openRouterKey" value="" />
+
+    <!-- Document generation model -->
+    <option name="documentGenerationModel" value="qwen2.5-coder:3b" />
+    <option name="documentGenerationProvider" value="custom" />
+
+    <!-- Code completion model (local) -->
+    <option name="completionModel" value="qwen2.5-coder:3b" />
+    <option name="completionProvider" value="custom" />
+
+    <!-- Test generation -->
+    <option name="testGenerationModel" value="qwen2.5-coder:3b" />
+    <option name="testGenerationProvider" value="custom" />
+
+    <!-- Commit message generation -->
+    <option name="commitMessageModel" value="qwen2.5-coder:3b" />
+    <option name="commitMessageProvider" value="custom" />
+  </component>
+</project>
