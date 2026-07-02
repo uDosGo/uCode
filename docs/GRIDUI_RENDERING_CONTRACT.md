@@ -235,19 +235,24 @@ The uCode runtime will produce two types of output:
 3. **CSS DOM for static viewing** — Optional render mode where the grid is rendered as CSS `<span>` elements with `-webkit-font-smoothing: none` for maximum readability. Used for teletext page browsing, documentation, etc.
 4. **Hybrid as future path** — CSS for text layer, canvas overlay for graphics. Requires position synchronization but gives the best of both worlds.
 
-**Planned: G0 Bitmap Renderer**
+### G0 Bitmap Renderer
 
-```typescript
-// Future enhancement: pre-render G0 chars to 12×10 binary bitmaps
-class G0Renderer {
-  // 1. Render MODE7GX3 char at 48×40 (4×) on offscreen canvas
-  // 2. Read pixels, threshold at 50% → binary bitmap
-  // 3. Downscale 4× to 12×10 → pixel-crisp G0 glyph
-  // 4. Cache as Uint8Array (120 bytes per char, 96 chars = 11.5KB)
-  // 5. Render: NN-scale 2× to 24×20, blit to cell with fillRect per pixel
-  // Result: zero anti-aliasing, matches galax.xyz CSS quality
-}
+The teletext view uses a **G0 bitmap renderer** instead of `fillText()`. This eliminates canvas anti-aliasing, matching galax.xyz CSS quality.
+
+**Pipeline:**
 ```
+MODE7GX3 font
+  → Render char at 48×40 (4× G0 size) on offscreen canvas
+    → Read pixels, threshold at 50% alpha → binary (fg/bg)
+      → Downscale 4× to 12×10 → G0 glyph bitmap
+        → Cache (Uint8Array, 120 bytes per char, 96 chars = 11.5KB)
+          → Render: 2× nearest-neighbour → 24×20, center in 24×24 cell
+            → putImageData or per-pixel fillRect
+```
+
+**Mosaic blocks** (2×3) are generated algorithmically from the 6-bit pattern in the character code — no font needed.
+
+**Result**: Zero anti-aliasing. Pixel-crisp Ceefax text matching galax.xyz CSS quality, rendered at canvas framerates with no DOM overhead.
 
 ### Viewport Size Reference (24×24 base cell)
 
