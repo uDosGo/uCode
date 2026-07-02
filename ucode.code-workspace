@@ -2,56 +2,42 @@
   "folders": [
     {
       "name": "uCode (root)",
-      "path": "/Users/fredbook/Code/uCode",
+      "path": ".",
       "git": {
         "checkoutType": "auto"
       }
     },
     {
       "name": "gridcore",
-      "path": "/Users/fredbook/Code/uCode/packages/gridcore",
+      "path": "packages/gridcore",
       "git": {
         "checkoutType": "auto"
       }
     },
     {
       "name": "viewport-renderer",
-      "path": "/Users/fredbook/Code/uCode/packages/viewport-renderer",
+      "path": "packages/viewport-renderer",
       "git": {
         "checkoutType": "auto"
       }
     },
     {
       "name": "agents",
-      "path": "/Users/fredbook/Code/uCode/agents",
+      "path": "agents",
       "git": {
         "checkoutType": "auto"
       }
     },
     {
       "name": "shared",
-      "path": "/Users/fredbook/Code/uCode/shared",
+      "path": "shared",
       "git": {
         "checkoutType": "auto"
       }
     },
     {
       "name": "runtimes",
-      "path": "/Users/fredbook/Code/uCode/runtimes",
-      "git": {
-        "checkoutType": "auto"
-      }
-    },
-    {
-      "name": "uCore",
-      "path": "/Users/fredbook/Code/uCore",
-      "git": {
-        "checkoutType": "auto"
-      }
-    },
-    {
-      "name": "HomeNest",
-      "path": "/Users/fredbook/Code/HomeNest",
+      "path": "runtimes",
       "git": {
         "checkoutType": "auto"
       }
@@ -59,7 +45,7 @@
   ],
   "settings": {
     // Python settings
-    "python.defaultInterpreterPath": "/Users/fredbook/Code/uCore/backend/.venv/bin/python",
+    "python.defaultInterpreterPath": "./.venv/bin/python",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.analysis.typeCheckingMode": "basic",

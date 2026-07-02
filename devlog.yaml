@@ -1,6 +1,6 @@
 # Devlog — uCode
 version: "1.0.0"
-updated: "2026-07-01T21:00:00Z"
+updated: "2026-07-02T13:21:00Z"
 round: "sprint.2026-07-02 setup"
 
 ## Recent Changes (2026-07-01)
@@ -11,6 +11,12 @@ round: "sprint.2026-07-02 setup"
 - Rules: .clinerules updated with config, secrets, LLM routing rules
 - Workspace: ucode.code-workspace with agents, runtimes, uCore, HomeNest
 - IDE: PyCharm run configs (.idea/runConfigurations/), cleaned stale modules
+
+## Recent Changes (2026-07-02)
+
+- Tasker: .tasker/repo-memory.yaml — Python version verdict (3.12.12 stable)
+- Investigated: keepalive OSErrors resolved by pinning to Python 3.12
+- Documented: python@3.13/3.14 kept for awscli, ollama, ansible, mlx, nmap only
 
 ## Current Dev Flow
 

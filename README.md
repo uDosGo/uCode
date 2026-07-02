@@ -142,6 +142,17 @@ Configuration lives in `config/`:
 | `config/mcp_config.json` | MCP server definitions          |
 | `config/vault.yaml`      | Vault/secret paths              |
 
+## Embedding uCode
+
+uCode provides core functionality as standalone browser-embeddable bundles.
+
+```bash
+# Serve embeddables at http://localhost:8000
+npm run serve:embed
+```
+
+See [`docs/EMBEDDING.md`](docs/EMBEDDING.md) for details.
+
 ---
 
 ## Development Rule

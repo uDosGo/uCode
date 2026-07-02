@@ -18,8 +18,8 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "build": "tsup src/index.ts --format esm,cjs,iife --global-name uDosViewportRenderer --dts",
+    "dev": "tsup src/index.ts --format esm,cjs,iife --global-name uDosViewportRenderer --dts --watch",
     "test": "vitest run"
   },
   "dependencies": {

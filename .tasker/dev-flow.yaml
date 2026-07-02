@@ -8,8 +8,8 @@ sprint:
   goals:
     - "GridSmith Node agent build (CLI + MCP + npm)"
     - "BBCSDL runtime migration (v2 spec)"
-    - "uCode surface in uCore developer view"
-    - "ucode.code-workspace — unified workspace"
+    - "uCode embeddable surface (grid-algebra bundle)"
+    - "ucode.code-workspace — standalone workspace"
   items:
     - id: "task-001"
       title: "Build GridSmith core class"
@@ -67,15 +67,15 @@ sprint:
       status: pending
       priority: low
     - id: "task-012"
-      title: "Register uCode surface in uCore"
-      file: "uCore backend + frontend"
+      title: "Provide embeddable uCode surface"
+      file: "packages/gridcore + packages/viewport-renderer"
       status: pending
-      priority: medium
+      priority: high
     - id: "task-013"
       title: "Update ucode.code-workspace"
       file: "ucode.code-workspace"
       status: complete
-      completed: "2026-07-01"
+      completed: "2026-07-02"
     - id: "task-014"
       title: "Docs: GridSmith dev plan"
       file: "docs/GRIDSMITH_DEV_PLAN.md"
@@ -106,3 +106,13 @@ sprint:
       file: ".idea/"
       status: complete
       completed: "2026-07-01"
+    - id: "task-020"
+      title: "Configure standalone bundling (IIFE/UMD) for gridcore"
+      file: "packages/gridcore/package.json"
+      status: complete
+      completed: "2026-07-02"
+    - id: "task-021"
+      title: "Configure standalone bundling (IIFE/UMD) for viewport-renderer"
+      file: "packages/viewport-renderer/package.json"
+      status: complete
+      completed: "2026-07-02"

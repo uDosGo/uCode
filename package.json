@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "npm run -ws build",
-    "test": "npm run -ws test"
+    "test": "npm run -ws test",
+    "serve:embed": "./scripts/serve-dist.sh"
   }
 }
