@@ -41,7 +41,8 @@ __export(index_exports, {
   exportUvox: () => exportUvox,
   findPath: () => findPath,
   importAmosProgram: () => importAmosProgram,
-  importBasicProgram: () => importBasicProgram
+  importBasicProgram: () => importBasicProgram,
+  sourceMiner: () => sourceMiner
 });
 module.exports = __toCommonJS(index_exports);
 var import_gridcore6 = require("@udos/gridcore");
@@ -515,6 +516,444 @@ async function createWorld(options) {
   };
 }
 
+// src/tools/source-miner.ts
+var import_node_fs = require("fs");
+var import_node_path5 = require("path");
+var import_node_fs2 = require("fs");
+var ASM_EXTENSIONS = /* @__PURE__ */ new Set([".asm", ".s", ".6502", ".a65", ".inc", ".eq", ".bbc"]);
+var KNOWN_HARDWARE = {
+  "0xfe00": "VIA port B (user port)",
+  "0xfe01": "VIA port A (keyboard/sound)",
+  "0xfe04": "VIA timer 1 counter low",
+  "0xfe05": "VIA timer 1 counter high",
+  "0xfe08": "VIA ACR (auxiliary control register)",
+  "0xfe09": "VIA PCR (peripheral control register)",
+  "0xfe0a": "VIA IFR (interrupt flag register)",
+  "0xfe0b": "VIA IER (interrupt enable register)",
+  "0xfe40": "6845 CRTC address register",
+  "0xfe41": "6845 CRTC data register",
+  "0xfe60": "ACIA 6850 status/control",
+  "0xfe61": "ACIA 6850 data",
+  "0xfe80": "INTON (interrupt enable flip-flop)",
+  "0xfe84": "ROMSEL (paging register)",
+  "0xfea0": "System VIA IER",
+  "0xfec0": "ADC data high",
+  "0xfec1": "ADC data low",
+  "0xfee0": "Tube ULA data",
+  "0xfee1": "Tube ULA status",
+  "0xff00": "OSBYTE entry point",
+  "0xffe3": "OSBYTE indirect",
+  "0xffe7": "OSWORD entry point",
+  "0xfff4": "OSCLI entry point"
+};
+var ASSET_PATH_PATTERNS = [
+  { regex: /(?:^|[./])gfx[/\\]/i, type: "sprite_data" },
+  { regex: /(?:^|[./])sprites?[/\\]/i, type: "sprite_data" },
+  { regex: /(?:^|[./])graphics?[/\\]/i, type: "sprite_data" },
+  { regex: /(?:^|[./])text[/\\]/i, type: "teletext_pages" },
+  { regex: /(?:^|[./])data[/\\]/i, type: "game_data" },
+  { regex: /(?:^|[./])levels?[/\\]/i, type: "level_data" },
+  { regex: /(?:^|[./])maps?[/\\]/i, type: "map_data" },
+  { regex: /(?:^|[./])sound(s)?[/\\]/i, type: "audio_data" },
+  { regex: /(?:^|[./])music[/\\]/i, type: "audio_data" },
+  { regex: /(?:^|[./])chars?[/\\]/i, type: "character_data" },
+  { regex: /\.(?:bin|raw|dat|spr)$/i, type: "binary_asset" },
+  { regex: /\.(?:png|bmp|gif)$/i, type: "image_asset" },
+  { regex: /\.(?:wav|ogg|mp3)$/i, type: "audio_asset" }
+];
+function isAsmFile(path5) {
+  const ext = (0, import_node_path5.extname)(path5).toLowerCase();
+  if (ASM_EXTENSIONS.has(ext)) return true;
+  const base = path5.split("/").pop() || "";
+  if (!base.includes(".") && !ext) {
+    return true;
+  }
+  return false;
+}
+function matchesTarget(path5, patterns) {
+  if (patterns.length === 0) return isAsmFile(path5);
+  return patterns.some((p) => {
+    try {
+      return new RegExp(
+        "^" + p.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$",
+        "i"
+      ).test(path5);
+    } catch {
+      return path5.toLowerCase().includes(p.toLowerCase().replace(/\*/g, ""));
+    }
+  });
+}
+function matchesExclude(path5, patterns) {
+  if (patterns.length === 0) return false;
+  return patterns.some((p) => {
+    try {
+      return new RegExp(
+        "^" + p.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$",
+        "i"
+      ).test(path5);
+    } catch {
+      return path5.toLowerCase().includes(p.toLowerCase().replace(/\*/g, ""));
+    }
+  });
+}
+function scanFile(filePath, fileContent, currentOrg) {
+  const lines = fileContent.split("\n");
+  const memoryEntries = [];
+  const functions = [];
+  const structures = [];
+  let org = currentOrg;
+  let prevLabel = null;
+  let inDataBlock = false;
+  let dataBlockFields = [];
+  let dataBlockName = "";
+  let dataBlockOffset = 0;
+  let addressCounter = 0;
+  let commentBuffer = "";
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    const lineNo = i + 1;
+    if (/^[;*\\]/.test(line)) {
+      commentBuffer = line.replace(/^[;*\\]+\s*/, "");
+      continue;
+    }
+    const orgMatch = line.match(/^(?:ORG|\*)\s*(?:=)?\s*[$&]?([0-9A-Fa-f]+)/i);
+    if (orgMatch) {
+      org = parseInt(orgMatch[1], 16);
+      addressCounter = 0;
+      continue;
+    }
+    const equMatch = line.match(/^(\w+)\s+(?:EQU|=)\s*[$&]?([0-9A-Fa-f]+)/i);
+    if (equMatch) {
+      const label = equMatch[1];
+      const addr = parseInt(equMatch[2], 16);
+      const addrHex = "0x" + addr.toString(16).padStart(4, "0");
+      if (/^(PAGE|OS|VIA|SHEILA|CRTC|ACIA|ADC|TUBE|ULA|USER|INTON|ROMSEL|SYSTEM)/i.test(label)) {
+        commentBuffer = "";
+        continue;
+      }
+      const hwDesc = KNOWN_HARDWARE[addrHex];
+      if (hwDesc) {
+        memoryEntries.push({
+          label,
+          address: addrHex,
+          type: "byte",
+          description: hwDesc,
+          confidence: 0.95
+        });
+      } else {
+        memoryEntries.push({
+          label,
+          address: addrHex,
+          type: "byte",
+          description: commentBuffer || `${label} constant`,
+          confidence: commentBuffer ? 0.85 : 0.7
+        });
+      }
+      commentBuffer = "";
+      continue;
+    }
+    const labelMatch = line.match(/^\.(\w+)(?:\s*$|\s*;|\s*[\\*;])/);
+    if (labelMatch) {
+      prevLabel = labelMatch[1];
+      if (org !== null) {
+        const addr = org + addressCounter;
+        const addrHex = "0x" + addr.toString(16).padStart(4, "0");
+        const prevLine = i > 0 ? lines[i - 1].trim() : "";
+        const nextLine = i + 1 < lines.length ? lines[i + 1].trim() : "";
+        const looksLikeFunction = nextLine && /^(?:LDA|LDX|LDY|STA|STX|STY|JSR|JMP|PHA|PHP|PLA|PLP|TXA|TYA|TAX|TAY|CLC|SEC|CLI|SEI|CLD|SED|CLV|INX|INY|DEX|DEY|RTS|RTI|BIT)/i.test(nextLine);
+        if (looksLikeFunction) {
+          functions.push({
+            name: prevLabel,
+            address: addrHex,
+            description: commentBuffer || `${prevLabel} subroutine`,
+            parameters: extractParameters(lines, i + 1)
+          });
+        } else {
+          memoryEntries.push({
+            label: prevLabel,
+            address: addrHex,
+            type: "byte",
+            description: commentBuffer || `${prevLabel} data label`,
+            confidence: 0.75
+          });
+        }
+      }
+      commentBuffer = "";
+      continue;
+    }
+    if (/^(?:EQUB|EQUD|EQUW|DEFB|DEFW|DEFM|EQUS)\s/i.test(line)) {
+      if (prevLabel && inDataBlock) {
+        const sizeHint = /^(EQUB|DEFB|DEFM|EQUS)/i.test(line) ? 1 : /^(EQUW|DEFW)/i.test(line) ? 2 : 4;
+        dataBlockFields.push({ offset: dataBlockOffset, name: prevLabel, size: sizeHint });
+        dataBlockOffset += sizeHint;
+      }
+      const dataMatch = line.match(/^(?:EQUB|EQUD|EQUW|DEFB|DEFW|DEFM|EQUS)\s+(.+)/i);
+      if (dataMatch) {
+        const data = dataMatch[1];
+        const quotedMatch = data.match(/^"([^"]*)"/);
+        if (quotedMatch) {
+          addressCounter += quotedMatch[1].length;
+        } else {
+          addressCounter += data.split(",").length * (/^(EQUD)/i.test(line) ? 4 : /^(EQUW|DEFW)/i.test(line) ? 2 : 1);
+        }
+      }
+      prevLabel = null;
+      commentBuffer = "";
+      continue;
+    }
+    if (/^(?:SKIP|RES|DS|RMB)\s+(?:[$&])?([0-9A-Fa-f]+)/i.test(line)) {
+      const skipMatch = line.match(/^(?:SKIP|RES|DS|RMB)\s+(?:[$&])?([0-9A-Fa-f]+)/i);
+      const rawVal = skipMatch[1];
+      const isHex = /^[$&]/.test(line.match(/^(?:SKIP|RES|DS|RMB)\s+([$&])/i)?.[1] || "");
+      const skipBytes = isHex ? parseInt(rawVal, 16) : parseInt(rawVal, 10);
+      if (prevLabel) {
+        structures.push({
+          name: prevLabel,
+          size: skipBytes,
+          fields: []
+        });
+        memoryEntries.push({
+          label: prevLabel,
+          address: org !== null ? "0x" + (org + addressCounter).toString(16).padStart(4, "0") : "unknown",
+          type: "struct",
+          description: commentBuffer || `${prevLabel} data structure`,
+          confidence: 0.6,
+          length: skipBytes
+        });
+      }
+      addressCounter += skipBytes;
+      prevLabel = null;
+      commentBuffer = "";
+      continue;
+    }
+    if (prevLabel && !/^(?:LDA|LDX|LDY|STA|STX|STY|JSR|JMP|RTS|RTI|BNE|BEQ|BCC|BCS|BPL|BMI|BVC|BVS|CMP|CPX|CPY|ADC|SBC|AND|ORA|EOR|ASL|LSR|ROL|ROR|INC|DEC|INX|INY|DEX|DEY|PHA|PHP|PLA|PLP|TXA|TYA|TAX|TAY|CLC|SEC|CLI|SEI|CLD|SED|CLV|NOP|BRK)/i.test(line)) {
+      if (!inDataBlock) {
+        dataBlockName = prevLabel;
+        dataBlockFields = [];
+        dataBlockOffset = 0;
+        inDataBlock = true;
+      }
+      commentBuffer = "";
+      continue;
+    }
+    if (/^(?:LDA|LDX|LDY|STA|STX|STY|JSR|JMP|RTS|RTI|BNE|BEQ|BCC|BCS|BPL|BMI|BVC|BVS|CMP|CPX|CPY|ADC|SBC|AND|ORA|EOR|ASL|LSR|ROL|ROR|INC|DEC|INX|INY|DEX|DEY|PHA|PHP|PLA|PLP|TXA|TYA|TAX|TAY|CLC|SEC|CLI|SEI|CLD|SED|CLV|NOP|BRK)/i.test(line)) {
+      addressCounter += line.startsWith("JSR") || line.startsWith("JMP") ? 3 : line.startsWith("BNE") || line.startsWith("BEQ") || line.startsWith("BCC") || line.startsWith("BCS") || line.startsWith("BPL") || line.startsWith("BMI") || line.startsWith("BVC") || line.startsWith("BVS") ? 2 : 1;
+      if (inDataBlock && dataBlockName) {
+        structures.push({
+          name: dataBlockName,
+          size: dataBlockOffset,
+          fields: dataBlockFields
+        });
+        inDataBlock = false;
+        dataBlockName = "";
+        dataBlockFields = [];
+      }
+      prevLabel = null;
+      commentBuffer = "";
+      continue;
+    }
+    prevLabel = null;
+    commentBuffer = "";
+  }
+  if (inDataBlock && dataBlockName) {
+    structures.push({
+      name: dataBlockName,
+      size: dataBlockOffset,
+      fields: dataBlockFields
+    });
+  }
+  return { memoryEntries, functions, structures, org };
+}
+function extractParameters(lines, startIndex) {
+  const params = [];
+  for (let i = startIndex; i < Math.min(startIndex + 20, lines.length); i++) {
+    const line = lines[i].trim();
+    const ldaMatch = line.match(/LDA\s+#?\$?\w+/i);
+    if (ldaMatch && !params.some((p) => p.register === "A")) {
+      params.push({ register: "A", description: line });
+    }
+    const ldxMatch = line.match(/LDX\s+#?\$?\w+/i);
+    if (ldxMatch && !params.some((p) => p.register === "X")) {
+      params.push({ register: "X", description: line });
+    }
+    const ldyMatch = line.match(/LDY\s+#?\$?\w+/i);
+    if (ldyMatch && !params.some((p) => p.register === "Y")) {
+      params.push({ register: "Y", description: line });
+    }
+    if (line.startsWith("RTS") || line.startsWith("JMP")) break;
+  }
+  return params;
+}
+function scanDirectory(rootPath, patterns, excludePatterns) {
+  const results = [];
+  function walk(dir) {
+    try {
+      const entries = (0, import_node_fs2.readdirSync)(dir);
+      for (const entry of entries) {
+        const fullPath = (0, import_node_path5.join)(dir, entry);
+        try {
+          const st = (0, import_node_fs2.statSync)(fullPath);
+          if (st.isDirectory()) {
+            if (!entry.startsWith(".") && entry !== "node_modules" && entry !== ".git") {
+              walk(fullPath);
+            }
+          } else {
+            const relPath = fullPath.replace(rootPath + "/", "");
+            if (!matchesExclude(relPath, excludePatterns)) {
+              if (patterns.length === 0) {
+                if (isAsmFile(fullPath)) results.push(fullPath);
+              } else if (matchesTarget(relPath, patterns)) {
+                results.push(fullPath);
+              }
+            }
+          }
+        } catch {
+        }
+      }
+    } catch {
+    }
+  }
+  walk(rootPath);
+  return results;
+}
+function detectAssetReferences(rootPath) {
+  const refs = [];
+  const seen = /* @__PURE__ */ new Set();
+  function walk(dir) {
+    try {
+      const entries = (0, import_node_fs2.readdirSync)(dir);
+      for (const entry of entries) {
+        const fullPath = (0, import_node_path5.join)(dir, entry);
+        try {
+          const st = (0, import_node_fs2.statSync)(fullPath);
+          if (st.isDirectory()) {
+            if (!entry.startsWith(".") && entry !== "node_modules" && entry !== ".git") {
+              walk(fullPath);
+            }
+          } else {
+            const relPath = fullPath.replace(rootPath + "/", "");
+            for (const { regex, type } of ASSET_PATH_PATTERNS) {
+              if (regex.test(relPath) && !seen.has(relPath)) {
+                seen.add(relPath);
+                refs.push({
+                  path: relPath,
+                  type,
+                  description: `${type.replace(/_/g, " ")}: ${entry}`
+                });
+              }
+            }
+          }
+        } catch {
+        }
+      }
+    } catch {
+    }
+  }
+  walk(rootPath);
+  const collapsed = {};
+  for (const ref of refs) {
+    if (!collapsed[ref.type]) {
+      collapsed[ref.type] = { count: 0, type: ref.type, examples: [] };
+    }
+    collapsed[ref.type].count++;
+    if (collapsed[ref.type].examples.length < 3) {
+      collapsed[ref.type].examples.push(ref.path);
+    }
+  }
+  return Object.values(collapsed).map((c) => ({
+    path: c.examples[0] || rootPath,
+    type: c.type,
+    count: c.count,
+    description: `${c.count} ${c.type.replace(/_/g, " ")} file(s)`
+  }));
+}
+function generateRecommendations(findings, sourcePath) {
+  const recs = [];
+  const stateLabels = findings.memory_map.filter(
+    (m) => /score|status|state|lives|level|time|health|energy|position|x_pos|y_pos|inventory|ship/i.test(
+      m.label
+    ) && m.confidence >= 0.7
+  );
+  for (const entry of stateLabels.slice(0, 5)) {
+    recs.push({
+      action: "create_lens_extractor",
+      target: entry.label,
+      priority: entry.confidence >= 0.85 ? "high" : "medium",
+      rationale: `Game state variable for save/load and telemetry (${entry.description})`
+    });
+  }
+  const commandLabels = ["MainLoop", "Dock", "Jump", "Launch", "Start", "Init", "Title", "Death", "Win", "Lose", "Pause", "Save", "Load"];
+  for (const fn of findings.functions) {
+    if (commandLabels.some((c) => fn.name.toLowerCase().includes(c.toLowerCase()))) {
+      recs.push({
+        action: "create_mcp_command",
+        target: fn.name,
+        priority: "medium",
+        rationale: `${fn.name} is a game event trigger point`
+      });
+    }
+  }
+  if (findings.asset_references.length > 0) {
+    recs.push({
+      action: "create_skin_manifest",
+      target: sourcePath,
+      priority: "high",
+      rationale: `${findings.asset_references.length} asset type(s) found \u2014 create SKIN theme`
+    });
+  }
+  if (findings.data_structures.length > 0) {
+    recs.push({
+      action: "run_lens_craft",
+      target: findings.data_structures.map((s) => s.name).join(", "),
+      priority: "medium",
+      rationale: `${findings.data_structures.length} data structure(s) found \u2014 generate LENS extractors`
+    });
+  }
+  return recs;
+}
+function sourceMiner(input) {
+  const patterns = input.options.target_patterns || [];
+  const excludePatterns = input.options.exclude_patterns || [];
+  const sourcePath = input.source.url;
+  if (!(0, import_node_fs.existsSync)(sourcePath)) {
+    throw new Error(`Source path not found: ${sourcePath}`);
+  }
+  const st = (0, import_node_fs2.statSync)(sourcePath);
+  const files = st.isDirectory() ? scanDirectory(sourcePath, patterns, excludePatterns) : [sourcePath];
+  const allMemory = [];
+  const allFunctions = [];
+  const allStructures = [];
+  let currentOrg = null;
+  for (const file of files) {
+    try {
+      const content = (0, import_node_fs.readFileSync)(file, "utf-8");
+      const result = scanFile(file, content, currentOrg);
+      allMemory.push(...result.memoryEntries);
+      allFunctions.push(...result.functions);
+      allStructures.push(...result.structures);
+      if (result.org !== null) currentOrg = result.org;
+    } catch {
+    }
+  }
+  const rootPath = st.isDirectory() ? sourcePath : sourcePath.split("/").slice(0, -1).join("/") || ".";
+  const assets = detectAssetReferences(rootPath);
+  const findings = {
+    memory_map: allMemory,
+    functions: allFunctions,
+    data_structures: allStructures,
+    asset_references: assets
+  };
+  const recommendations = generateRecommendations(findings, sourcePath);
+  return {
+    skill: "Source-Miner",
+    version: "1.0",
+    executed_at: (/* @__PURE__ */ new Date()).toISOString(),
+    source: sourcePath,
+    findings,
+    recommendations
+  };
+}
+
 // src/index.ts
 var GRIDSMITH_TOOLS = [
   {
@@ -613,6 +1052,16 @@ var GRIDSMITH_TOOLS = [
     parameters: {
       coord: { type: "string", description: "uCode coordinate" }
     }
+  },
+  {
+    name: "source_miner",
+    description: "Scan 6502 assembly source code for LENS-extractable integration points.",
+    parameters: {
+      source_path: { type: "string", description: "Path to source directory or file" },
+      language: { type: "string", description: "Source language(s) as CSV", default: "6502" },
+      target_patterns: { type: "string", description: "File patterns as CSV (e.g. *.asm,*.s)", default: "" },
+      exclude_patterns: { type: "string", description: "Exclude patterns as CSV (e.g. test_*,*.tmp)", default: "" }
+    }
   }
 ];
 function createGridWorld(cols = 80, rows = 24) {
@@ -643,5 +1092,6 @@ function convertUCodeToLatLon(coord) {
   exportUvox,
   findPath,
   importAmosProgram,
-  importBasicProgram
+  importBasicProgram,
+  sourceMiner
 });

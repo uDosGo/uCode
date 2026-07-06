@@ -1,6 +1,6 @@
 version: "1.0.0"
-updated: "2026-07-06T14:30:00Z"
-round: "terminal-teletext-integration complete"
+updated: "2026-07-06T15:30:00Z"
+round: "skills-framework-phase-1 source-miner"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -51,4 +51,17 @@ changes_2026_07_06:
   - "Build: GridCore, viewport-renderer, GridSmith all build clean"
   - "Dev-flow: .tasker/dev-flow.yaml updated with integration tasks"
 
-current_dev_flow: "Terminal + Teletext integration complete. 37 tests passing."
+changes_2026_07_06_s2:
+  - "Skills: Source-Miner skill (agents/gridsmith/src/tools/source-miner.ts) — 6502 assembly scanner"
+  - "Skills: Scans ORG, EQU, labels, subroutines, data structures, SKIP/RES blocks"
+  - "Skills: Asset detection heuristics (gfx, sprites, maps, text, sounds, levels)"
+  - "Skills: Generates LENS extractor + MCP command + SKIN recommendations"
+  - "GridSmith: Tool registry extended to 11 tools with source_miner"
+  - "GridSmith: CLI command: gridsmith skill source-miner --source <path>"
+  - "GridSmith: MCP handler for source_miner in JSON-RPC server"
+  - "GridSmith: Test suite 36 tests passing (27 original + 9 source-miner)"
+  - "Docs: SKILLS_FRAMEWORK.md, UCODE_ADAPTATION_STRATEGY.md canonical specs"
+  - "Programs: 7 classic game scaffolds (Repton, Apple Panic, Elite, NetHack, Knight Orc, uConstruct, Eamon)"
+  - "Dev-flow: .tasker/dev-flow.yaml updated with tasks 036-038"
+
+current_dev_flow: "Skills Framework Phase 1 complete. Source-Miner scans 6502 assembly. Next: LENS-Craft code generator."

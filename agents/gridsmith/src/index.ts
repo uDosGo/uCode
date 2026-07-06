@@ -9,6 +9,16 @@ import { exportUvox } from './tools/uvox'
 import { findPath } from './tools/pathfind'
 import { createWorld, createWorldManifest } from './tools/world'
 import type { WorldCreationOptions } from './tools/world'
+import { sourceMiner } from './tools/source-miner'
+import type {
+  SourceMinerInput,
+  SourceMinerOutput,
+  MemoryMapEntry,
+  FunctionEntry,
+  DataStructure,
+  AssetReference,
+  Recommendation,
+} from './tools/source-miner'
 
 export interface GridSmithToolParameter {
   type: 'string' | 'number' | 'array' | 'object'
@@ -121,6 +131,16 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
       coord: { type: 'string', description: 'uCode coordinate' },
     },
   },
+  {
+    name: 'source_miner',
+    description: 'Scan 6502 assembly source code for LENS-extractable integration points.',
+    parameters: {
+      source_path: { type: 'string', description: 'Path to source directory or file' },
+      language: { type: 'string', description: 'Source language(s) as CSV', default: '6502' },
+      target_patterns: { type: 'string', description: 'File patterns as CSV (e.g. *.asm,*.s)', default: '' },
+      exclude_patterns: { type: 'string', description: 'Exclude patterns as CSV (e.g. test_*,*.tmp)', default: '' },
+    },
+  },
 ]
 
 export function createGridWorld(cols = 80, rows = 24): { grid: Grid; cols: number; rows: number; cellCount: number } {
@@ -150,5 +170,17 @@ export {
   findPath,
   createWorld,
   createWorldManifest,
+  sourceMiner,
 }
-export type { Grid, CellPayload, WorldCreationOptions }
+export type {
+  Grid,
+  CellPayload,
+  WorldCreationOptions,
+  SourceMinerInput,
+  SourceMinerOutput,
+  MemoryMapEntry,
+  FunctionEntry,
+  DataStructure,
+  AssetReference,
+  Recommendation,
+}

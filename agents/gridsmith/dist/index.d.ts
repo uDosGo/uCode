@@ -79,6 +79,73 @@ declare function createWorld(options: WorldCreationOptions): Promise<{
     files: Record<string, string>;
 }>;
 
+interface SourceMinerInput {
+    source: {
+        type: 'repository' | 'local_path';
+        url: string;
+        branch?: string;
+        language: string[];
+    };
+    options: {
+        scan_depth?: 'shallow' | 'full';
+        target_patterns?: string[];
+        exclude_patterns?: string[];
+    };
+}
+interface MemoryMapEntry {
+    label: string;
+    address: string;
+    type: string;
+    description: string;
+    confidence: number;
+    length?: number;
+    element_type?: string;
+}
+interface FunctionEntry {
+    name: string;
+    address: string;
+    description: string;
+    parameters: {
+        register?: string;
+        description: string;
+    }[];
+}
+interface DataStructure {
+    name: string;
+    size: number;
+    fields: {
+        offset: number;
+        name: string;
+        size: number;
+    }[];
+}
+interface AssetReference {
+    path: string;
+    type: string;
+    count?: number;
+    description: string;
+}
+interface Recommendation {
+    action: string;
+    target: string;
+    priority: 'high' | 'medium' | 'low';
+    rationale: string;
+}
+interface SourceMinerOutput {
+    skill: 'Source-Miner';
+    version: '1.0';
+    executed_at: string;
+    source: string;
+    findings: {
+        memory_map: MemoryMapEntry[];
+        functions: FunctionEntry[];
+        data_structures: DataStructure[];
+        asset_references: AssetReference[];
+    };
+    recommendations: Recommendation[];
+}
+declare function sourceMiner(input: SourceMinerInput): SourceMinerOutput;
+
 interface GridSmithToolParameter {
     type: 'string' | 'number' | 'array' | 'object';
     description: string;
@@ -105,4 +172,4 @@ declare function convertUCodeToLatLon(coord: string): {
     lon: number;
 } | null;
 
-export { type CellPayload, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram };
+export { type AssetReference, type CellPayload, type DataStructure, type FunctionEntry, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type MemoryMapEntry, type Recommendation, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, sourceMiner };

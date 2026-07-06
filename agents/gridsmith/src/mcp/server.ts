@@ -14,6 +14,7 @@ import {
   exportUvox,
   findPath,
   createWorld,
+  sourceMiner,
 } from '../index'
 
 const PORT = process.env.GRIDSMITH_MCP_PORT || '8670'
@@ -143,6 +144,25 @@ async function invokeTool(name: string, params: Record<string, unknown>): Promis
       return {
         location: convertUCodeToLatLon(String(params.coord || '')),
       }
+
+    case 'source_miner': {
+      const sourcePath = String(params.source_path || process.cwd())
+      const langStr = String(params.language || '6502')
+      const language = langStr.split(',').map((s: string) => s.trim())
+      const targetStr = String(params.target_patterns || '')
+      const excludeStr = String(params.exclude_patterns || '')
+      const targetPatterns = targetStr ? targetStr.split(',').filter(Boolean) : []
+      const excludePatterns = excludeStr ? excludeStr.split(',').filter(Boolean) : []
+
+      return sourceMiner({
+        source: { type: 'local_path', url: sourcePath, language },
+        options: {
+          scan_depth: 'full',
+          target_patterns: targetPatterns.length > 0 ? targetPatterns : undefined,
+          exclude_patterns: excludePatterns.length > 0 ? excludePatterns : undefined,
+        },
+      })
+    }
 
     default:
       throw new Error(`Unknown tool: ${name}`)

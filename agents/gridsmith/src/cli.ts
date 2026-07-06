@@ -11,6 +11,7 @@ import {
   exportUvox,
   findPath,
   createWorld,
+  sourceMiner,
 } from './index'
 
 function argValue(args: string[], flag: string, fallback?: string): string | undefined {
@@ -183,6 +184,25 @@ function main(): void {
   if (section === 'location' && action === 'ucode-to-latlon') {
     const coord = argValue(args, '--coord', '') || ''
     printJson({ location: convertUCodeToLatLon(coord) })
+    return
+  }
+
+  if (section === 'skill' && action === 'source-miner') {
+    const sourcePath = argValue(args, '--source', process.cwd()) || process.cwd()
+    const langStr = argValue(args, '--language', '6502') || '6502'
+    const lang = langStr.split(',').map(s => s.trim())
+    const targetPatterns = (argValue(args, '--patterns', '') || '').split(',').filter(Boolean)
+    const excludePatterns = (argValue(args, '--exclude', '') || '').split(',').filter(Boolean)
+
+    const result = sourceMiner({
+      source: { type: 'local_path', url: sourcePath, language: lang },
+      options: {
+        scan_depth: 'full',
+        target_patterns: targetPatterns.length > 0 ? targetPatterns : undefined,
+        exclude_patterns: excludePatterns.length > 0 ? excludePatterns : undefined,
+      },
+    })
+    printJson(result)
     return
   }
 

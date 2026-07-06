@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-06
 version: "1.0.0"
 created: "2026-07-01T21:00:00Z"
-updated: "2026-07-06T14:30:00Z"
+updated: "2026-07-06T15:30:00Z"
 status: active
 
 sprint:
@@ -21,6 +21,24 @@ sprint:
       status: complete
       completed: "2026-07-02"
       priority: high
+    - id: "task-036"
+      title: "Phase 1: Source-Miner skill for 6502 assembly"
+      file: "agents/gridsmith/src/tools/source-miner.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-037"
+      title: "Wire Source-Miner into CLI + MCP + tool registry (11 tools)"
+      file: "agents/gridsmith/src/index.ts, cli.ts, mcp/server.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-038"
+      title: "Source-Miner test suite (9 tests, 36 total pass)"
+      file: "agents/gridsmith/test/source-miner.test.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: medium
     - id: "task-002"
       title: "Wire GridSmith CLI commands"
       file: "agents/gridsmith/src/cli.ts"

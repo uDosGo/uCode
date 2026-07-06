@@ -10,8 +10,9 @@ import {
   exportUvox,
   findPath,
   importAmosProgram,
-  importBasicProgram
-} from "./chunk-X2UHOTOK.js";
+  importBasicProgram,
+  sourceMiner
+} from "./chunk-IC62ZHDJ.js";
 export {
   GRIDSMITH_TOOLS,
   composeGridLayers,
@@ -24,5 +25,6 @@ export {
   exportUvox,
   findPath,
   importAmosProgram,
-  importBasicProgram
+  importBasicProgram,
+  sourceMiner
 };

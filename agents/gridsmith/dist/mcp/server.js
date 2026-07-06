@@ -10,8 +10,9 @@ import {
   exportUvox,
   findPath,
   importAmosProgram,
-  importBasicProgram
-} from "../chunk-X2UHOTOK.js";
+  importBasicProgram,
+  sourceMiner
+} from "../chunk-IC62ZHDJ.js";
 
 // src/mcp/server.ts
 import { createServer } from "http";
@@ -112,6 +113,23 @@ async function invokeTool(name, params) {
       return {
         location: convertUCodeToLatLon(String(params.coord || ""))
       };
+    case "source_miner": {
+      const sourcePath = String(params.source_path || process.cwd());
+      const langStr = String(params.language || "6502");
+      const language = langStr.split(",").map((s) => s.trim());
+      const targetStr = String(params.target_patterns || "");
+      const excludeStr = String(params.exclude_patterns || "");
+      const targetPatterns = targetStr ? targetStr.split(",").filter(Boolean) : [];
+      const excludePatterns = excludeStr ? excludeStr.split(",").filter(Boolean) : [];
+      return sourceMiner({
+        source: { type: "local_path", url: sourcePath, language },
+        options: {
+          scan_depth: "full",
+          target_patterns: targetPatterns.length > 0 ? targetPatterns : void 0,
+          exclude_patterns: excludePatterns.length > 0 ? excludePatterns : void 0
+        }
+      });
+    }
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
