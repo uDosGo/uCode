@@ -1,0 +1,34 @@
+program:
+  name: "NetHack (uCode)"
+  version: "1.0"
+  type: "ucode"
+  approach: "adapt-source"
+
+  entry: "src/nethack.bbc"
+  runtime: "bbc_basic_sdl"
+
+  assets:
+    teletext:
+      - "text/title_page.ttx"
+
+  lens:
+    capture:
+      - dungeon_state
+      - inventory
+      - monster_positions
+      - player_stats
+
+  skin:
+    default: "teletext_classic"
+    alternates: ["dark_mode"]
+
+  mcp:
+    commands: ["SAVE", "LOAD", "MOVE", "STATUS"]
+
+  effort: "medium"
+  estimated_weeks: 3
+  status: "scaffold"
+
+  references:
+    source: "https://github.com/NetHack/NetHack"
+    docs: "https://nethackwiki.com/"

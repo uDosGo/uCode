@@ -1,0 +1,40 @@
+program:
+  name: "BBC Elite"
+  version: "1.0"
+  type: "ucode"
+  approach: "adapt-source"
+
+  entry: "elite.ssd"
+  runtime: "bbc_basic_sdl"
+  emulation: "6502"
+
+  assets:
+    teletext:
+      - "text/planet_descriptions.ttx"
+    sprites:
+      - "sprites/ships/*.bin"
+    sounds:
+      - "sounds/laser.wav"
+      - "sounds/explosion.wav"
+
+  lens:
+    capture:
+      - ship_status
+      - location
+      - inventory
+      - credits
+
+  skin:
+    default: "elite_classic"
+    alternates: ["paper_retro", "dark_mode"]
+
+  mcp:
+    commands: ["PAUSE", "SAVE", "LOAD", "JUMP", "DOCK", "STATUS"]
+
+  effort: "medium"
+  estimated_weeks: 3
+  status: "scaffold"
+
+  references:
+    source: "https://github.com/markmoxon/elite-source-code-bbc-micro"
+    docs: "https://www.bbcelite.com/"

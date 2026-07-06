@@ -1,0 +1,37 @@
+program:
+  name: "Apple Panic (uCode)"
+  version: "1.0"
+  type: "ucode"
+  approach: "rewrite-inspired-by"
+
+  entry: "src/apple_panic.bbc"
+  runtime: "bbc_basic_sdl"
+
+  assets:
+    sprites:
+      - "sprites/player_*.png"
+      - "sprites/enemy_*.png"
+    sounds:
+      - "sounds/dig.wav"
+
+  lens:
+    capture:
+      - level
+      - score
+      - lives
+      - enemy_positions
+
+  skin:
+    default: "retro_pixel"
+    alternates: ["teletext_classic"]
+
+  mcp:
+    commands: ["PAUSE", "RESTART", "LEVEL_SKIP", "STATUS"]
+
+  effort: "small"
+  estimated_weeks: 2
+  status: "scaffold"
+
+  references:
+    source: "https://www.mobygames.com/game/apple-panic"
+    docs: "https://en.wikipedia.org/wiki/Apple_Panic"

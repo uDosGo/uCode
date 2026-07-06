@@ -204,3 +204,33 @@ sprint:
       status: complete
       completed: "2026-07-06"
       priority: medium
+    - id: "task-031"
+      title: "Program scaffold: Repton (adapt 6502 source, 2 weeks)"
+      file: "programs/repton/program.yaml"
+      status: scaffold
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-032"
+      title: "Program scaffold: Apple Panic (rewrite, 2 weeks)"
+      file: "programs/apple-panic/program.yaml"
+      status: scaffold
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-033"
+      title: "Program scaffold: Elite (adapt 6502 source, 3 weeks)"
+      file: "programs/elite/program.yaml"
+      status: scaffold
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-034"
+      title: "Program scaffold: NetHack (adapt C source, 3 weeks)"
+      file: "programs/nethack/program.yaml"
+      status: scaffold
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-035"
+      title: "Program scaffold: Knight Orc (rewrite, 10 weeks)"
+      file: "programs/knight-orc/program.yaml"
+      status: scaffold
+      completed: "2026-07-06"
+      priority: high

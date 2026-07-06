@@ -1,0 +1,37 @@
+program:
+  name: "Repton"
+  version: "1.0"
+  type: "ucode"
+  approach: "adapt-source"
+
+  entry: "src/repton.bbc"
+  runtime: "bbc_basic_sdl"
+  emulation: "6502"
+
+  assets:
+    sprites:
+      - "sprites/repton_*.png"
+    maps:
+      - "maps/level_*.json"
+
+  lens:
+    capture:
+      - level_state
+      - map_data
+      - score
+      - time_remaining
+
+  skin:
+    default: "repton_classic"
+    alternates: ["teletext_classic"]
+
+  mcp:
+    commands: ["LEVEL_SELECT", "PAUSE", "SAVE", "STATUS"]
+
+  effort: "small"
+  estimated_weeks: 2
+  status: "scaffold"
+
+  references:
+    source: "https://github.com/superior-software/repton"
+    docs: "https://www.reptonresourcepage.co.uk/"

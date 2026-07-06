@@ -1,0 +1,34 @@
+program:
+  name: "Knight Orc (uCode)"
+  version: "1.0"
+  type: "ucode"
+  approach: "rewrite-inspired-by"
+
+  entry: "src/knight_orc.bbc"
+  runtime: "bbc_basic_sdl"
+
+  assets:
+    teletext:
+      - "text/title_page.ttx"
+
+  lens:
+    capture:
+      - player_location
+      - player_inventory
+      - game_time
+      - npc_statuses
+
+  skin:
+    default: "dark_fantasy"
+    alternates: ["teletext_classic"]
+
+  mcp:
+    commands: ["SAVE", "LOAD", "TIME_SKIP", "STATUS"]
+
+  effort: "large"
+  estimated_weeks: 10
+  status: "scaffold"
+
+  references:
+    source: "https://www.mobygames.com/game/knight-orc"
+    docs: "https://en.wikipedia.org/wiki/Knight_Orc"
