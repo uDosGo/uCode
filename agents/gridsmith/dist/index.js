@@ -12,8 +12,11 @@ import {
   importAmosProgram,
   importBasicProgram,
   lensCraft,
-  sourceMiner
-} from "./chunk-IQGLPJKQ.js";
+  mcpScribe,
+  skinWeaver,
+  sourceMiner,
+  writeSkinManifest
+} from "./chunk-U2WXLTPT.js";
 export {
   GRIDSMITH_TOOLS,
   composeGridLayers,
@@ -28,5 +31,8 @@ export {
   importAmosProgram,
   importBasicProgram,
   lensCraft,
-  sourceMiner
+  mcpScribe,
+  skinWeaver,
+  sourceMiner,
+  writeSkinManifest
 };

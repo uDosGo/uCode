@@ -203,6 +203,123 @@ interface LensCraftOutput {
 }
 declare function lensCraft(input: LensCraftInput): LensCraftOutput;
 
+interface SkinWeaverInput {
+    source_assets: Array<{
+        path: string;
+        type: string;
+        format?: string;
+        transform?: {
+            scale?: number;
+            rotation?: number;
+            center?: [number, number];
+        };
+    }>;
+    target: {
+        locale: string;
+        resolution: {
+            cols: number;
+            rows: number;
+        };
+        palette: string;
+    };
+}
+interface CharacterMapping {
+    source: string;
+    target_char: string;
+    target_fg: number;
+    target_bg: number;
+    description: string;
+}
+interface TeletextOverride {
+    header_row?: {
+        fg: number;
+        bg: number;
+        bold?: boolean;
+    };
+    hud_row?: {
+        fg: number;
+        bg: number;
+        bold?: boolean;
+    };
+    alert_row?: {
+        fg: number;
+        bg: number;
+        bold?: boolean;
+    };
+}
+interface SkinManifest {
+    name: string;
+    version: string;
+    palette: Record<string, string>;
+    character_mappings: CharacterMapping[];
+    teletext_overrides: TeletextOverride;
+}
+interface ExportedAsset {
+    source: string;
+    output: string;
+}
+interface SkinWeaverOutput {
+    skill: 'SKIN-Weaver';
+    version: '1.0';
+    executed_at: string;
+    skin_name: string;
+    manifest: SkinManifest;
+    exported_assets: ExportedAsset[];
+    manifest_written_to?: string;
+}
+declare function skinWeaver(input: SkinWeaverInput): SkinWeaverOutput;
+declare function writeSkinManifest(output: SkinWeaverOutput, outputDir: string, format?: 'yaml' | 'json'): string;
+
+interface McpScribeInput {
+    program_name: string;
+    program_type: 'adapt-source' | 'rewrite' | 'port-c-to-basic' | 'rewrite_inspired_by';
+    game_mechanics: {
+        genre: string[];
+        save_system?: string;
+        input_method?: string;
+        persistence?: string;
+    };
+    source_miner_report: {
+        findings: {
+            memory_map: Array<{
+                label: string;
+                address: string;
+                type: string;
+                description: string;
+                confidence: number;
+            }>;
+            functions: Array<{
+                name: string;
+                address: string;
+                description: string;
+                parameters?: Array<{
+                    register?: string;
+                    description: string;
+                }>;
+            }>;
+        };
+    };
+}
+interface McpCommand {
+    name: string;
+    description: string;
+    parameters: Record<string, {
+        type: string;
+        description: string;
+        default?: string;
+    }>;
+    action: 'lens_capture' | 'lens_restore' | 'mcp_inject' | 'emulator_control' | 'lens_query';
+    payload: Record<string, unknown>;
+}
+interface McpScribeOutput {
+    skill: 'MCP-Scribe';
+    version: '1.0';
+    executed_at: string;
+    program: string;
+    commands: McpCommand[];
+}
+declare function mcpScribe(input: McpScribeInput): McpScribeOutput;
+
 interface GridSmithToolParameter {
     type: 'string' | 'number' | 'array' | 'object';
     description: string;
@@ -229,4 +346,4 @@ declare function convertUCodeToLatLon(coord: string): {
     lon: number;
 } | null;
 
-export { type AssetReference, type CellPayload, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type LensCraftInput, type LensCraftOutput, type MemoryMapEntry, type Recommendation, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, lensCraft, sourceMiner };
+export { type AssetReference, type CellPayload, type CharacterMapping, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type LensCraftInput, type LensCraftOutput, type McpCommand, type McpScribeInput, type McpScribeOutput, type MemoryMapEntry, type Recommendation, type SkinManifest, type SkinWeaverInput, type SkinWeaverOutput, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, lensCraft, mcpScribe, skinWeaver, sourceMiner, writeSkinManifest };

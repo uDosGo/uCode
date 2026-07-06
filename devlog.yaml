@@ -1,6 +1,6 @@
 version: "1.0.0"
-updated: "2026-07-06T15:38:00Z"
-round: "skills-framework-phase-2 lens-craft"
+updated: "2026-07-06T16:03:00Z"
+round: "skills-framework-phase-3 skin-weaver-mcp-scribe"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -74,4 +74,16 @@ changes_2026_07_06_s3:
   - "GridSmith: MCP handler for lens_craft in JSON-RPC server"
   - "GridSmith: Test suite 44 tests passing (27 core + 9 source-miner + 8 lens-craft)"
 
-current_dev_flow: "Skills Framework Phase 1+2 complete. Source-Miner→LENS-Craft end-to-end pipeline working. Next: SKIN-Weaver + MCP-Scribe skills."
+changes_2026_07_06_s4:
+  - "Skills: SKIN-Weaver (agents/gridsmith/src/tools/skin-weaver.ts) — asset→character mapper"
+  - "Skills: 5 built-in palettes (bbc_mode7, teletext_classic, dark_fantasy, repton_classic, elite_wireframe)"
+  - "Skills: Character mapping heuristics for 10 asset types (sprite→*, map→#, audio→~, etc.)"
+  - "Skills: YAML + JSON manifest generation, file writing to disk"
+  - "Skills: MCP-Scribe (agents/gridsmith/src/tools/mcp-scribe.ts) — command spec generator"
+  - "Skills: Generates save/load/status/pause + inject commands from Source-Miner functions"
+  - "GridSmith: Tool registry extended to 14 tools (skin_weaver + mcp_scribe)"
+  - "GridSmith: CLI commands for all 4 skills"
+  - "GridSmith: MCP JSON-RPC handlers for all 4 skills"
+  - "GridSmith: Test suite 60 tests passing (27 core + 9 source-miner + 8 lens-craft + 8 skin-weaver + 8 mcp-scribe)"
+
+current_dev_flow: "Skills Framework Phases 1-3 complete. All 4 skills built and wired. Next: Inspire-Engine + uCode-Weaver for rewrite games."

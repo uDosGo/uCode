@@ -25,6 +25,15 @@ import type {
   LensCraftOutput,
   ExtractorDefinition,
 } from './tools/lens-craft'
+import { skinWeaver, writeSkinManifest } from './tools/skin-weaver'
+import type {
+  SkinWeaverInput,
+  SkinWeaverOutput,
+  SkinManifest,
+  CharacterMapping,
+} from './tools/skin-weaver'
+import { mcpScribe } from './tools/mcp-scribe'
+import type { McpScribeInput, McpScribeOutput, McpCommand } from './tools/mcp-scribe'
 
 export interface GridSmithToolParameter {
   type: 'string' | 'number' | 'array' | 'object'
@@ -156,6 +165,25 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
       output_path: { type: 'string', description: 'Output file path (e.g. runtimes/basic/bridge/lens/extractors/)', default: '' },
     },
   },
+  {
+    name: 'skin_weaver',
+    description: 'Convert original game assets to uCode SKIN manifest.',
+    parameters: {
+      assets_json: { type: 'string', description: 'JSON array of asset objects [{path, type, format?}]' },
+      skin_name: { type: 'string', description: 'Name for the generated skin' },
+      palette: { type: 'string', description: 'Palette: bbc_mode7, teletext_classic, dark_fantasy, repton_classic, elite_wireframe', default: 'bbc_mode7' },
+      output_dir: { type: 'string', description: 'Output directory for .skin.yaml manifest', default: '' },
+    },
+  },
+  {
+    name: 'mcp_scribe',
+    description: 'Generate MCP command specifications from Source-Miner report.',
+    parameters: {
+      source_miner_json: { type: 'string', description: 'Source-Miner output as JSON string' },
+      program_name: { type: 'string', description: 'Program name (e.g. Elite, Repton)' },
+      program_type: { type: 'string', description: 'adapt-source, rewrite, port-c-to-basic, or rewrite_inspired_by', default: 'adapt-source' },
+    },
+  },
 ]
 
 export function createGridWorld(cols = 80, rows = 24): { grid: Grid; cols: number; rows: number; cellCount: number } {
@@ -187,6 +215,9 @@ export {
   createWorldManifest,
   sourceMiner,
   lensCraft,
+  skinWeaver,
+  writeSkinManifest,
+  mcpScribe,
 }
 export type {
   Grid,
@@ -202,4 +233,11 @@ export type {
   LensCraftInput,
   LensCraftOutput,
   ExtractorDefinition,
+  SkinWeaverInput,
+  SkinWeaverOutput,
+  SkinManifest,
+  CharacterMapping,
+  McpScribeInput,
+  McpScribeOutput,
+  McpCommand,
 }

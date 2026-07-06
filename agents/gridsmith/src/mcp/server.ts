@@ -16,6 +16,9 @@ import {
   createWorld,
   sourceMiner,
   lensCraft,
+  skinWeaver,
+  writeSkinManifest,
+  mcpScribe,
 } from '../index'
 
 const PORT = process.env.GRIDSMITH_MCP_PORT || '8670'
@@ -179,6 +182,42 @@ async function invokeTool(name: string, params: Record<string, unknown>): Promis
           module_name: moduleName,
           path: outputPath || undefined,
         },
+      })
+    }
+
+    case 'skin_weaver': {
+      const assetsJson = String(params.assets_json || '[]')
+      const palette = String(params.palette || 'bbc_mode7')
+      const outputDir = String(params.output_dir || '')
+
+      const assets = JSON.parse(assetsJson)
+      const result = skinWeaver({
+        source_assets: assets,
+        target: {
+          locale: 'teletext_grid',
+          resolution: { cols: 40, rows: 25 },
+          palette,
+        },
+      })
+
+      if (outputDir) {
+        const writtenTo = writeSkinManifest(result, outputDir, 'yaml')
+        return { ...result, manifest_written_to: writtenTo }
+      }
+      return result
+    }
+
+    case 'mcp_scribe': {
+      const minerJson = String(params.source_miner_json || '{}')
+      const programName = String(params.program_name || 'Unknown')
+      const programType = (params.program_type as string) || 'adapt-source'
+
+      const report = JSON.parse(minerJson)
+      return mcpScribe({
+        program_name: programName,
+        program_type: programType as 'adapt-source' | 'rewrite' | 'port-c-to-basic' | 'rewrite_inspired_by',
+        game_mechanics: { genre: [] },
+        source_miner_report: report,
       })
     }
 

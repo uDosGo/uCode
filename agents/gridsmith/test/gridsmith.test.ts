@@ -13,8 +13,8 @@ import { importAmosProgram } from '../src/tools/amos'
 import { createWorldManifest } from '../src/tools/world'
 
 describe('GridSmith tool definitions', () => {
-  it('has 12 registered tools', () => {
-    expect(GRIDSMITH_TOOLS).toHaveLength(12)
+  it('has 14 registered tools', () => {
+    expect(GRIDSMITH_TOOLS).toHaveLength(14)
   })
 
   it.each([

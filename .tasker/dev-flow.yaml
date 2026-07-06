@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-06
 version: "1.0.0"
 created: "2026-07-01T21:00:00Z"
-updated: "2026-07-06T15:38:00Z"
+updated: "2026-07-06T16:03:00Z"
 status: active
 
 sprint:
@@ -39,6 +39,24 @@ sprint:
       status: complete
       completed: "2026-07-06"
       priority: medium
+    - id: "task-042"
+      title: "Phase 3: SKIN-Weaver skill — asset character mapper with 5 palettes"
+      file: "agents/gridsmith/src/tools/skin-weaver.ts"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
+    - id: "task-043"
+      title: "Phase 3: MCP-Scribe skill — MCP command spec generator"
+      file: "agents/gridsmith/src/tools/mcp-scribe.ts"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
+    - id: "task-044"
+      title: "Wire SKIN-Weaver + MCP-Scribe into CLI + MCP (14 tools, 60 tests pass)"
+      file: "agents/gridsmith/src/index.ts, cli.ts, mcp/server.ts"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
     - id: "task-039"
       title: "Phase 2: LENS-Craft skill — Python extractor code generator"
       file: "agents/gridsmith/src/tools/lens-craft.ts"

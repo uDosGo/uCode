@@ -11,8 +11,11 @@ import {
   importAmosProgram,
   importBasicProgram,
   lensCraft,
-  sourceMiner
-} from "./chunk-IQGLPJKQ.js";
+  mcpScribe,
+  skinWeaver,
+  sourceMiner,
+  writeSkinManifest
+} from "./chunk-U2WXLTPT.js";
 
 // src/cli.ts
 import { createGrid } from "@udos/gridcore";
@@ -202,6 +205,46 @@ function main() {
         module_name: moduleName,
         path: outputPath || void 0
       }
+    });
+    printJson(result);
+    return;
+  }
+  if (section === "skill" && action === "skin-weaver") {
+    const assetsJson = argValue(args, "--assets", "[]") || "[]";
+    const palette = argValue(args, "--palette", "bbc_mode7") || "bbc_mode7";
+    const outputDir = argValue(args, "--output", "") || "";
+    const assets = JSON.parse(assetsJson);
+    const result = skinWeaver({
+      source_assets: assets,
+      target: {
+        locale: "teletext_grid",
+        resolution: { cols: 40, rows: 25 },
+        palette
+      }
+    });
+    if (outputDir) {
+      const writtenTo = writeSkinManifest(result, outputDir, "yaml");
+      printJson({ ...result, manifest_written_to: writtenTo });
+    } else {
+      printJson(result);
+    }
+    return;
+  }
+  if (section === "skill" && action === "mcp-scribe") {
+    const minerJson = argValue(args, "--miner-report", "") || "";
+    const programName = argValue(args, "--program", "Unknown") || "Unknown";
+    const programType = argValue(args, "--type", "adapt-source") || "adapt-source";
+    if (!minerJson) {
+      process.stderr.write("Error: --miner-report required (Source-Miner JSON output)\n");
+      process.exitCode = 1;
+      return;
+    }
+    const report = JSON.parse(minerJson);
+    const result = mcpScribe({
+      program_name: programName,
+      program_type: programType,
+      game_mechanics: { genre: [] },
+      source_miner_report: report
     });
     printJson(result);
     return;

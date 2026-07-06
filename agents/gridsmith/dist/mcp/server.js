@@ -12,8 +12,11 @@ import {
   importAmosProgram,
   importBasicProgram,
   lensCraft,
-  sourceMiner
-} from "../chunk-IQGLPJKQ.js";
+  mcpScribe,
+  skinWeaver,
+  sourceMiner,
+  writeSkinManifest
+} from "../chunk-U2WXLTPT.js";
 
 // src/mcp/server.ts
 import { createServer } from "http";
@@ -144,6 +147,37 @@ async function invokeTool(name, params) {
           module_name: moduleName,
           path: outputPath || void 0
         }
+      });
+    }
+    case "skin_weaver": {
+      const assetsJson = String(params.assets_json || "[]");
+      const palette = String(params.palette || "bbc_mode7");
+      const outputDir = String(params.output_dir || "");
+      const assets = JSON.parse(assetsJson);
+      const result = skinWeaver({
+        source_assets: assets,
+        target: {
+          locale: "teletext_grid",
+          resolution: { cols: 40, rows: 25 },
+          palette
+        }
+      });
+      if (outputDir) {
+        const writtenTo = writeSkinManifest(result, outputDir, "yaml");
+        return { ...result, manifest_written_to: writtenTo };
+      }
+      return result;
+    }
+    case "mcp_scribe": {
+      const minerJson = String(params.source_miner_json || "{}");
+      const programName = String(params.program_name || "Unknown");
+      const programType = params.program_type || "adapt-source";
+      const report = JSON.parse(minerJson);
+      return mcpScribe({
+        program_name: programName,
+        program_type: programType,
+        game_mechanics: { genre: [] },
+        source_miner_report: report
       });
     }
     default:
