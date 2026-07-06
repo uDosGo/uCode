@@ -1,0 +1,42 @@
+program:
+  name: "uConstruct (Adventure Forge)"
+  version: "1.0"
+  type: "ucode"
+  approach: "rewrite-inspired-by"
+  inspired_by: "Adventure Construction Set (ACS, Apple II, 1984)"
+
+  entry: "src/uconstruct.bbc"
+  runtime: "bbc_basic_sdl"
+
+  description: >
+    Tile-based adventure builder inspired by ACS. Create 15x15 tile maps
+    with walkable/non-walkable tiles, rooms, items, creatures, and
+    export/import via LENS/Spool/SKIN/Marp.
+
+  assets:
+    teletext:
+      - "text/title_page.ttx"
+    sprites:
+      - "sprites/tiles_*.png"
+
+  lens:
+    capture:
+      - map
+      - rooms
+      - inventory
+      - creatures
+
+  skin:
+    default: "teletext_classic"
+    alternates: ["pixel_art", "paper_retro"]
+
+  mcp:
+    commands: ["SAVE", "LOAD", "EXPORT_TAILWIND", "EXPORT_MARP", "DEBUG"]
+
+  effort: "large"
+  estimated_weeks: 10
+  status: "scaffold"
+
+  references:
+    source: "https://www.mobygames.com/game/adventure-construction-set"
+    docs: "https://en.wikipedia.org/wiki/Adventure_Construction_Set"

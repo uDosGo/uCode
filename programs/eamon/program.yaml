@@ -1,0 +1,40 @@
+program:
+  name: "Eamon (uCode)"
+  version: "1.0"
+  type: "ucode"
+  approach: "adapt-source"
+  inspired_by: "Eamon (Apple II, Applesoft BASIC, 1980)"
+
+  entry: "src/eamon.bbc"
+  runtime: "bbc_basic_sdl"
+
+  description: >
+    Port of the classic Eamon text adventure system. Modular Applesoft BASIC
+    source ported to uCode's BBC BASIC runtime. Character stats, room-based
+    world model, inventory, and combat preserved via LENS extraction.
+
+  assets:
+    teletext:
+      - "text/title_page.ttx"
+
+  lens:
+    capture:
+      - character_stats
+      - room_state
+      - inventory
+      - combat_state
+
+  skin:
+    default: "teletext_classic"
+    alternates: ["dark_mode", "paper_retro"]
+
+  mcp:
+    commands: ["SAVE", "LOAD", "CHEAT_STATS", "TELEPORT", "STATUS"]
+
+  effort: "medium"
+  estimated_weeks: 3
+  status: "scaffold"
+
+  references:
+    source: "https://github.com/TheCodingGentleman/EamonRemastered"
+    docs: "https://eamon.fandom.com/wiki/Eamon_Wiki"

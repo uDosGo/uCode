@@ -17,6 +17,7 @@ The Skills Framework defines automated tools ("Skills") for importing and adapti
 | `SKIN-Weaver` | Convert original graphics to uCode SKINs | Asset files (.png, .bmp, sprite data) | SKIN manifest + asset files |
 | `MCP-Scribe` | Define MCP command interfaces | Source-Miner report + game mechanics spec | MCP command YAML specification |
 | `Inspire-Engine` | Generate game design docs for rewrites | Research materials (reviews, wikis) | Structured game design document |
+| `uCode-Weaver` | Generate skeleton code from GDD | Inspire-Engine GDD output | BBC BASIC or Python source with LENS/SKIN/MCP hooks |
 
 ---
 
