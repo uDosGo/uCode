@@ -15,6 +15,7 @@ import {
   findPath,
   createWorld,
   sourceMiner,
+  lensCraft,
 } from '../index'
 
 const PORT = process.env.GRIDSMITH_MCP_PORT || '8670'
@@ -160,6 +161,23 @@ async function invokeTool(name: string, params: Record<string, unknown>): Promis
           scan_depth: 'full',
           target_patterns: targetPatterns.length > 0 ? targetPatterns : undefined,
           exclude_patterns: excludePatterns.length > 0 ? excludePatterns : undefined,
+        },
+      })
+    }
+
+    case 'lens_craft': {
+      const minerJson = String(params.source_miner_json || '{}')
+      const moduleName = String(params.module_name || 'lens_extractor')
+      const outputPath = String(params.output_path || '')
+
+      const report = JSON.parse(minerJson)
+      return lensCraft({
+        source_miner_report: report,
+        emulator: { type: '6502', endianness: 'little' },
+        output: {
+          language: 'python',
+          module_name: moduleName,
+          path: outputPath || undefined,
         },
       })
     }

@@ -1,6 +1,6 @@
 version: "1.0.0"
-updated: "2026-07-06T15:30:00Z"
-round: "skills-framework-phase-1 source-miner"
+updated: "2026-07-06T15:38:00Z"
+round: "skills-framework-phase-2 lens-craft"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -64,4 +64,14 @@ changes_2026_07_06_s2:
   - "Programs: 7 classic game scaffolds (Repton, Apple Panic, Elite, NetHack, Knight Orc, uConstruct, Eamon)"
   - "Dev-flow: .tasker/dev-flow.yaml updated with tasks 036-038"
 
-current_dev_flow: "Skills Framework Phase 1 complete. Source-Miner scans 6502 assembly. Next: LENS-Craft code generator."
+changes_2026_07_06_s3:
+  - "Skills: LENS-Craft (agents/gridsmith/src/tools/lens-craft.ts) — Python extractor generator"
+  - "Skills: Generates Python classes with @property getters for memory-mapped variables"
+  - "Skills: Supports bitmask (with label lookup), struct, array, uint8/16/32 extractors"
+  - "Skills: Writes .py files to disk; capture_all() method with all extractors"
+  - "GridSmith: Tool registry extended to 12 tools with lens_craft"
+  - "GridSmith: CLI: gridsmith skill lens-craft --miner-report <json> --module <name>"
+  - "GridSmith: MCP handler for lens_craft in JSON-RPC server"
+  - "GridSmith: Test suite 44 tests passing (27 core + 9 source-miner + 8 lens-craft)"
+
+current_dev_flow: "Skills Framework Phase 1+2 complete. Source-Miner→LENS-Craft end-to-end pipeline working. Next: SKIN-Weaver + MCP-Scribe skills."

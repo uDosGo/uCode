@@ -10,8 +10,9 @@ import {
   findPath,
   importAmosProgram,
   importBasicProgram,
+  lensCraft,
   sourceMiner
-} from "./chunk-IC62ZHDJ.js";
+} from "./chunk-IQGLPJKQ.js";
 
 // src/cli.ts
 import { createGrid } from "@udos/gridcore";
@@ -178,6 +179,28 @@ function main() {
         scan_depth: "full",
         target_patterns: targetPatterns.length > 0 ? targetPatterns : void 0,
         exclude_patterns: excludePatterns.length > 0 ? excludePatterns : void 0
+      }
+    });
+    printJson(result);
+    return;
+  }
+  if (section === "skill" && action === "lens-craft") {
+    const minerJson = argValue(args, "--miner-report", "") || "";
+    const moduleName = argValue(args, "--module", "lens_extractor") || "lens_extractor";
+    const outputPath = argValue(args, "--output", "") || "";
+    if (!minerJson) {
+      process.stderr.write("Error: --miner-report required (Source-Miner JSON output)\n");
+      process.exitCode = 1;
+      return;
+    }
+    const report = JSON.parse(minerJson);
+    const result = lensCraft({
+      source_miner_report: report,
+      emulator: { type: "6502", endianness: "little" },
+      output: {
+        language: "python",
+        module_name: moduleName,
+        path: outputPath || void 0
       }
     });
     printJson(result);

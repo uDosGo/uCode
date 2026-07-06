@@ -936,6 +936,241 @@ function sourceMiner(input) {
   };
 }
 
+// src/tools/lens-craft.ts
+var import_node_fs3 = require("fs");
+var import_node_path6 = require("path");
+function pascalCase(name) {
+  return name.replace(/[^a-zA-Z0-9]/g, " ").split(/[\s_]+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join("");
+}
+function snakeCase(name) {
+  return name.replace(/[^a-zA-Z0-9]/g, "_").replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+}
+function pythonType(ext) {
+  switch (ext.type) {
+    case "bitmask":
+    case "uint8":
+      return "int";
+    case "uint16":
+    case "int16":
+      return "int";
+    case "uint32":
+    case "int32":
+      return "int";
+    case "array":
+      return "dict";
+    case "struct":
+      return "dict";
+    default:
+      return "int";
+  }
+}
+function pythonDocstring(description) {
+  return `"""${description}"""`;
+}
+function generateBitmaskGetter(ext, addr) {
+  const cases = ext.labels ? Object.entries(ext.labels).map(([val, label]) => `        ${val}: "${label}"`).join(",\n") : "";
+  const classLabel = ext.labels ? `        labels = {${cases ? "\n" + cases + "\n" : ""}        }
+        return labels.get(val, "unknown")` : "return val";
+  return [
+    `    @property`,
+    `    def ${snakeCase(ext.name)}(self) -> str:`,
+    `        ${pythonDocstring(ext.description)}`,
+    `        val = self._emu.read_byte(0x${addr.toString(16)})`,
+    classLabel
+  ].join("\n");
+}
+function generateSimpleGetter(ext, addr) {
+  const method = ext.type === "uint32" || ext.type === "int32" ? `read_uint32(0x${addr.toString(16)})` : ext.type === "uint16" || ext.type === "int16" ? `read_uint16(0x${addr.toString(16)})` : `read_byte(0x${addr.toString(16)})`;
+  return [
+    `    @property`,
+    `    def ${snakeCase(ext.name)}(self) -> ${pythonType(ext)}:`,
+    `        ${pythonDocstring(ext.description)}`,
+    `        return self._emu.${method}`
+  ].join("\n");
+}
+function generateStructGetter(ext, addr) {
+  const fieldLines = ext.fields?.map((f) => {
+    const readMethod = f.type === "uint32" ? `read_uint32(0x${(addr + f.offset).toString(16)})` : f.type === "uint16" ? `read_uint16(0x${(addr + f.offset).toString(16)})` : `read_byte(0x${(addr + f.offset).toString(16)})`;
+    return `            "${f.name}": self._emu.${readMethod}`;
+  }) || [];
+  return [
+    `    @property`,
+    `    def ${snakeCase(ext.name)}(self) -> dict:`,
+    `        ${pythonDocstring(ext.description)}`,
+    "        return {",
+    ...fieldLines,
+    "        }"
+  ].join("\n");
+}
+function generateArrayGetter(ext, addr) {
+  const size = ext.size || 1;
+  const labels = ext.labels ? Object.entries(ext.labels).map(([idx, label]) => `        items = ${JSON.stringify(Object.values(ext.labels))}`).join("\n") : "";
+  const labelBlock = labels ? `
+${labels}
+        result = {}
+        for i, label in enumerate(items):
+            result[label] = self._emu.read_byte(0x${addr.toString(16)} + i)
+        return result` : `        result = {}
+        for i in range(${size}):
+            result[i] = self._emu.read_byte(0x${addr.toString(16)} + i)
+        return result`;
+  return [
+    `    @property`,
+    `    def ${snakeCase(ext.name)}(self) -> dict:`,
+    `        ${pythonDocstring(ext.description)}`,
+    labelBlock
+  ].join("\n");
+}
+function generateProperty(ext) {
+  const addr = parseInt(ext.address, 16);
+  switch (ext.type) {
+    case "bitmask":
+      return generateBitmaskGetter(ext, addr);
+    case "struct":
+      return generateStructGetter(ext, addr);
+    case "array":
+      return generateArrayGetter(ext, addr);
+    case "uint8":
+    case "uint16":
+    case "uint32":
+    case "int16":
+    case "int32":
+      return generateSimpleGetter(ext, addr);
+    default:
+      return generateSimpleGetter(ext, addr);
+  }
+}
+function extractorToProvider(mem, programName) {
+  const providers = [];
+  for (const entry of mem) {
+    if (entry.confidence < 0.6) continue;
+    const snaked = snakeCase(entry.label);
+    const name = `${programName}_${snaked}`.replace(/^[^a-z_]+/, "");
+    switch (entry.type) {
+      case "byte":
+        if (entry.description && /stat(e|us)|flag|mode|bit/i.test(entry.description)) {
+          providers.push({
+            name,
+            type: "bitmask",
+            address: entry.address,
+            size: 1,
+            labels: guessBitmaskLabels(entry.label, entry.description),
+            description: entry.description
+          });
+        } else if (entry.length && entry.length > 1) {
+          providers.push({
+            name,
+            type: "array",
+            address: entry.address,
+            size: entry.length,
+            description: entry.description
+          });
+        } else {
+          providers.push({
+            name,
+            type: "uint8",
+            address: entry.address,
+            size: 1,
+            description: entry.description
+          });
+        }
+        break;
+      case "struct":
+        providers.push({
+          name,
+          type: "struct",
+          address: entry.address,
+          size: entry.length || 4,
+          fields: [],
+          description: entry.description
+        });
+        break;
+      default:
+        providers.push({
+          name,
+          type: "uint8",
+          address: entry.address,
+          size: 1,
+          description: entry.description
+        });
+    }
+  }
+  return providers;
+}
+function guessBitmaskLabels(label, description) {
+  const lower = description.toLowerCase();
+  if (/docked|docking|flight|land/.test(lower)) {
+    return { "0": "docked", "1": "in_flight", "2": "docking", "3": "jumping" };
+  }
+  if (/paused|running|stopped|title/i.test(lower)) {
+    return { "0": "title_screen", "1": "running", "2": "paused", "3": "game_over" };
+  }
+  if (/alive|dead|hurt|invincible/i.test(lower)) {
+    return { "0": "alive", "1": "dead", "2": "hurt", "3": "invincible" };
+  }
+  return { "0": "off", "1": "on" };
+}
+function generatePythonCode(extractors, moduleName, sourcePath) {
+  const className = pascalCase(moduleName) + "Extractor";
+  const propertyBlocks = extractors.map(generateProperty).join("\n\n");
+  const captureItems = extractors.map((e) => `            "${snakeCase(e.name)}": self.${snakeCase(e.name)}`).join(",\n");
+  const header = [
+    "# Auto-generated by LENS-Craft v1.0",
+    `# Source: ${sourcePath}`,
+    `# ${extractors.length} extractors generated`,
+    "",
+    "",
+    `class ${className}:`
+  ].join("\n");
+  const init = [
+    "    def __init__(self, emu):",
+    '        """Initialize with a 6502 emulator instance.',
+    "",
+    "        Args:",
+    "            emu: Emulator providing read_byte(addr), read_uint16(addr),",
+    "                 read_uint32(addr) in little-endian byte order.",
+    '        """',
+    "        self._emu = emu"
+  ].join("\n");
+  const captureAll = [
+    "",
+    "    def capture_all(self) -> dict:",
+    '        """Capture all known state in a single snapshot."""',
+    "        return {",
+    captureItems,
+    "        }"
+  ].join("\n");
+  return [header, init, propertyBlocks, captureAll, ""].join("\n\n");
+}
+function lensCraft(input) {
+  const memoryMap = input.source_miner_report.findings.memory_map || [];
+  const sourcePath = input.source_miner_report.source || "unknown";
+  const pathSegments = sourcePath.replace(/\/$/, "").split("/");
+  const programName = pathSegments[pathSegments.length - 1] || "unknown";
+  const extractors = extractorToProvider(memoryMap, programName);
+  const moduleName = input.output.module_name;
+  const generatedCode = generatePythonCode(extractors, moduleName, sourcePath);
+  let writtenTo;
+  if (input.output.path) {
+    const outPath = input.output.path.endsWith(".py") ? input.output.path : (0, import_node_path6.join)(input.output.path, `${moduleName}.py`);
+    const dir = (0, import_node_path6.dirname)(outPath);
+    if (!(0, import_node_fs3.existsSync)(dir)) {
+      (0, import_node_fs3.mkdirSync)(dir, { recursive: true });
+    }
+    (0, import_node_fs3.writeFileSync)(outPath, generatedCode, "utf-8");
+    writtenTo = outPath;
+  }
+  return {
+    skill: "LENS-Craft",
+    version: "1.0",
+    executed_at: (/* @__PURE__ */ new Date()).toISOString(),
+    module_path: input.output.path || `${moduleName}.py`,
+    extractors,
+    generated_code: generatedCode,
+    written_to: writtenTo
+  };
+}
+
 // src/index.ts
 var GRIDSMITH_TOOLS = [
   {
@@ -1043,6 +1278,15 @@ var GRIDSMITH_TOOLS = [
       language: { type: "string", description: "Source language(s) as CSV", default: "6502" },
       target_patterns: { type: "string", description: "File patterns as CSV (e.g. *.asm,*.s)", default: "" },
       exclude_patterns: { type: "string", description: "Exclude patterns as CSV (e.g. test_*,*.tmp)", default: "" }
+    }
+  },
+  {
+    name: "lens_craft",
+    description: "Generate Python LENS extractor code from a Source-Miner report.",
+    parameters: {
+      source_miner_json: { type: "string", description: "Source-Miner output as JSON string" },
+      module_name: { type: "string", description: "Python module name (e.g. elite_lens)" },
+      output_path: { type: "string", description: "Output file path (e.g. runtimes/basic/bridge/lens/extractors/)", default: "" }
     }
   }
 ];
@@ -1174,6 +1418,21 @@ async function invokeTool(name, params) {
           scan_depth: "full",
           target_patterns: targetPatterns.length > 0 ? targetPatterns : void 0,
           exclude_patterns: excludePatterns.length > 0 ? excludePatterns : void 0
+        }
+      });
+    }
+    case "lens_craft": {
+      const minerJson = String(params.source_miner_json || "{}");
+      const moduleName = String(params.module_name || "lens_extractor");
+      const outputPath = String(params.output_path || "");
+      const report = JSON.parse(minerJson);
+      return lensCraft({
+        source_miner_report: report,
+        emulator: { type: "6502", endianness: "little" },
+        output: {
+          language: "python",
+          module_name: moduleName,
+          path: outputPath || void 0
         }
       });
     }

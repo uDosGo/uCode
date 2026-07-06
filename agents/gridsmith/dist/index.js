@@ -11,8 +11,9 @@ import {
   findPath,
   importAmosProgram,
   importBasicProgram,
+  lensCraft,
   sourceMiner
-} from "./chunk-IC62ZHDJ.js";
+} from "./chunk-IQGLPJKQ.js";
 export {
   GRIDSMITH_TOOLS,
   composeGridLayers,
@@ -26,5 +27,6 @@ export {
   findPath,
   importAmosProgram,
   importBasicProgram,
+  lensCraft,
   sourceMiner
 };

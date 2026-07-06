@@ -11,8 +11,9 @@ import {
   findPath,
   importAmosProgram,
   importBasicProgram,
+  lensCraft,
   sourceMiner
-} from "../chunk-IC62ZHDJ.js";
+} from "../chunk-IQGLPJKQ.js";
 
 // src/mcp/server.ts
 import { createServer } from "http";
@@ -127,6 +128,21 @@ async function invokeTool(name, params) {
           scan_depth: "full",
           target_patterns: targetPatterns.length > 0 ? targetPatterns : void 0,
           exclude_patterns: excludePatterns.length > 0 ? excludePatterns : void 0
+        }
+      });
+    }
+    case "lens_craft": {
+      const minerJson = String(params.source_miner_json || "{}");
+      const moduleName = String(params.module_name || "lens_extractor");
+      const outputPath = String(params.output_path || "");
+      const report = JSON.parse(minerJson);
+      return lensCraft({
+        source_miner_report: report,
+        emulator: { type: "6502", endianness: "little" },
+        output: {
+          language: "python",
+          module_name: moduleName,
+          path: outputPath || void 0
         }
       });
     }

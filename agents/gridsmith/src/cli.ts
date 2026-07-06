@@ -12,6 +12,7 @@ import {
   findPath,
   createWorld,
   sourceMiner,
+  lensCraft,
 } from './index'
 
 function argValue(args: string[], flag: string, fallback?: string): string | undefined {
@@ -200,6 +201,31 @@ function main(): void {
         scan_depth: 'full',
         target_patterns: targetPatterns.length > 0 ? targetPatterns : undefined,
         exclude_patterns: excludePatterns.length > 0 ? excludePatterns : undefined,
+      },
+    })
+    printJson(result)
+    return
+  }
+
+  if (section === 'skill' && action === 'lens-craft') {
+    const minerJson = argValue(args, '--miner-report', '') || ''
+    const moduleName = argValue(args, '--module', 'lens_extractor') || 'lens_extractor'
+    const outputPath = argValue(args, '--output', '') || ''
+
+    if (!minerJson) {
+      process.stderr.write('Error: --miner-report required (Source-Miner JSON output)\n')
+      process.exitCode = 1
+      return
+    }
+
+    const report = JSON.parse(minerJson)
+    const result = lensCraft({
+      source_miner_report: report,
+      emulator: { type: '6502', endianness: 'little' },
+      output: {
+        language: 'python',
+        module_name: moduleName,
+        path: outputPath || undefined,
       },
     })
     printJson(result)

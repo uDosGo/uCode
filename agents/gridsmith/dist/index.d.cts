@@ -146,6 +146,63 @@ interface SourceMinerOutput {
 }
 declare function sourceMiner(input: SourceMinerInput): SourceMinerOutput;
 
+interface LensCraftInput {
+    source_miner_report: {
+        findings: {
+            memory_map: Array<{
+                label: string;
+                address: string;
+                type: string;
+                description: string;
+                confidence: number;
+                length?: number;
+            }>;
+            functions: Array<{
+                name: string;
+                address: string;
+                description: string;
+            }>;
+        };
+        source: string;
+    };
+    emulator: {
+        type: string;
+        memory_size?: number;
+        memory_base?: string;
+        endianness: 'little' | 'big';
+    };
+    output: {
+        language: string;
+        module_name: string;
+        path?: string;
+    };
+}
+interface ExtractorDefinition {
+    name: string;
+    type: 'bitmask' | 'struct' | 'array' | 'uint8' | 'uint16' | 'uint32' | 'int16' | 'int32';
+    address: string;
+    size: number;
+    labels?: Record<string, string>;
+    fields?: Array<{
+        name: string;
+        offset: number;
+        type: string;
+        description: string;
+    }>;
+    element_type?: string;
+    description: string;
+}
+interface LensCraftOutput {
+    skill: 'LENS-Craft';
+    version: '1.0';
+    executed_at: string;
+    module_path: string;
+    extractors: ExtractorDefinition[];
+    generated_code?: string;
+    written_to?: string;
+}
+declare function lensCraft(input: LensCraftInput): LensCraftOutput;
+
 interface GridSmithToolParameter {
     type: 'string' | 'number' | 'array' | 'object';
     description: string;
@@ -172,4 +229,4 @@ declare function convertUCodeToLatLon(coord: string): {
     lon: number;
 } | null;
 
-export { type AssetReference, type CellPayload, type DataStructure, type FunctionEntry, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type MemoryMapEntry, type Recommendation, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, sourceMiner };
+export { type AssetReference, type CellPayload, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type LensCraftInput, type LensCraftOutput, type MemoryMapEntry, type Recommendation, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, lensCraft, sourceMiner };

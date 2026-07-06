@@ -19,6 +19,12 @@ import type {
   AssetReference,
   Recommendation,
 } from './tools/source-miner'
+import { lensCraft } from './tools/lens-craft'
+import type {
+  LensCraftInput,
+  LensCraftOutput,
+  ExtractorDefinition,
+} from './tools/lens-craft'
 
 export interface GridSmithToolParameter {
   type: 'string' | 'number' | 'array' | 'object'
@@ -141,6 +147,15 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
       exclude_patterns: { type: 'string', description: 'Exclude patterns as CSV (e.g. test_*,*.tmp)', default: '' },
     },
   },
+  {
+    name: 'lens_craft',
+    description: 'Generate Python LENS extractor code from a Source-Miner report.',
+    parameters: {
+      source_miner_json: { type: 'string', description: 'Source-Miner output as JSON string' },
+      module_name: { type: 'string', description: 'Python module name (e.g. elite_lens)' },
+      output_path: { type: 'string', description: 'Output file path (e.g. runtimes/basic/bridge/lens/extractors/)', default: '' },
+    },
+  },
 ]
 
 export function createGridWorld(cols = 80, rows = 24): { grid: Grid; cols: number; rows: number; cellCount: number } {
@@ -171,6 +186,7 @@ export {
   createWorld,
   createWorldManifest,
   sourceMiner,
+  lensCraft,
 }
 export type {
   Grid,
@@ -183,4 +199,7 @@ export type {
   DataStructure,
   AssetReference,
   Recommendation,
+  LensCraftInput,
+  LensCraftOutput,
+  ExtractorDefinition,
 }

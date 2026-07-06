@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-06
 version: "1.0.0"
 created: "2026-07-01T21:00:00Z"
-updated: "2026-07-06T15:30:00Z"
+updated: "2026-07-06T15:38:00Z"
 status: active
 
 sprint:
@@ -36,6 +36,24 @@ sprint:
     - id: "task-038"
       title: "Source-Miner test suite (9 tests, 36 total pass)"
       file: "agents/gridsmith/test/source-miner.test.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: medium
+    - id: "task-039"
+      title: "Phase 2: LENS-Craft skill — Python extractor code generator"
+      file: "agents/gridsmith/src/tools/lens-craft.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-040"
+      title: "Wire LENS-Craft into CLI + MCP + tool registry (12 tools)"
+      file: "agents/gridsmith/src/index.ts, cli.ts, mcp/server.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-041"
+      title: "LENS-Craft test suite (8 tests, 44 total pass)"
+      file: "agents/gridsmith/test/lens-craft.test.ts"
       status: complete
       completed: "2026-07-06"
       priority: medium
