@@ -11,12 +11,13 @@
       },
       "disabled": false
     },
-    "gridsmith": {
+    "gridsmith-mcp": {
       "command": "node",
-      "args": ["./agents/gridsmith/dist/cli.js", "mcp"],
+      "args": ["./agents/gridsmith/dist/mcp/server.js"],
       "cwd": "/Users/fredbook/Code/uCode",
       "env": {
-        "UCORE_ENDPOINT": "http://localhost:8484"
+        "GRIDSMITH_MCP_PORT": "8670",
+        "GRIDSMITH_MCP_HOST": "127.0.0.1"
       },
       "disabled": false
     },

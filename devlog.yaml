@@ -1,27 +1,54 @@
-# Devlog — uCode
 version: "1.0.0"
-updated: "2026-07-02T13:21:00Z"
-round: "sprint.2026-07-02 setup"
+updated: "2026-07-06T14:30:00Z"
+round: "terminal-teletext-integration complete"
 
-## Recent Changes (2026-07-01)
+changes_2026_07_01:
+  - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
+  - "Config: Hivemind env, MCP server config, Vault, OpenRouter"
+  - "Tasker: .tasker/dev-flow.yaml with 19 sprint items (7 complete)"
+  - "Rules: .clinerules updated with config, secrets, LLM routing rules"
+  - "Workspace: ucode.code-workspace with agents, runtimes, uCore, HomeNest"
+  - "IDE: PyCharm run configs (.idea/runConfigurations/), cleaned stale modules"
 
-- Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md
-- Config: Hivemind env, MCP server config, Vault, OpenRouter
-- Tasker: .tasker/dev-flow.yaml with 19 sprint items (7 complete)
-- Rules: .clinerules updated with config, secrets, LLM routing rules
-- Workspace: ucode.code-workspace with agents, runtimes, uCore, HomeNest
-- IDE: PyCharm run configs (.idea/runConfigurations/), cleaned stale modules
+changes_2026_07_02:
+  - "Tasker: .tasker/repo-memory.yaml — Python version verdict (3.12.12 stable)"
+  - "Investigated: keepalive OSErrors resolved by pinning to Python 3.12"
+  - "Documented: python@3.13/3.14 kept for awscli, ollama, ansible, mlx, nmap only"
 
-## Recent Changes (2026-07-02)
+changes_2026_07_03:
+  - "GridSmith: 10 MCP tools (create_world, edit_cell, compose_layers, export_uvox, pathfind, import_basic, import_amos, create_grid, latlon_to_ucode, ucode_to_latlon)"
+  - "GridSmith: CLI v0.2.0 with stateful grid registry, 12 commands"
+  - "GridSmith: MCP JSON-RPC 2.0 server (agents/gridsmith/src/mcp/server.ts)"
+  - "GridSmith: AMOS importer (SPRITE, BOB, SOUND, MOVE, REM parsing)"
+  - "GridSmith: A* pathfinding with wall-blocking support"
+  - "GridSmith: World creator with optional terrain map"
+  - "GridSmith: UVOX artifact exporter (.uvox format)"
+  - "GridSmith: Test suite — 27 tests, all passing"
+  - "GridSmith: Global npm link (gridsmith and gridsmith-mcp binaries)"
+  - "Runtime: BBCSDL engine package (runtimes/basic/bbcsdl/)"
+  - "Runtime: BBCSDL assembly script (assemble.mjs)"
+  - "Runtime: Python BBCSDL bridge (bbcsdl_bridge.py) — subprocess IPC"
+  - "Runtime: LENS viewport renderer (lens.py)"
+  - "Runtime: SKIN theming with 3 built-in themes (skin.py)"
+  - "Runtime: Variable manager with snapshot/restore (variables.py)"
+  - "Runtime: GridSmith Python bridge — 13 CLI wrapper functions"
+  - "Runtime: .runtime nugget format spec (.runtime.spec.md)"
+  - "Runtime: One-line installer (install.sh)"
+  - "CI: GitHub Actions workflow for build + test (ucode-ci.yml)"
+  - "Config: GridSmith MCP server registered in mcp_config.json"
+  - "Docs: DEV_PLAN.md and GRIDSMITH_DEV_PLAN.md archived to docs/archive/"
+  - "Dev-flow: .tasker/dev-flow.yaml — 24 tasks complete, sprint closed"
 
-- Tasker: .tasker/repo-memory.yaml — Python version verdict (3.12.12 stable)
-- Investigated: keepalive OSErrors resolved by pinning to Python 3.12
-- Documented: python@3.13/3.14 kept for awscli, ollama, ansible, mlx, nmap only
+changes_2026_07_06:
+  - "GridCore: TerminalSurface class with scrollback, history, role-based colours"
+  - "GridCore: TeletextSurface class with page navigation, FASTEXT, page stack"
+  - "GridCore: TeletextPageProvider — Vault, doc-sites, and User Feeds mappers"
+  - "GridCore: RuntimeBridge IPC layer with event system and default dispatcher"
+  - "GridCore: All 13 uCode commands dispatched through bridge (HELP→LENS)"
+  - "GridCore: CEEFAX command triggers teletext page navigation via bridge"
+  - "Runtime: GridCoreAdapter Python module — JSON-RPC dispatch + teletext loader"
+  - "Tests: 37 tests across 4 suites (terminal, teletext, page-provider, gridcore)"
+  - "Build: GridCore, viewport-renderer, GridSmith all build clean"
+  - "Dev-flow: .tasker/dev-flow.yaml updated with integration tasks"
 
-## Current Dev Flow
-
-- GridSmith Node agent build (agents/gridsmith/)
-- BBCSDL runtime migration (runtimes/basic/)
-- uCode surface registration in uCore
-- GridCore display library (packages/gridcore/)
-- Viewport renderer (packages/viewport-renderer/)
+current_dev_flow: "Terminal + Teletext integration complete. 37 tests passing."

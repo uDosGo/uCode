@@ -1,1 +1,1 @@
-"""Tests for uCode1 + CEETEX integration"""
+# uCode BASIC runtime tests

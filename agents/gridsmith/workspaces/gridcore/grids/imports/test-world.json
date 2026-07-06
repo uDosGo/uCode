@@ -1,0 +1,15 @@
+{
+  "worldId": "test-world",
+  "preview": [
+    {
+      "row": 0,
+      "lineNumber": 10,
+      "text": "PRINT \"Hello\""
+    },
+    {
+      "row": 1,
+      "lineNumber": 20,
+      "text": "GOTO 10"
+    }
+  ]
+}

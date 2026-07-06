@@ -31,6 +31,10 @@ export class DOMViewport extends ViewportWidget {
     this.drawGrid(this.lastGrid)
   }
 
+  getElement(): HTMLDivElement {
+    return this.root
+  }
+
   destroy(): void {
     this.root.remove()
   }

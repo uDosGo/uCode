@@ -1,0 +1,29 @@
+{
+  "id": "test-world",
+  "name": "Test World",
+  "type": "library",
+  "source": "basic",
+  "sourceType": "inline",
+  "grid": {
+    "cols": 80,
+    "rows": 2,
+    "cellSize": 24
+  },
+  "layers": [
+    "terrain",
+    "details",
+    "entities"
+  ],
+  "metrics": {
+    "lineCount": 2,
+    "maxLineLength": 13,
+    "statements": {
+      "print": 1,
+      "data": 0,
+      "goto": 1,
+      "gosub": 0,
+      "rem": 0,
+      "other": 0
+    }
+  }
+}

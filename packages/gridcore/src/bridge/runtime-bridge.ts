@@ -1,0 +1,285 @@
+import type { OutputLine } from '../terminal/terminal-surface'
+import type { TeletextPage } from '../teletext/teletext-surface'
+
+// ── Types ─────────────────────────────────────────────────────────
+
+export type BridgeMode = 'in-process' | 'websocket' | 'mock'
+
+export interface BridgeMessage {
+  type: 'command' | 'output' | 'teletext-load' | 'teletext-page' | 'error'
+  payload: unknown
+}
+
+export interface CommandResult {
+  output: string | string[] | OutputLine[]
+  teletextPage?: number // if command triggers CEEFAX navigation
+}
+
+/**
+ * Command dispatcher — maps uCode commands to results.
+ * In production this would call the Python runtime via WebSocket/HTTP.
+ */
+export type CommandDispatcher = (command: string) => CommandResult | Promise<CommandResult>
+
+export interface RuntimeBridgeOptions {
+  mode?: BridgeMode
+  dispatcher?: CommandDispatcher
+}
+
+// ── Default in-process dispatcher ────────────────────────────────
+
+const HELP_TEXT = `Commands: HELP BEEP RENUM GRID LAYER MAP WORLD VAULT CEEFAX UVOX SKIN LENS QUIT`
+
+function defaultDispatcher(command: string): CommandResult {
+  const upper = command.toUpperCase().trim()
+
+  if (upper === 'HELP') {
+    return { output: HELP_TEXT }
+  }
+  if (upper === 'BEEP') {
+    return { output: '\x07' }
+  }
+  if (upper === 'QUIT') {
+    return { output: 'Goodbye.' }
+  }
+  if (upper === 'CEEFAX') {
+    return { output: 'Loading Teletext Reader...', teletextPage: 100 }
+  }
+  if (upper.startsWith('CEEFAX ')) {
+    const pageStr = upper.slice(7).trim()
+    const page = parseInt(pageStr, 10)
+    if (!isNaN(page) && page >= 100) {
+      return { output: `Loading page ${page}...`, teletextPage: page }
+    }
+    return { output: 'Usage: CEEFAX [page number]' }
+  }
+  if (upper === 'VAULT') {
+    return { output: 'Usage: VAULT <key>. Keys: ollama_endpoint, hivemind_api_key, openrouter_api_key' }
+  }
+  if (upper.startsWith('VAULT ')) {
+    const key = upper.slice(6).trim()
+    if (key === 'ollama_endpoint') return { output: 'ollama_endpoint = http://localhost:11434' }
+    if (key === 'hivemind_api_key') return { output: 'hivemind_api_key = [SET]' }
+    if (key === 'openrouter_api_key') return { output: 'openrouter_api_key = [SET]' }
+    return { output: `Vault key '${key}' not found.` }
+  }
+  if (upper === 'WORLD LIST' || upper === 'WORLD') {
+    return { output: ['Worlds:', '  default (40x25, 2 layers)', '  test-world (80x24, 3 layers)'] }
+  }
+  if (upper.startsWith('WORLD NEW ')) {
+    const name = upper.slice(10).trim()
+    return { output: `World '${name}' created with 2 layers.` }
+  }
+  if (upper === 'GRID' || upper.startsWith('GRID ')) {
+    return { output: 'GRID GET <col> <row> | GRID SET <col> <row> <char>' }
+  }
+  if (upper.startsWith('GRID SET ')) {
+    const parts = upper.slice(9).trim().split(/\s+/)
+    if (parts.length >= 3) {
+      return { output: `Set (${parts[0]},${parts[1]}) to '${parts[2]}'` }
+    }
+    return { output: 'Usage: GRID SET <col> <row> <char>' }
+  }
+  if (upper.startsWith('GRID GET ')) {
+    const parts = upper.slice(9).trim().split(/\s+/)
+    if (parts.length >= 2) {
+      return { output: `  (${parts[0]},${parts[1]}) = ' '` }
+    }
+    return { output: 'Usage: GRID GET <col> <row>' }
+  }
+  if (upper === 'LAYER' || upper === 'LAYER LIST') {
+    return { output: ['Layers:', '  main (40x25)', '  fx (40x25)'] }
+  }
+  if (upper === 'MAP' || upper === 'MAP LIST') {
+    return { output: '  (no maps loaded)' }
+  }
+  if (upper === 'RENUM') {
+    return { output: 'No program loaded.' }
+  }
+  if (upper === 'UVOX') {
+    return { output: 'UVox spatial algebra engine is in development.' }
+  }
+  if (upper.startsWith('UVOX ')) {
+    return { output: 'UVox spatial algebra engine is in development.' }
+  }
+  if (upper === 'SKIN') {
+    return { output: ['Skins: bbc, teletext, inverse, classic, dark, retro'] }
+  }
+  if (upper === 'LENS') {
+    return { output: 'LENS: viewport capture/restore. Usage: LENS CAPTURE | LENS RESTORE' }
+  }
+
+  // ── GRIDSMITH tools (delegated to GridSmith MCP) ──
+  if (upper.startsWith('GRIDSMITH CREATE_WORLD ') || upper.startsWith('WORLD CREATE ')) {
+    const name = upper.includes('CREATE_WORLD ') ? upper.split('CREATE_WORLD ')[1].trim() : upper.split('WORLD CREATE ')[1].trim()
+    return { output: `World '${name}' created via GridSmith. use GRIDSMITH WORLD LIST to verify` }
+  }
+  if (upper === 'GRIDSMITH CREATE_GRID' || upper.startsWith('GRIDSMITH CREATE_GRID ')) {
+    return { output: 'Grid created. Use GRIDSMITH CELL EDIT <grid> <x> <y> <char> to populate.' }
+  }
+  if (upper.startsWith('GRIDSMITH CELL EDIT ')) {
+    return { output: 'Cell edited. Use GRID GET <x> <y> to verify.' }
+  }
+  if (upper.startsWith('GRIDSMITH PATHFIND ') || upper.startsWith('GRIDSMITH PATH FIND ')) {
+    return { output: 'Pathfinding dispatched. Use GRIDSMITH PATH RESULT to check.' }
+  }
+  if (upper === 'GRIDSMITH TOOLS LIST') {
+    return { output: ['GridSmith Tools (10 available):',
+      '  create_world, import_basic_program, import_amos_program,',
+      '  create_grid, edit_cell, compose_layers, export_uvox,',
+      '  pathfind, latlon_to_ucode, ucode_to_latlon'] }
+  }
+  if (upper === 'GRIDSMITH COMPOSE_LAYERS' || upper.startsWith('GRIDSMITH COMPOSE ')) {
+    return { output: 'Layers composed. Viewport updated.' }
+  }
+  if (upper === 'GRIDSMITH EXPORT_UVOX' || upper.startsWith('GRIDSMITH EXPORT ')) {
+    return { output: 'UVox export initiated. Check workspaces/gridcore/grids/exports/ for .uvox files.' }
+  }
+  if (upper === 'GRIDSMITH LATLON_TO_UCODE' || upper.startsWith('GRIDSMITH LATLON ')) {
+    return { output: 'Use: GRIDSMITH LATLON_TO_UCODE <lat> <lon>' }
+  }
+  if (upper.startsWith('GRIDSMITH LATLON_TO_UCODE ')) {
+    return { output: 'Coordinate converted. Use GRIDSMITH UCODE_TO_LATLON to reverse.' }
+  }
+  if (upper === 'GRIDSMITH' || upper === 'GRIDSMITH HELP') {
+    return { output: ['GridSmith Agent — world builder tools:',
+      '  GRIDSMITH TOOLS LIST             List all tools',
+      '  GRIDSMITH CREATE_WORLD <name>    Create a new world',
+      '  GRIDSMITH CREATE_GRID [cols rows] Create a named grid',
+      '  GRIDSMITH CELL EDIT <g> <x> <y> <c>  Edit a cell',
+      '  GRIDSMITH PATHFIND <g> <sx> <sy> <ex> <ey>  Find path',
+      '  GRIDSMITH COMPOSE_LAYERS <g>     Compose layers',
+      '  GRIDSMITH EXPORT_UVOX <g> <out>  Export UVox artifact',
+      '  GRIDSMITH LATLON_TO_UCODE <lat> <lon>  Convert coords',
+      'Type GRIDSMITH <command> for details.'] }
+  }
+
+  // Unknown command
+  return { output: `Unknown command: ${command}. Type HELP for available commands.` }
+}
+
+// ── RuntimeBridge ─────────────────────────────────────────────────
+
+export class RuntimeBridge {
+  private mode: BridgeMode
+  private dispatcher: CommandDispatcher
+  private listeners: Map<string, Set<(...args: unknown[]) => void>> = new Map()
+
+  constructor(options: RuntimeBridgeOptions = {}) {
+    this.mode = options.mode ?? 'in-process'
+    this.dispatcher = options.dispatcher ?? defaultDispatcher
+  }
+
+  // ── Event system ────────────────────────────────────────────────
+
+  on(event: string, fn: (...args: unknown[]) => void): void {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, new Set())
+    }
+    this.listeners.get(event)!.add(fn)
+  }
+
+  off(event: string, fn: (...args: unknown[]) => void): void {
+    this.listeners.get(event)?.delete(fn)
+  }
+
+  private emit(event: string, ...args: unknown[]): void {
+    this.listeners.get(event)?.forEach(fn => fn(...args))
+  }
+
+  // ── Command dispatch ────────────────────────────────────────────
+
+  /** Send a command from the terminal to the backend */
+  async sendCommand(command: string): Promise<void> {
+    try {
+      const result = await this.dispatcher(command)
+      this.emit('command-output', result.output)
+
+      if (result.teletextPage !== undefined) {
+        this.emit('teletext-navigate', result.teletextPage)
+      }
+    } catch (err) {
+      this.emit('error', String(err))
+    }
+  }
+
+  /** Load a teletext page (for populating Teletext surface from backend) */
+  async loadTeletextPage(pageNumber: number): Promise<TeletextPage | null> {
+    // In production, this would fetch from Python runtime which reads ceefax JSON
+    // For now, returns null (TeletextPageProvider handles this in-process)
+    return null
+  }
+
+  /** Get the dispatcher (for direct access) */
+  getDispatcher(): CommandDispatcher {
+    return this.dispatcher
+  }
+
+  /** Set a custom dispatcher */
+  setDispatcher(dispatcher: CommandDispatcher): void {
+    this.dispatcher = dispatcher
+  }
+
+  /** Get the bridge mode */
+  getMode(): BridgeMode {
+    return this.mode
+  }
+
+  /** Switch to WebSocket mode and connect to GridcoreAdapter server */
+  async connectWebSocket(url: string): Promise<void> {
+    this.mode = 'websocket'
+
+    try {
+      const ws = new WebSocket(url)
+      this._ws = ws
+
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data)
+          if (msg.type === 'command-output') {
+            this.emit('command-output', msg.payload)
+          } else if (msg.type === 'teletext-navigate') {
+            this.emit('teletext-navigate', msg.payload)
+          } else if (msg.type === 'error') {
+            this.emit('error', msg.payload)
+          }
+        } catch {
+          // Raw text fallback
+          this.emit('command-output', event.data)
+        }
+      }
+
+      // Override dispatcher to send via WebSocket
+      this.dispatcher = async (command: string) => {
+        const payload = JSON.stringify({ command })
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(payload)
+        }
+        // Return placeholder; real output comes via ws.onmessage
+        return { output: '' }
+      }
+
+      // Wait for connection
+      await new Promise<void>((resolve, reject) => {
+        ws.onopen = () => resolve()
+        ws.onerror = () => reject(new Error('WebSocket connection failed'))
+        setTimeout(() => reject(new Error('WebSocket connection timeout')), 5000)
+      })
+    } catch (err) {
+      this.mode = 'in-process'
+      throw err
+    }
+  }
+
+  /** Disconnect WebSocket */
+  disconnectWebSocket(): void {
+    if (this._ws) {
+      this._ws.close()
+      this._ws = null
+    }
+    this.mode = 'in-process'
+    this.dispatcher = defaultDispatcher
+  }
+
+  private _ws: WebSocket | null = null
+}

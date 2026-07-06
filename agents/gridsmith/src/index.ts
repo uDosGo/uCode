@@ -1,5 +1,14 @@
 import { createGrid, listCells, latLonToUCode, uCodeToLatLon } from '@udos/gridcore'
+import type { Grid } from '@udos/gridcore'
 import { importBasicProgram } from './tools/basic'
+import { importAmosProgram } from './tools/amos'
+import { editCell } from './tools/cell'
+import type { CellPayload } from './tools/cell'
+import { composeGridLayers } from './tools/layers'
+import { exportUvox } from './tools/uvox'
+import { findPath } from './tools/pathfind'
+import { createWorld, createWorldManifest } from './tools/world'
+import type { WorldCreationOptions } from './tools/world'
 
 export interface GridSmithToolParameter {
   type: 'string' | 'number' | 'array' | 'object'
@@ -15,6 +24,18 @@ export interface GridSmithToolDefinition {
 }
 
 export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
+  {
+    name: 'create_world',
+    description: 'Create a new world with optional terrain.',
+    parameters: {
+      name: { type: 'string', description: 'World name' },
+      type: { type: 'string', description: 'World type: earth, dungeon, vault, or library' },
+      cols: { type: 'number', description: 'Grid column count', default: 80 },
+      rows: { type: 'number', description: 'Grid row count', default: 24 },
+      seed: { type: 'number', description: 'Random seed', default: 0 },
+      terrain: { type: 'object', description: 'Map of "x,y" -> character for terrain' },
+    },
+  },
   {
     name: 'import_basic_program',
     description: 'Import a BASIC program as a grid world.',
@@ -48,7 +69,7 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
       x: { type: 'number', description: 'X cell coordinate' },
       y: { type: 'number', description: 'Y cell coordinate' },
       layer: { type: 'number', description: 'Layer index', default: 0 },
-      data: { type: 'object', description: 'Cell payload' },
+      data: { type: 'object', description: 'Cell payload (char, fg, bg)' },
     },
   },
   {
@@ -73,6 +94,18 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
     },
   },
   {
+    name: 'pathfind',
+    description: 'Find path between two points on a grid (A*).',
+    parameters: {
+      grid_id: { type: 'string', description: 'Grid identifier' },
+      start_x: { type: 'number', description: 'Start X coordinate' },
+      start_y: { type: 'number', description: 'Start Y coordinate' },
+      end_x: { type: 'number', description: 'End X coordinate' },
+      end_y: { type: 'number', description: 'End Y coordinate' },
+      layer: { type: 'number', description: 'Layer index', default: 0 },
+    },
+  },
+  {
     name: 'latlon_to_ucode',
     description: 'Convert lat/lon to uCode.',
     parameters: {
@@ -90,9 +123,10 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
   },
 ]
 
-export function createGridWorld(cols = 80, rows = 24): { cols: number; rows: number; cellCount: number } {
+export function createGridWorld(cols = 80, rows = 24): { grid: Grid; cols: number; rows: number; cellCount: number } {
   const grid = createGrid(cols, rows)
   return {
+    grid,
     cols: grid.cols,
     rows: grid.rows,
     cellCount: listCells(grid).length,
@@ -107,4 +141,14 @@ export function convertUCodeToLatLon(coord: string): { lat: number; lon: number 
   return uCodeToLatLon(coord)
 }
 
-export { importBasicProgram }
+export {
+  importBasicProgram,
+  importAmosProgram,
+  editCell,
+  composeGridLayers,
+  exportUvox,
+  findPath,
+  createWorld,
+  createWorldManifest,
+}
+export type { Grid, CellPayload, WorldCreationOptions }

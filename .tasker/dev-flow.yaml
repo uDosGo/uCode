@@ -1,75 +1,109 @@
-/# uCode Dev Flow — sprint.2026-07-02
+# uCode Dev Flow — sprint.2026-07-06
 version: "1.0.0"
 created: "2026-07-01T21:00:00Z"
+updated: "2026-07-06T14:30:00Z"
 status: active
 
 sprint:
-  name: "sprint.2026-07-02"
+  name: "sprint.2026-07-06"
   goals:
     - "GridSmith Node agent build (CLI + MCP + npm)"
     - "BBCSDL runtime migration (v2 spec)"
     - "uCode embeddable surface (grid-algebra bundle)"
     - "ucode.code-workspace — standalone workspace"
+    - "Terminal + Teletext GridCore surface integration"
+    - "Wire uCode commands → Terminal OK> prompt"
+    - "Wire Vault/doc-sites/User Feeds → Teletext pages"
   items:
     - id: "task-001"
       title: "Build GridSmith core class"
       file: "agents/gridsmith/src/index.ts"
-      status: pending
+      status: complete
+      completed: "2026-07-02"
       priority: high
     - id: "task-002"
       title: "Wire GridSmith CLI commands"
       file: "agents/gridsmith/src/cli.ts"
-      status: pending
+      status: complete
+      completed: "2026-07-02"
       priority: high
     - id: "task-003"
       title: "Create BASIC importer"
-      file: "agents/gridsmith/src/importers/"
-      status: pending
+      file: "agents/gridsmith/src/tools/basic.ts"
+      status: complete
+      completed: "2026-07-02"
       priority: medium
     - id: "task-004"
       title: "Create AMOS importer"
-      file: "agents/gridsmith/src/importers/"
-      status: pending
+      file: "agents/gridsmith/src/tools/amos.ts"
+      status: complete
+      completed: "2026-07-02"
       priority: medium
     - id: "task-005"
-      title: "Build MCP tools for Cline"
-      file: "agents/gridsmith/src/mcp/"
-      status: pending
+      title: "Build MCP server for Cline"
+      file: "agents/gridsmith/src/mcp/server.ts"
+      status: complete
+      completed: "2026-07-02"
+      priority: medium
+    - id: "task-005b"
+      title: "GridSmith test suite"
+      file: "agents/gridsmith/test/gridsmith.test.ts"
+      status: complete
+      completed: "2026-07-02"
+      priority: medium
+    - id: "task-005c"
+      title: "npm link for global gridsmith command"
+      file: "agents/gridsmith/"
+      status: complete
+      completed: "2026-07-02"
       priority: medium
     - id: "task-006"
       title: "Package BBCSDL engine"
       file: "runtimes/basic/bbcsdl/"
-      status: pending
+      status: complete
+      completed: "2026-07-02"
       priority: high
     - id: "task-007"
       title: "Write Python bridge (bbcsdl_bridge.py)"
-      file: "runtimes/basic/bridge/"
-      status: pending
+      file: "runtimes/basic/bridge/bbcsdl_bridge.py"
+      status: complete
+      completed: "2026-07-02"
       priority: high
     - id: "task-008"
-      title: "Write LENS/SKIN modules"
-      file: "runtimes/basic/bridge/"
-      status: pending
+      title: "Write LENS module"
+      file: "runtimes/basic/bridge/lens.py"
+      status: complete
+      completed: "2026-07-02"
+      priority: medium
+    - id: "task-008b"
+      title: "Write SKIN module"
+      file: "runtimes/basic/bridge/skin.py"
+      status: complete
+      completed: "2026-07-02"
       priority: medium
     - id: "task-009"
       title: "Write variable manager"
       file: "runtimes/basic/bridge/variables.py"
-      status: pending
+      status: complete
+      completed: "2026-07-02"
       priority: medium
     - id: "task-010"
       title: "Create .runtime nugget format"
-      file: "runtimes/basic/"
-      status: pending
+      file: "runtimes/basic/.runtime.spec.md"
+      status: complete
+      completed: "2026-07-02"
       priority: low
     - id: "task-011"
       title: "One-line installer script"
-      file: "runtimes/basic/"
-      status: pending
+      file: "runtimes/basic/install.sh"
+      status: complete
+      completed: "2026-07-02"
       priority: low
     - id: "task-012"
       title: "Provide embeddable uCode surface"
       file: "packages/gridcore + packages/viewport-renderer"
-      status: pending
+      status: complete
+      completed: "2026-07-02"
       priority: high
     - id: "task-013"
       title: "Update ucode.code-workspace"
@@ -116,3 +150,57 @@ sprint:
       file: "packages/viewport-renderer/package.json"
       status: complete
       completed: "2026-07-02"
+    - id: "task-022"
+      title: "Implement TerminalSurface class in GridCore"
+      file: "packages/gridcore/src/terminal/terminal-surface.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-023"
+      title: "Implement TeletextSurface class in GridCore"
+      file: "packages/gridcore/src/teletext/teletext-surface.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-024"
+      title: "Implement TeletextPageProvider (Vault/Docs/Feeds mappers)"
+      file: "packages/gridcore/src/teletext/page-provider.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-025"
+      title: "Implement RuntimeBridge IPC layer"
+      file: "packages/gridcore/src/bridge/runtime-bridge.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-026"
+      title: "Create GridCoreAdapter Python module"
+      file: "runtimes/basic/bridge/gridcore_adapter.py"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-027"
+      title: "Wire uCode commands to Terminal OK> prompt"
+      file: "packages/gridcore/src/bridge/runtime-bridge.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-028"
+      title: "Wire Vault/doc-sites/Feeds to Teletext pages"
+      file: "packages/gridcore/src/teletext/page-provider.ts"
+      status: complete
+      completed: "2026-07-06"
+      priority: high
+    - id: "task-029"
+      title: "Create integration tests (terminal, teletext, page-provider)"
+      file: "packages/gridcore/test/"
+      status: complete
+      completed: "2026-07-06"
+      priority: medium
+    - id: "task-030"
+      title: "Full test suite verification (37 tests passing)"
+      file: "packages/gridcore/test/"
+      status: complete
+      completed: "2026-07-06"
+      priority: medium

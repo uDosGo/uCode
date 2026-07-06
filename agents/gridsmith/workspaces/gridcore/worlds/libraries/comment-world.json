@@ -1,0 +1,39 @@
+{
+  "id": "comment-world",
+  "name": "Comment World",
+  "type": "dungeon",
+  "source": "amos",
+  "sourceType": "inline",
+  "grid": {
+    "cols": 80,
+    "rows": 1,
+    "cellSize": 24
+  },
+  "layers": [
+    "terrain",
+    "details",
+    "entities"
+  ],
+  "assets": {
+    "sprites": [
+      {
+        "number": 1,
+        "x": 10,
+        "y": 20,
+        "image": 1
+      }
+    ],
+    "bobs": [],
+    "sounds": [],
+    "moves": [],
+    "commentCount": 1
+  },
+  "metrics": {
+    "totalLines": 2,
+    "spriteCount": 1,
+    "bobCount": 0,
+    "soundCount": 0,
+    "moveCount": 0,
+    "commentCount": 1
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "@udos/gridsmith",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Contained GridSmith agent for uCode world-building.",
   "type": "module",
@@ -8,7 +8,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "gridsmith": "./dist/cli.js"
+    "gridsmith": "./dist/cli.js",
+    "gridsmith-mcp": "./dist/mcp/server.js"
   },
   "exports": {
     ".": {
@@ -21,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/cli.ts --format esm,cjs --dts",
+    "build": "tsup src/index.ts src/cli.ts src/mcp/server.ts --format esm,cjs --dts",
     "dev": "tsup src/index.ts src/cli.ts --format esm,cjs --dts --watch",
     "test": "vitest run"
   },

@@ -1,0 +1,13 @@
+{
+  "name": "@udos/bbcsdl-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BBCSDL engine package baked for uCode runtime.",
+  "type": "module",
+  "scripts": {
+    "assemble": "node assemble.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10"
+  }
+}

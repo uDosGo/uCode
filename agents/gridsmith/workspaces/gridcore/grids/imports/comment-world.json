@@ -1,0 +1,14 @@
+{
+  "worldId": "comment-world",
+  "spriteTable": [
+    {
+      "number": 1,
+      "x": 10,
+      "y": 20,
+      "image": 1
+    }
+  ],
+  "bobTable": [],
+  "soundTable": [],
+  "moveTable": []
+}

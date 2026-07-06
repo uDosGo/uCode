@@ -1,0 +1,35 @@
+{
+  "worldId": "amos-world",
+  "spriteTable": [
+    {
+      "number": 1,
+      "x": 100,
+      "y": 50,
+      "image": 1
+    }
+  ],
+  "bobTable": [
+    {
+      "number": 1,
+      "x": 200,
+      "y": 100,
+      "image": "image.gif"
+    }
+  ],
+  "soundTable": [
+    {
+      "channel": 1,
+      "freq": 100,
+      "duration": 200,
+      "volume": 50
+    }
+  ],
+  "moveTable": [
+    {
+      "spriteNumber": 1,
+      "targetX": 300,
+      "targetY": 200,
+      "steps": 10
+    }
+  ]
+}

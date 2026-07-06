@@ -1,12 +1,19 @@
 import {
   GRIDSMITH_TOOLS,
+  composeGridLayers,
   convertLatLonToUCode,
   convertUCodeToLatLon,
   createGridWorld,
+  createWorld,
+  editCell,
+  exportUvox,
+  findPath,
+  importAmosProgram,
   importBasicProgram
-} from "./chunk-6ETJRHPT.js";
+} from "./chunk-X2UHOTOK.js";
 
 // src/cli.ts
+import { createGrid } from "@udos/gridcore";
 function argValue(args, flag, fallback) {
   const index = args.indexOf(flag);
   if (index === -1 || index + 1 >= args.length) return fallback;
@@ -23,11 +30,27 @@ function printUsage() {
       "",
       "Commands:",
       "  tools list",
-      "  grid create --cols 80 --rows 24",
+      '  world create --name "My World" --type dungeon [--cols 80 --rows 24 --seed 42]',
+      '  world import-basic --program <file|code> --world-name "Name"',
+      '  world import-amos --program <file|code> --world-name "Name"',
+      "  grid create [--grid-id mygrid] [--cols 80 --rows 24]",
+      "  cell edit --grid-id mygrid --x 0 --y 0 [--layer 0] --char X --fg 7 --bg 0",
+      "  layers compose --grid-id mygrid [--layers 0,1,2]",
+      "  uvox export --grid-id mygrid --output output.uvox",
+      "  path find --grid-id mygrid --start-x 0 --start-y 0 --end-x 10 --end-y 10 [--layer 0]",
       "  location latlon-to-ucode --lat -33.8688 --lon 151.2093 --level 340",
       "  location ucode-to-latlon --coord L340-0A0B-0000-0"
     ].join("\n") + "\n"
   );
+}
+var gridRegistry = /* @__PURE__ */ new Map();
+function getOrCreateGrid(id, cols = 80, rows = 24) {
+  let grid = gridRegistry.get(id);
+  if (!grid) {
+    grid = createGrid(cols, rows);
+    gridRegistry.set(id, grid);
+  }
+  return grid;
 }
 function main() {
   const args = process.argv.slice(2);
@@ -41,10 +64,17 @@ function main() {
     printJson({ tools: GRIDSMITH_TOOLS });
     return;
   }
-  if (section === "grid" && action === "create") {
+  if (section === "world" && action === "create") {
+    const name = argValue(args, "--name", "New World") || "New World";
+    const type = argValue(args, "--type", "earth");
     const cols = Number(argValue(args, "--cols", "80"));
     const rows = Number(argValue(args, "--rows", "24"));
-    printJson({ grid: createGridWorld(cols, rows) });
+    const seed = Number(argValue(args, "--seed", "0")) || void 0;
+    createWorld({ name, type, cols, rows, seed }).then((result) => printJson(result)).catch((error) => {
+      process.stderr.write(`${String(error)}
+`);
+      process.exitCode = 1;
+    });
     return;
   }
   if (section === "world" && action === "import-basic") {
@@ -55,6 +85,72 @@ function main() {
 `);
       process.exitCode = 1;
     });
+    return;
+  }
+  if (section === "world" && action === "import-amos") {
+    const program = argValue(args, "--program", "") || "";
+    const worldName = argValue(args, "--world-name", "Imported AMOS World") || "Imported AMOS World";
+    importAmosProgram(program, worldName).then((result) => printJson(result)).catch((error) => {
+      process.stderr.write(`${String(error)}
+`);
+      process.exitCode = 1;
+    });
+    return;
+  }
+  if (section === "grid" && action === "create") {
+    const gridId = argValue(args, "--grid-id", `grid-${Date.now()}`) || `grid-${Date.now()}`;
+    const cols = Number(argValue(args, "--cols", "80"));
+    const rows = Number(argValue(args, "--rows", "24"));
+    const world = createGridWorld(cols, rows);
+    gridRegistry.set(gridId, world.grid);
+    printJson({ gridId, cols: world.cols, rows: world.rows, cellCount: world.cellCount });
+    return;
+  }
+  if (section === "cell" && action === "edit") {
+    const gridId = argValue(args, "--grid-id", "default") || "default";
+    const grid = getOrCreateGrid(gridId);
+    const x = Number(argValue(args, "--x", "0"));
+    const y = Number(argValue(args, "--y", "0"));
+    const layer = Number(argValue(args, "--layer", "0"));
+    const char = argValue(args, "--char");
+    const fg = argValue(args, "--fg");
+    const bg = argValue(args, "--bg");
+    const data = {};
+    if (char !== void 0) data.char = char;
+    if (fg !== void 0) data.fg = Number(fg);
+    if (bg !== void 0) data.bg = Number(bg);
+    printJson(editCell(grid, x, y, layer, data));
+    return;
+  }
+  if (section === "layers" && action === "compose") {
+    const gridId = argValue(args, "--grid-id", "default") || "default";
+    const grid = getOrCreateGrid(gridId);
+    const layersStr = argValue(args, "--layers", "0,1,2,3,4,5");
+    const layers = (layersStr || "0,1,2,3,4,5").split(",").map(Number);
+    const result = composeGridLayers(grid, layers);
+    printJson({ cellCount: result.cellCount, layerCount: result.layers.length });
+    return;
+  }
+  if (section === "uvox" && action === "export") {
+    const gridId = argValue(args, "--grid-id", "default") || "default";
+    const grid = getOrCreateGrid(gridId);
+    const output = argValue(args, "--output", "output.uvox") || "output.uvox";
+    exportUvox(grid, gridId, output).then((result) => printJson(result)).catch((error) => {
+      process.stderr.write(`${String(error)}
+`);
+      process.exitCode = 1;
+    });
+    return;
+  }
+  if (section === "path" && action === "find") {
+    const gridId = argValue(args, "--grid-id", "default") || "default";
+    const grid = getOrCreateGrid(gridId);
+    const startX = Number(argValue(args, "--start-x", "0"));
+    const startY = Number(argValue(args, "--start-y", "0"));
+    const endX = Number(argValue(args, "--end-x", "0"));
+    const endY = Number(argValue(args, "--end-y", "0"));
+    const layer = Number(argValue(args, "--layer", "0"));
+    printJson(findPath(grid, startX, startY, endX, endY, layer));
     return;
   }
   if (section === "location" && action === "latlon-to-ucode") {

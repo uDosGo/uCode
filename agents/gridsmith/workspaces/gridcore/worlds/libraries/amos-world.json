@@ -1,0 +1,60 @@
+{
+  "id": "amos-world",
+  "name": "AMOS World",
+  "type": "dungeon",
+  "source": "amos",
+  "sourceType": "inline",
+  "grid": {
+    "cols": 80,
+    "rows": 4,
+    "cellSize": 24
+  },
+  "layers": [
+    "terrain",
+    "details",
+    "entities"
+  ],
+  "assets": {
+    "sprites": [
+      {
+        "number": 1,
+        "x": 100,
+        "y": 50,
+        "image": 1
+      }
+    ],
+    "bobs": [
+      {
+        "number": 1,
+        "x": 200,
+        "y": 100,
+        "image": "image.gif"
+      }
+    ],
+    "sounds": [
+      {
+        "channel": 1,
+        "freq": 100,
+        "duration": 200,
+        "volume": 50
+      }
+    ],
+    "moves": [
+      {
+        "spriteNumber": 1,
+        "targetX": 300,
+        "targetY": 200,
+        "steps": 10
+      }
+    ],
+    "commentCount": 0
+  },
+  "metrics": {
+    "totalLines": 4,
+    "spriteCount": 1,
+    "bobCount": 1,
+    "soundCount": 1,
+    "moveCount": 1,
+    "commentCount": 0
+  }
+}
