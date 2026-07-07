@@ -11,12 +11,13 @@ import {
   findPath,
   importAmosProgram,
   importBasicProgram,
+  inspireEngine,
   lensCraft,
   mcpScribe,
   skinWeaver,
   sourceMiner,
   writeSkinManifest
-} from "./chunk-U2WXLTPT.js";
+} from "./chunk-7NKWRBKE.js";
 export {
   GRIDSMITH_TOOLS,
   composeGridLayers,
@@ -30,6 +31,7 @@ export {
   findPath,
   importAmosProgram,
   importBasicProgram,
+  inspireEngine,
   lensCraft,
   mcpScribe,
   skinWeaver,

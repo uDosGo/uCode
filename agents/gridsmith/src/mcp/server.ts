@@ -19,6 +19,7 @@ import {
   skinWeaver,
   writeSkinManifest,
   mcpScribe,
+  inspireEngine,
 } from '../index'
 
 const PORT = process.env.GRIDSMITH_MCP_PORT || '8670'
@@ -218,6 +219,26 @@ async function invokeTool(name: string, params: Record<string, unknown>): Promis
         program_type: programType as 'adapt-source' | 'rewrite' | 'port-c-to-basic' | 'rewrite_inspired_by',
         game_mechanics: { genre: [] },
         source_miner_report: report,
+      })
+    }
+
+    case 'inspire_engine': {
+      const targetGame = String(params.target_game || '')
+      const sourcesJson = String(params.sources_json || '[]')
+      const runtime = String(params.runtime || 'bbc_basic_sdl')
+      const displayMode = String(params.display_mode || 'teletext')
+
+      if (!targetGame) throw new Error('Missing required parameter: target_game')
+
+      const sources = JSON.parse(sourcesJson)
+      return inspireEngine({
+        target_game: targetGame,
+        approach: 'rewrite_inspired_by',
+        research_sources: sources,
+        design_constraints: {
+          target_runtime: runtime,
+          display_mode: displayMode,
+        },
       })
     }
 

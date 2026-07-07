@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-06
 version: "1.0.0"
 created: "2026-07-01T21:00:00Z"
-updated: "2026-07-06T16:03:00Z"
+updated: "2026-07-06T16:59:00Z"
 status: active
 
 sprint:
@@ -53,6 +53,18 @@ sprint:
       priority: high
     - id: "task-044"
       title: "Wire SKIN-Weaver + MCP-Scribe into CLI + MCP (14 tools, 60 tests pass)"
+      file: "agents/gridsmith/src/index.ts, cli.ts, mcp/server.ts"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
+    - id: "task-045"
+      title: "Phase 4: Inspire-Engine skill — game design doc generator (3 game templates)"
+      file: "agents/gridsmith/src/tools/inspire-engine.ts"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
+    - id: "task-046"
+      title: "Wire Inspire-Engine into CLI + MCP (15 tools, 66 tests pass)"
       file: "agents/gridsmith/src/index.ts, cli.ts, mcp/server.ts"
       status: complete
       completed: "2026-07-07"

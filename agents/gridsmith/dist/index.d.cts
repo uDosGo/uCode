@@ -320,6 +320,79 @@ interface McpScribeOutput {
 }
 declare function mcpScribe(input: McpScribeInput): McpScribeOutput;
 
+interface ResearchSource {
+    type: 'mobygames' | 'wikipedia' | 'forum_thread' | 'review' | 'wiki' | 'manual' | 'let_s_play';
+    url: string;
+    reliability: 'high' | 'medium' | 'low';
+}
+interface DesignConstraints {
+    target_runtime: string;
+    display_mode: string;
+    max_program_size?: string;
+}
+interface InspireEngineInput {
+    target_game: string;
+    approach: 'rewrite_inspired_by';
+    research_sources: ResearchSource[];
+    design_constraints: DesignConstraints;
+}
+interface CoreMechanic {
+    name: string;
+    description: string;
+    constraints?: string[];
+    implementation?: string;
+    vocabulary_size?: string;
+    spells?: Array<{
+        name: string;
+        cost: number;
+        effect: string;
+        learn_location?: string;
+    }>;
+    locations?: Array<{
+        id: string;
+        name: string;
+        exits: string[];
+    }>;
+}
+interface LensExtractorTarget {
+    target: string;
+    type: string;
+    description: string;
+}
+interface SkinThemeTarget {
+    name: string;
+    description: string;
+}
+interface McpCommandTarget {
+    name: string;
+    description: string;
+}
+interface UCodeIntegration {
+    lens_extractors: LensExtractorTarget[];
+    skin_themes: SkinThemeTarget[];
+    mcp_commands: McpCommandTarget[];
+}
+interface GameDesignDocument {
+    title: string;
+    genre: string[];
+    summary: string;
+    core_mechanics: CoreMechanic[];
+    uCode_integration: UCodeIntegration;
+}
+interface EffortEstimate {
+    total_weeks: number;
+    breakdown: Record<string, number>;
+}
+interface InspireEngineOutput {
+    skill: 'Inspire-Engine';
+    version: '1.0';
+    executed_at: string;
+    target_game: string;
+    game_design_document: GameDesignDocument;
+    effort_estimate: EffortEstimate;
+}
+declare function inspireEngine(input: InspireEngineInput): InspireEngineOutput;
+
 interface GridSmithToolParameter {
     type: 'string' | 'number' | 'array' | 'object';
     description: string;
@@ -346,4 +419,4 @@ declare function convertUCodeToLatLon(coord: string): {
     lon: number;
 } | null;
 
-export { type AssetReference, type CellPayload, type CharacterMapping, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GridSmithToolDefinition, type GridSmithToolParameter, type LensCraftInput, type LensCraftOutput, type McpCommand, type McpScribeInput, type McpScribeOutput, type MemoryMapEntry, type Recommendation, type SkinManifest, type SkinWeaverInput, type SkinWeaverOutput, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, lensCraft, mcpScribe, skinWeaver, sourceMiner, writeSkinManifest };
+export { type AssetReference, type CellPayload, type CharacterMapping, type CoreMechanic, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GameDesignDocument, type GridSmithToolDefinition, type GridSmithToolParameter, type InspireEngineInput, type InspireEngineOutput, type LensCraftInput, type LensCraftOutput, type McpCommand, type McpScribeInput, type McpScribeOutput, type MemoryMapEntry, type Recommendation, type SkinManifest, type SkinWeaverInput, type SkinWeaverOutput, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, inspireEngine, lensCraft, mcpScribe, skinWeaver, sourceMiner, writeSkinManifest };

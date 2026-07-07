@@ -34,6 +34,13 @@ import type {
 } from './tools/skin-weaver'
 import { mcpScribe } from './tools/mcp-scribe'
 import type { McpScribeInput, McpScribeOutput, McpCommand } from './tools/mcp-scribe'
+import { inspireEngine } from './tools/inspire-engine'
+import type {
+  InspireEngineInput,
+  InspireEngineOutput,
+  GameDesignDocument,
+  CoreMechanic,
+} from './tools/inspire-engine'
 
 export interface GridSmithToolParameter {
   type: 'string' | 'number' | 'array' | 'object'
@@ -184,6 +191,16 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
       program_type: { type: 'string', description: 'adapt-source, rewrite, port-c-to-basic, or rewrite_inspired_by', default: 'adapt-source' },
     },
   },
+  {
+    name: 'inspire_engine',
+    description: 'Generate game design documents for rewrite-inspired projects.',
+    parameters: {
+      target_game: { type: 'string', description: 'Game name (e.g. Knight Orc, Apple Panic, uConstruct)' },
+      sources_json: { type: 'string', description: 'JSON array of research sources [{type, url, reliability}]', default: '[]' },
+      runtime: { type: 'string', description: 'Target runtime', default: 'bbc_basic_sdl' },
+      display_mode: { type: 'string', description: 'Display mode', default: 'teletext' },
+    },
+  },
 ]
 
 export function createGridWorld(cols = 80, rows = 24): { grid: Grid; cols: number; rows: number; cellCount: number } {
@@ -218,6 +235,7 @@ export {
   skinWeaver,
   writeSkinManifest,
   mcpScribe,
+  inspireEngine,
 }
 export type {
   Grid,
@@ -240,4 +258,8 @@ export type {
   McpScribeInput,
   McpScribeOutput,
   McpCommand,
+  InspireEngineInput,
+  InspireEngineOutput,
+  GameDesignDocument,
+  CoreMechanic,
 }

@@ -16,6 +16,7 @@ import {
   skinWeaver,
   writeSkinManifest,
   mcpScribe,
+  inspireEngine,
 } from './index'
 
 function argValue(args: string[], flag: string, fallback?: string): string | undefined {
@@ -277,6 +278,32 @@ function main(): void {
       program_type: programType,
       game_mechanics: { genre: [] },
       source_miner_report: report,
+    })
+    printJson(result)
+    return
+  }
+
+  if (section === 'skill' && action === 'inspire-engine') {
+    const targetGame = argValue(args, '--game', '') || ''
+    const sourcesJson = argValue(args, '--sources', '[]') || '[]'
+    const runtime = argValue(args, '--runtime', 'bbc_basic_sdl') || 'bbc_basic_sdl'
+    const displayMode = argValue(args, '--display', 'teletext') || 'teletext'
+
+    if (!targetGame) {
+      process.stderr.write('Error: --game required (e.g. "Knight Orc", "Apple Panic", "uConstruct")\n')
+      process.exitCode = 1
+      return
+    }
+
+    const sources = JSON.parse(sourcesJson)
+    const result = inspireEngine({
+      target_game: targetGame,
+      approach: 'rewrite_inspired_by',
+      research_sources: sources,
+      design_constraints: {
+        target_runtime: runtime,
+        display_mode: displayMode,
+      },
     })
     printJson(result)
     return
