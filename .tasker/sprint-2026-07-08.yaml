@@ -1,19 +1,19 @@
 # uCode Dev Flow — sprint.2026-07-08
 version: "1.0.0"
 created: "2026-07-07T17:12:00Z"
-updated: "2026-07-08T10:46:00Z"
+updated: "2026-07-08T10:56:00Z"
 status: active
 
 sprint:
   name: "sprint.2026-07-08"
   goals:
-    - "End-to-end pipeline validation (Source-Miner → LENS-Craft → MCP-Scribe)"
-    - "Repton program adaptation (build order #1, 2 weeks)"
+    - "End-to-end pipeline validation (Source-Miner - LENS-Craft - MCP-Scribe)"
+    - "Repton program adaptation (build order 1, 2 weeks)"
     - "Clone Repton 6502 source, run full skills pipeline"
     - "Generate repton_lens.py extractor via LENS-Craft"
     - "Generate Repton MCP command specs via MCP-Scribe"
     - "Wire Repton LENS extractor into BBCSDL runtime bridge"
-    - "Apple Panic GDD → skeleton code (Inspire-Engine output)"
+    - "Apple Panic GDD to skeleton code (Inspire-Engine output)"
     - "Archive sprint.2026-07-06 to docs/archive/"
   items:
     - id: "task-047"
@@ -28,11 +28,10 @@ sprint:
       status: complete
       completed: "2026-07-07"
       priority: high
-    - id: "task-054"
-      title: "Repton: Write BBC BASIC skeleton (game loop, controls)"
-      file: "programs/repton/src/repton.bbc"
-      status: complete
-      completed: "2026-07-08"
+    - id: "task-049"
+      title: "Repton: Clone/research 6502 source repository"
+      file: "programs/repton/"
+      status: skipped
       priority: high
     - id: "task-050"
       title: "Repton: Run Source-Miner on assembly source"
@@ -55,21 +54,41 @@ sprint:
     - id: "task-053"
       title: "Repton: Run SKIN-Weaver for sprite assets"
       file: "programs/repton/skin/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
+    - id: "task-054"
+      title: "Repton: Write BBC BASIC skeleton"
+      file: "programs/repton/src/repton.bbc"
+      status: complete
+      completed: "2026-07-08"
+      priority: high
     - id: "task-055"
       title: "Repton: Integrate LENS extractor with runtime bridge"
       file: "runtimes/basic/bridge/gridcore_adapter.py"
       status: pending
       priority: medium
     - id: "task-056"
-      title: "Apple Panic: Generate GDD via Inspire-Engine"
+      title: "Apple Panic: GDD + uCode-Weaver skeleton"
       file: "programs/apple-panic/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-057"
-      title: "Archive sprint.2026-07-06 dev flow to docs/archive/"
+      title: "Archive sprint.2026-07-06 to docs/archive/"
       file: "docs/archive/sprint-2026-07-06.yaml"
       status: complete
       completed: "2026-07-07"
       priority: low
+    - id: "task-058"
+      title: "uCode-Weaver skill (completes all 6 Skills Framework skills)"
+      file: "agents/gridsmith/src/tools/ucode-weaver.ts"
+      status: complete
+      completed: "2026-07-08"
+      priority: high
+    - id: "task-059"
+      title: "Wire uCode-Weaver into CLI + MCP (16 tools, 75 tests pass)"
+      file: "agents/gridsmith/src/index.ts, cli.ts, mcp/server.ts"
+      status: complete
+      completed: "2026-07-08"
+      priority: high
