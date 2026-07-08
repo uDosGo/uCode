@@ -17,6 +17,7 @@ import {
   writeSkinManifest,
   mcpScribe,
   inspireEngine,
+  ucodeWeaver,
 } from './index'
 
 function argValue(args: string[], flag: string, fallback?: string): string | undefined {
@@ -306,6 +307,29 @@ function main(): void {
       },
     })
     printJson(result)
+    return
+  }
+
+  if (section === 'skill' && action === 'ucode-weaver') {
+    const gddJson = argValue(args, '--gdd', '') || ''
+    const programName = argValue(args, '--program', 'Weaver') || 'Weaver'
+    const runtime = argValue(args, '--runtime', 'bbc_basic_sdl') || 'bbc_basic_sdl'
+    const displayMode = argValue(args, '--display', 'teletext') || 'teletext'
+
+    if (!gddJson) {
+      process.stderr.write('Error: --gdd required (Inspire-Engine GDD JSON output)\n')
+      process.exitCode = 1
+      return
+    }
+
+    const gdd = JSON.parse(gddJson)
+    const result = ucodeWeaver({
+      gdd: gdd.game_design_document || gdd,
+      program_name: programName,
+      runtime,
+      display_mode: displayMode,
+    })
+    printJson({ skill: result.skill, program_name: result.program_name, entry_file: result.entry_file, generated_code: result.generated_code })
     return
   }
 

@@ -1,61 +1,9 @@
-"use strict";
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
 // src/index.ts
-var index_exports = {};
-__export(index_exports, {
-  GRIDSMITH_TOOLS: () => GRIDSMITH_TOOLS,
-  composeGridLayers: () => composeGridLayers,
-  convertLatLonToUCode: () => convertLatLonToUCode,
-  convertUCodeToLatLon: () => convertUCodeToLatLon,
-  createGridWorld: () => createGridWorld,
-  createWorld: () => createWorld,
-  createWorldManifest: () => createWorldManifest,
-  editCell: () => editCell,
-  exportUvox: () => exportUvox,
-  findPath: () => findPath,
-  importAmosProgram: () => importAmosProgram,
-  importBasicProgram: () => importBasicProgram,
-  inspireEngine: () => inspireEngine,
-  lensCraft: () => lensCraft,
-  mcpScribe: () => mcpScribe,
-  skinWeaver: () => skinWeaver,
-  sourceMiner: () => sourceMiner,
-  ucodeWeaver: () => ucodeWeaver,
-  writeSkinManifest: () => writeSkinManifest
-});
-module.exports = __toCommonJS(index_exports);
-var import_gridcore6 = require("@udos/gridcore");
+import { createGrid as createGrid2, listCells as listCells3, latLonToUCode, uCodeToLatLon } from "@udos/gridcore";
 
 // src/tools/basic.ts
-var import_promises = require("fs/promises");
-var import_node_path = __toESM(require("path"), 1);
+import { mkdir, readFile, writeFile } from "fs/promises";
+import path from "path";
 function slugify(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 }
@@ -92,11 +40,11 @@ function classifyStatements(lines) {
   return counts;
 }
 async function importBasicProgram(programOrPath, worldName) {
-  const maybeFile = import_node_path.default.resolve(programOrPath);
+  const maybeFile = path.resolve(programOrPath);
   let source = programOrPath;
   let sourceType = "inline";
   try {
-    source = await (0, import_promises.readFile)(maybeFile, "utf-8");
+    source = await readFile(maybeFile, "utf-8");
     sourceType = "file";
   } catch {
     sourceType = "inline";
@@ -104,16 +52,16 @@ async function importBasicProgram(programOrPath, worldName) {
   const parsed = parseBasicLines(source);
   const stats = classifyStatements(parsed);
   const slug = slugify(worldName || "basic-world") || "basic-world";
-  const workspaceRoot = import_node_path.default.resolve(process.cwd(), "workspaces/gridcore");
-  const scriptsDir = import_node_path.default.join(workspaceRoot, "scripts/basic");
-  const worldsDir = import_node_path.default.join(workspaceRoot, "worlds/libraries");
-  const importsDir = import_node_path.default.join(workspaceRoot, "grids/imports");
-  await (0, import_promises.mkdir)(scriptsDir, { recursive: true });
-  await (0, import_promises.mkdir)(worldsDir, { recursive: true });
-  await (0, import_promises.mkdir)(importsDir, { recursive: true });
-  const scriptPath = import_node_path.default.join(scriptsDir, `${slug}.bas`);
-  const worldPath = import_node_path.default.join(worldsDir, `${slug}.json`);
-  const importPath = import_node_path.default.join(importsDir, `${slug}.json`);
+  const workspaceRoot = path.resolve(process.cwd(), "workspaces/gridcore");
+  const scriptsDir = path.join(workspaceRoot, "scripts/basic");
+  const worldsDir = path.join(workspaceRoot, "worlds/libraries");
+  const importsDir = path.join(workspaceRoot, "grids/imports");
+  await mkdir(scriptsDir, { recursive: true });
+  await mkdir(worldsDir, { recursive: true });
+  await mkdir(importsDir, { recursive: true });
+  const scriptPath = path.join(scriptsDir, `${slug}.bas`);
+  const worldPath = path.join(worldsDir, `${slug}.json`);
+  const importPath = path.join(importsDir, `${slug}.json`);
   const world = {
     id: slug,
     name: worldName,
@@ -140,9 +88,9 @@ async function importBasicProgram(programOrPath, worldName) {
       text: line.statement
     }))
   };
-  await (0, import_promises.writeFile)(scriptPath, source, "utf-8");
-  await (0, import_promises.writeFile)(worldPath, JSON.stringify(world, null, 2), "utf-8");
-  await (0, import_promises.writeFile)(importPath, JSON.stringify(importArtifact, null, 2), "utf-8");
+  await writeFile(scriptPath, source, "utf-8");
+  await writeFile(worldPath, JSON.stringify(world, null, 2), "utf-8");
+  await writeFile(importPath, JSON.stringify(importArtifact, null, 2), "utf-8");
   return {
     world,
     files: {
@@ -159,8 +107,8 @@ async function importBasicProgram(programOrPath, worldName) {
 }
 
 // src/tools/amos.ts
-var import_promises2 = require("fs/promises");
-var import_node_path2 = __toESM(require("path"), 1);
+import { mkdir as mkdir2, readFile as readFile2, writeFile as writeFile2 } from "fs/promises";
+import path2 from "path";
 function slugify2(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 }
@@ -244,11 +192,11 @@ function parseAmosProgram(program) {
   return merged;
 }
 async function importAmosProgram(programOrPath, worldName) {
-  const maybeFile = import_node_path2.default.resolve(programOrPath);
+  const maybeFile = path2.resolve(programOrPath);
   let source = programOrPath;
   let sourceType = "inline";
   try {
-    source = await (0, import_promises2.readFile)(maybeFile, "utf-8");
+    source = await readFile2(maybeFile, "utf-8");
     sourceType = "file";
   } catch {
     sourceType = "inline";
@@ -256,16 +204,16 @@ async function importAmosProgram(programOrPath, worldName) {
   const parsed = parseAmosProgram(source);
   const totalAssets = parsed.sprites.length + parsed.bobs.length + parsed.sounds.length + parsed.moves.length;
   const slug = slugify2(worldName || "amos-world") || "amos-world";
-  const workspaceRoot = import_node_path2.default.resolve(process.cwd(), "workspaces/gridcore");
-  const scriptsDir = import_node_path2.default.join(workspaceRoot, "scripts/amos");
-  const worldsDir = import_node_path2.default.join(workspaceRoot, "worlds/libraries");
-  const importsDir = import_node_path2.default.join(workspaceRoot, "grids/imports");
-  await (0, import_promises2.mkdir)(scriptsDir, { recursive: true });
-  await (0, import_promises2.mkdir)(worldsDir, { recursive: true });
-  await (0, import_promises2.mkdir)(importsDir, { recursive: true });
-  const scriptPath = import_node_path2.default.join(scriptsDir, `${slug}.amos`);
-  const worldPath = import_node_path2.default.join(worldsDir, `${slug}.json`);
-  const importPath = import_node_path2.default.join(importsDir, `${slug}.json`);
+  const workspaceRoot = path2.resolve(process.cwd(), "workspaces/gridcore");
+  const scriptsDir = path2.join(workspaceRoot, "scripts/amos");
+  const worldsDir = path2.join(workspaceRoot, "worlds/libraries");
+  const importsDir = path2.join(workspaceRoot, "grids/imports");
+  await mkdir2(scriptsDir, { recursive: true });
+  await mkdir2(worldsDir, { recursive: true });
+  await mkdir2(importsDir, { recursive: true });
+  const scriptPath = path2.join(scriptsDir, `${slug}.amos`);
+  const worldPath = path2.join(worldsDir, `${slug}.json`);
+  const importPath = path2.join(importsDir, `${slug}.json`);
   const world = {
     id: slug,
     name: worldName,
@@ -301,9 +249,9 @@ async function importAmosProgram(programOrPath, worldName) {
     soundTable: parsed.sounds,
     moveTable: parsed.moves
   };
-  await (0, import_promises2.writeFile)(scriptPath, source, "utf-8");
-  await (0, import_promises2.writeFile)(worldPath, JSON.stringify(world, null, 2), "utf-8");
-  await (0, import_promises2.writeFile)(importPath, JSON.stringify(importArtifact, null, 2), "utf-8");
+  await writeFile2(scriptPath, source, "utf-8");
+  await writeFile2(worldPath, JSON.stringify(world, null, 2), "utf-8");
+  await writeFile2(importPath, JSON.stringify(importArtifact, null, 2), "utf-8");
   return {
     world,
     files: {
@@ -323,15 +271,15 @@ async function importAmosProgram(programOrPath, worldName) {
 }
 
 // src/tools/cell.ts
-var import_gridcore = require("@udos/gridcore");
+import { setCell, getCell, createCell } from "@udos/gridcore";
 function editCell(grid, x, y, layer, data) {
-  const existing = (0, import_gridcore.getCell)(grid, x, y, layer);
+  const existing = getCell(grid, x, y, layer);
   const coord = existing?.coord ?? `L340-${x.toString(36).toUpperCase().padStart(2, "0")}${y.toString(36).toUpperCase().padStart(2, "0")}-0000-0`;
-  const cell = (0, import_gridcore.createCell)(coord, x, y, layer);
+  const cell = createCell(coord, x, y, layer);
   if (data.char !== void 0) cell.char = data.char;
   if (data.fg !== void 0) cell.fg = data.fg;
   if (data.bg !== void 0) cell.bg = data.bg;
-  (0, import_gridcore.setCell)(grid, cell);
+  setCell(grid, cell);
   return {
     cell: { x: cell.x, y: cell.y, layer: cell.layer, char: cell.char, fg: cell.fg, bg: cell.bg },
     previous: existing ? { x: existing.x, y: existing.y, layer: existing.layer, char: existing.char, fg: existing.fg, bg: existing.bg } : null
@@ -339,22 +287,22 @@ function editCell(grid, x, y, layer, data) {
 }
 
 // src/tools/layers.ts
-var import_gridcore2 = require("@udos/gridcore");
+import { createLayer, composeLayers, getCell as getCell2 } from "@udos/gridcore";
 function composeGridLayers(grid, layerIndices) {
   const layers = [];
   for (const z of layerIndices) {
     const cells = [];
     for (let y = 0; y < grid.rows; y++) {
       for (let x = 0; x < grid.cols; x++) {
-        const cell = (0, import_gridcore2.getCell)(grid, x, y, z);
+        const cell = getCell2(grid, x, y, z);
         if (cell) {
           cells.push(cell);
         }
       }
     }
-    layers.push((0, import_gridcore2.createLayer)(z, cells));
+    layers.push(createLayer(z, cells));
   }
-  const composed = (0, import_gridcore2.composeLayers)(layers);
+  const composed = composeLayers(layers);
   return {
     layers: layers.map((l) => ({ z: l.z, cellCount: l.cells.length })),
     composed,
@@ -363,13 +311,13 @@ function composeGridLayers(grid, layerIndices) {
 }
 
 // src/tools/uvox.ts
-var import_promises3 = require("fs/promises");
-var import_node_path3 = __toESM(require("path"), 1);
-var import_gridcore3 = require("@udos/gridcore");
+import { writeFile as writeFile3, mkdir as mkdir3 } from "fs/promises";
+import path3 from "path";
+import { listCells as listCells2 } from "@udos/gridcore";
 async function exportUvox(grid, gridId, outputPath) {
-  const resolved = import_node_path3.default.resolve(outputPath);
-  await (0, import_promises3.mkdir)(import_node_path3.default.dirname(resolved), { recursive: true });
-  const cells = (0, import_gridcore3.listCells)(grid).map((cell) => ({
+  const resolved = path3.resolve(outputPath);
+  await mkdir3(path3.dirname(resolved), { recursive: true });
+  const cells = listCells2(grid).map((cell) => ({
     x: cell.x,
     y: cell.y,
     layer: cell.layer,
@@ -387,7 +335,7 @@ async function exportUvox(grid, gridId, outputPath) {
     cells
   };
   const json = JSON.stringify(manifest, null, 2);
-  await (0, import_promises3.writeFile)(resolved, json, "utf-8");
+  await writeFile3(resolved, json, "utf-8");
   return {
     path: resolved,
     bytes: Buffer.byteLength(json, "utf-8"),
@@ -396,7 +344,7 @@ async function exportUvox(grid, gridId, outputPath) {
 }
 
 // src/tools/pathfind.ts
-var import_gridcore4 = require("@udos/gridcore");
+import { getCell as getCell3 } from "@udos/gridcore";
 function heuristic(a, b) {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }
@@ -416,7 +364,7 @@ function neighbors(node, grid, layer) {
     const nx = node.x + dx;
     const ny = node.y + dy;
     if (nx >= 0 && nx < grid.cols && ny >= 0 && ny < grid.rows) {
-      const cell = (0, import_gridcore4.getCell)(grid, nx, ny, layer);
+      const cell = getCell3(grid, nx, ny, layer);
       if (cell && cell.char !== "#") {
         result.push({ x: nx, y: ny, layer });
       }
@@ -467,9 +415,9 @@ function findPath(grid, startX, startY, endX, endY, layer = 0) {
 }
 
 // src/tools/world.ts
-var import_promises4 = require("fs/promises");
-var import_node_path4 = __toESM(require("path"), 1);
-var import_gridcore5 = require("@udos/gridcore");
+import { mkdir as mkdir4, writeFile as writeFile4 } from "fs/promises";
+import path4 from "path";
+import { createGrid } from "@udos/gridcore";
 function createWorldManifest(id, name, type, seed, source = "generated") {
   return { id, name, type, seed, source };
 }
@@ -477,7 +425,7 @@ async function createWorld(options) {
   const cols = options.cols ?? 80;
   const rows = options.rows ?? 24;
   const slug = options.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 80);
-  const grid = (0, import_gridcore5.createGrid)(cols, rows);
+  const grid = createGrid(cols, rows);
   if (options.terrain) {
     for (const [coord, char] of Object.entries(options.terrain)) {
       const parts = coord.split(",");
@@ -491,11 +439,11 @@ async function createWorld(options) {
     }
   }
   const manifest = createWorldManifest(slug, options.name, options.type, options.seed);
-  const workspaceRoot = import_node_path4.default.resolve(process.cwd(), "workspaces/gridcore");
-  const worldDir = import_node_path4.default.join(workspaceRoot, "worlds", slug);
-  const manifestPath = import_node_path4.default.join(worldDir, "manifest.json");
-  const gridPath = import_node_path4.default.join(worldDir, "grid.json");
-  await (0, import_promises4.mkdir)(worldDir, { recursive: true });
+  const workspaceRoot = path4.resolve(process.cwd(), "workspaces/gridcore");
+  const worldDir = path4.join(workspaceRoot, "worlds", slug);
+  const manifestPath = path4.join(worldDir, "manifest.json");
+  const gridPath = path4.join(worldDir, "grid.json");
+  await mkdir4(worldDir, { recursive: true });
   const gridExport = {
     id: slug,
     cols: grid.cols,
@@ -510,8 +458,8 @@ async function createWorld(options) {
       coord: c.coord
     }))
   };
-  await (0, import_promises4.writeFile)(manifestPath, JSON.stringify(manifest, null, 2), "utf-8");
-  await (0, import_promises4.writeFile)(gridPath, JSON.stringify(gridExport, null, 2), "utf-8");
+  await writeFile4(manifestPath, JSON.stringify(manifest, null, 2), "utf-8");
+  await writeFile4(gridPath, JSON.stringify(gridExport, null, 2), "utf-8");
   return {
     manifest,
     grid: { cols: grid.cols, rows: grid.rows, cellCount: grid.cells.size },
@@ -523,9 +471,9 @@ async function createWorld(options) {
 }
 
 // src/tools/source-miner.ts
-var import_node_fs = require("fs");
-var import_node_path5 = require("path");
-var import_node_fs2 = require("fs");
+import { readFileSync, existsSync } from "fs";
+import { join, extname } from "path";
+import { readdirSync, statSync } from "fs";
 var ASM_EXTENSIONS = /* @__PURE__ */ new Set([".asm", ".s", ".6502", ".a65", ".inc", ".eq", ".bbc"]);
 var KNOWN_HARDWARE = {
   "0xfe00": "VIA port B (user port)",
@@ -568,7 +516,7 @@ var ASSET_PATH_PATTERNS = [
   { regex: /\.(?:wav|ogg|mp3)$/i, type: "audio_asset" }
 ];
 function isAsmFile(path5) {
-  const ext = (0, import_node_path5.extname)(path5).toLowerCase();
+  const ext = extname(path5).toLowerCase();
   if (ASM_EXTENSIONS.has(ext)) return true;
   const base = path5.split("/").pop() || "";
   if (!base.includes(".") && !ext) {
@@ -796,11 +744,11 @@ function scanDirectory(rootPath, patterns, excludePatterns) {
   const results = [];
   function walk(dir) {
     try {
-      const entries = (0, import_node_fs2.readdirSync)(dir);
+      const entries = readdirSync(dir);
       for (const entry of entries) {
-        const fullPath = (0, import_node_path5.join)(dir, entry);
+        const fullPath = join(dir, entry);
         try {
-          const st = (0, import_node_fs2.statSync)(fullPath);
+          const st = statSync(fullPath);
           if (st.isDirectory()) {
             if (!entry.startsWith(".") && entry !== "node_modules" && entry !== ".git") {
               walk(fullPath);
@@ -829,11 +777,11 @@ function detectAssetReferences(rootPath) {
   const seen = /* @__PURE__ */ new Set();
   function walk(dir) {
     try {
-      const entries = (0, import_node_fs2.readdirSync)(dir);
+      const entries = readdirSync(dir);
       for (const entry of entries) {
-        const fullPath = (0, import_node_path5.join)(dir, entry);
+        const fullPath = join(dir, entry);
         try {
-          const st = (0, import_node_fs2.statSync)(fullPath);
+          const st = statSync(fullPath);
           if (st.isDirectory()) {
             if (!entry.startsWith(".") && entry !== "node_modules" && entry !== ".git") {
               walk(fullPath);
@@ -923,10 +871,10 @@ function sourceMiner(input) {
   const patterns = input.options.target_patterns || [];
   const excludePatterns = input.options.exclude_patterns || [];
   const sourcePath = input.source.url;
-  if (!(0, import_node_fs.existsSync)(sourcePath)) {
+  if (!existsSync(sourcePath)) {
     throw new Error(`Source path not found: ${sourcePath}`);
   }
-  const st = (0, import_node_fs2.statSync)(sourcePath);
+  const st = statSync(sourcePath);
   const files = st.isDirectory() ? scanDirectory(sourcePath, patterns, excludePatterns) : [sourcePath];
   const allMemory = [];
   const allFunctions = [];
@@ -934,7 +882,7 @@ function sourceMiner(input) {
   let currentOrg = null;
   for (const file of files) {
     try {
-      const content = (0, import_node_fs.readFileSync)(file, "utf-8");
+      const content = readFileSync(file, "utf-8");
       const result = scanFile(file, content, currentOrg);
       allMemory.push(...result.memoryEntries);
       allFunctions.push(...result.functions);
@@ -963,8 +911,8 @@ function sourceMiner(input) {
 }
 
 // src/tools/lens-craft.ts
-var import_node_fs3 = require("fs");
-var import_node_path6 = require("path");
+import { writeFileSync, mkdirSync, existsSync as existsSync2 } from "fs";
+import { dirname, join as join2 } from "path";
 function pascalCase(name) {
   return name.replace(/[^a-zA-Z0-9]/g, " ").split(/[\s_]+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join("");
 }
@@ -1178,12 +1126,12 @@ function lensCraft(input) {
   const generatedCode = generatePythonCode(extractors, moduleName, sourcePath);
   let writtenTo;
   if (input.output.path) {
-    const outPath = input.output.path.endsWith(".py") ? input.output.path : (0, import_node_path6.join)(input.output.path, `${moduleName}.py`);
-    const dir = (0, import_node_path6.dirname)(outPath);
-    if (!(0, import_node_fs3.existsSync)(dir)) {
-      (0, import_node_fs3.mkdirSync)(dir, { recursive: true });
+    const outPath = input.output.path.endsWith(".py") ? input.output.path : join2(input.output.path, `${moduleName}.py`);
+    const dir = dirname(outPath);
+    if (!existsSync2(dir)) {
+      mkdirSync(dir, { recursive: true });
     }
-    (0, import_node_fs3.writeFileSync)(outPath, generatedCode, "utf-8");
+    writeFileSync(outPath, generatedCode, "utf-8");
     writtenTo = outPath;
   }
   return {
@@ -1198,8 +1146,8 @@ function lensCraft(input) {
 }
 
 // src/tools/skin-weaver.ts
-var import_node_fs4 = require("fs");
-var import_node_path7 = require("path");
+import { writeFileSync as writeFileSync2, mkdirSync as mkdirSync2, existsSync as existsSync3 } from "fs";
+import { join as join3 } from "path";
 var PALETTES = {
   bbc_mode7: {
     "0": "#000000",
@@ -1387,13 +1335,13 @@ function skinWeaver(input) {
   };
 }
 function writeSkinManifest(output, outputDir, format = "yaml") {
-  if (!(0, import_node_fs4.existsSync)(outputDir)) {
-    (0, import_node_fs4.mkdirSync)(outputDir, { recursive: true });
+  if (!existsSync3(outputDir)) {
+    mkdirSync2(outputDir, { recursive: true });
   }
   const ext = format === "yaml" ? ".yaml" : ".json";
-  const outPath = (0, import_node_path7.join)(outputDir, `${output.skin_name}.skin${ext}`);
+  const outPath = join3(outputDir, `${output.skin_name}.skin${ext}`);
   const content = format === "yaml" ? generateYamlManifest(output.manifest) : generateJsonManifest(output.manifest);
-  (0, import_node_fs4.writeFileSync)(outPath, content, "utf-8");
+  writeFileSync2(outPath, content, "utf-8");
   return outPath;
 }
 
@@ -2222,39 +2170,39 @@ var GRIDSMITH_TOOLS = [
   }
 ];
 function createGridWorld(cols = 80, rows = 24) {
-  const grid = (0, import_gridcore6.createGrid)(cols, rows);
+  const grid = createGrid2(cols, rows);
   return {
     grid,
     cols: grid.cols,
     rows: grid.rows,
-    cellCount: (0, import_gridcore6.listCells)(grid).length
+    cellCount: listCells3(grid).length
   };
 }
 function convertLatLonToUCode(lat, lon, level = 340) {
-  return (0, import_gridcore6.latLonToUCode)(lat, lon, level);
+  return latLonToUCode(lat, lon, level);
 }
 function convertUCodeToLatLon(coord) {
-  return (0, import_gridcore6.uCodeToLatLon)(coord);
+  return uCodeToLatLon(coord);
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  GRIDSMITH_TOOLS,
-  composeGridLayers,
-  convertLatLonToUCode,
-  convertUCodeToLatLon,
-  createGridWorld,
-  createWorld,
-  createWorldManifest,
+
+export {
+  importBasicProgram,
+  importAmosProgram,
   editCell,
+  composeGridLayers,
   exportUvox,
   findPath,
-  importAmosProgram,
-  importBasicProgram,
-  inspireEngine,
-  lensCraft,
-  mcpScribe,
-  skinWeaver,
+  createWorldManifest,
+  createWorld,
   sourceMiner,
+  lensCraft,
+  skinWeaver,
+  writeSkinManifest,
+  mcpScribe,
+  inspireEngine,
   ucodeWeaver,
-  writeSkinManifest
-});
+  GRIDSMITH_TOOLS,
+  createGridWorld,
+  convertLatLonToUCode,
+  convertUCodeToLatLon
+};

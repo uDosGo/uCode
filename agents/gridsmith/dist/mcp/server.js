@@ -16,8 +16,9 @@ import {
   mcpScribe,
   skinWeaver,
   sourceMiner,
+  ucodeWeaver,
   writeSkinManifest
-} from "../chunk-Q3OEJYCI.js";
+} from "../chunk-4ASG7VW3.js";
 
 // src/mcp/server.ts
 import { createServer } from "http";
@@ -196,6 +197,19 @@ async function invokeTool(name, params) {
           target_runtime: runtime,
           display_mode: displayMode
         }
+      });
+    }
+    case "ucode_weaver": {
+      const gddJson = String(params.gdd_json || "{}");
+      const programName = String(params.program_name || "Weaver");
+      const runtime = String(params.runtime || "bbc_basic_sdl");
+      const displayMode = String(params.display_mode || "teletext");
+      const gdd = JSON.parse(gddJson);
+      return ucodeWeaver({
+        gdd: gdd.game_design_document || gdd,
+        program_name: programName,
+        runtime,
+        display_mode: displayMode
       });
     }
     default:

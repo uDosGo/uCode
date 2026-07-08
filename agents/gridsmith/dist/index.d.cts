@@ -393,6 +393,30 @@ interface InspireEngineOutput {
 }
 declare function inspireEngine(input: InspireEngineInput): InspireEngineOutput;
 
+interface UCodeWeaverInput {
+    gdd: GameDesignDocument;
+    program_name: string;
+    runtime: string;
+    display_mode: string;
+    entry_file?: string;
+}
+interface BbcBasicProcedure {
+    name: string;
+    description: string;
+    body: string;
+}
+interface UCodeWeaverOutput {
+    skill: 'uCode-Weaver';
+    version: '1.0';
+    executed_at: string;
+    program_name: string;
+    entry_file: string;
+    procedures: BbcBasicProcedure[];
+    generated_code: string;
+    written_to?: string;
+}
+declare function ucodeWeaver(input: UCodeWeaverInput): UCodeWeaverOutput;
+
 interface GridSmithToolParameter {
     type: 'string' | 'number' | 'array' | 'object';
     description: string;
@@ -419,4 +443,4 @@ declare function convertUCodeToLatLon(coord: string): {
     lon: number;
 } | null;
 
-export { type AssetReference, type CellPayload, type CharacterMapping, type CoreMechanic, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GameDesignDocument, type GridSmithToolDefinition, type GridSmithToolParameter, type InspireEngineInput, type InspireEngineOutput, type LensCraftInput, type LensCraftOutput, type McpCommand, type McpScribeInput, type McpScribeOutput, type MemoryMapEntry, type Recommendation, type SkinManifest, type SkinWeaverInput, type SkinWeaverOutput, type SourceMinerInput, type SourceMinerOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, inspireEngine, lensCraft, mcpScribe, skinWeaver, sourceMiner, writeSkinManifest };
+export { type AssetReference, type BbcBasicProcedure, type CellPayload, type CharacterMapping, type CoreMechanic, type DataStructure, type ExtractorDefinition, type FunctionEntry, GRIDSMITH_TOOLS, type GameDesignDocument, type GridSmithToolDefinition, type GridSmithToolParameter, type InspireEngineInput, type InspireEngineOutput, type LensCraftInput, type LensCraftOutput, type McpCommand, type McpScribeInput, type McpScribeOutput, type MemoryMapEntry, type Recommendation, type SkinManifest, type SkinWeaverInput, type SkinWeaverOutput, type SourceMinerInput, type SourceMinerOutput, type UCodeWeaverInput, type UCodeWeaverOutput, type WorldCreationOptions, composeGridLayers, convertLatLonToUCode, convertUCodeToLatLon, createGridWorld, createWorld, createWorldManifest, editCell, exportUvox, findPath, importAmosProgram, importBasicProgram, inspireEngine, lensCraft, mcpScribe, skinWeaver, sourceMiner, ucodeWeaver, writeSkinManifest };

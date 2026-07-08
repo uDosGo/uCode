@@ -20,6 +20,7 @@ import {
   writeSkinManifest,
   mcpScribe,
   inspireEngine,
+  ucodeWeaver,
 } from '../index'
 
 const PORT = process.env.GRIDSMITH_MCP_PORT || '8670'
@@ -239,6 +240,21 @@ async function invokeTool(name: string, params: Record<string, unknown>): Promis
           target_runtime: runtime,
           display_mode: displayMode,
         },
+      })
+    }
+
+    case 'ucode_weaver': {
+      const gddJson = String(params.gdd_json || '{}')
+      const programName = String(params.program_name || 'Weaver')
+      const runtime = String(params.runtime || 'bbc_basic_sdl')
+      const displayMode = String(params.display_mode || 'teletext')
+
+      const gdd = JSON.parse(gddJson)
+      return ucodeWeaver({
+        gdd: gdd.game_design_document || gdd,
+        program_name: programName,
+        runtime,
+        display_mode: displayMode,
       })
     }
 

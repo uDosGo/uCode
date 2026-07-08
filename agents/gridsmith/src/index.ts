@@ -35,6 +35,8 @@ import type {
 import { mcpScribe } from './tools/mcp-scribe'
 import type { McpScribeInput, McpScribeOutput, McpCommand } from './tools/mcp-scribe'
 import { inspireEngine } from './tools/inspire-engine'
+import { ucodeWeaver } from './tools/ucode-weaver'
+import type { UCodeWeaverInput, UCodeWeaverOutput, BbcBasicProcedure } from './tools/ucode-weaver'
 import type {
   InspireEngineInput,
   InspireEngineOutput,
@@ -201,6 +203,16 @@ export const GRIDSMITH_TOOLS: GridSmithToolDefinition[] = [
       display_mode: { type: 'string', description: 'Display mode', default: 'teletext' },
     },
   },
+  {
+    name: 'ucode_weaver',
+    description: 'Generate BBC BASIC skeleton code from a game design document.',
+    parameters: {
+      gdd_json: { type: 'string', description: 'Inspire-Engine GDD output as JSON string' },
+      program_name: { type: 'string', description: 'Program name (e.g. Apple Panic, Knight Orc)' },
+      runtime: { type: 'string', description: 'Target runtime', default: 'bbc_basic_sdl' },
+      display_mode: { type: 'string', description: 'Display mode', default: 'teletext' },
+    },
+  },
 ]
 
 export function createGridWorld(cols = 80, rows = 24): { grid: Grid; cols: number; rows: number; cellCount: number } {
@@ -236,6 +248,7 @@ export {
   writeSkinManifest,
   mcpScribe,
   inspireEngine,
+  ucodeWeaver,
 }
 export type {
   Grid,
@@ -262,4 +275,7 @@ export type {
   InspireEngineOutput,
   GameDesignDocument,
   CoreMechanic,
+  UCodeWeaverInput,
+  UCodeWeaverOutput,
+  BbcBasicProcedure,
 }

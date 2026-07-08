@@ -16,8 +16,9 @@ import {
   mcpScribe,
   skinWeaver,
   sourceMiner,
+  ucodeWeaver,
   writeSkinManifest
-} from "./chunk-Q3OEJYCI.js";
+} from "./chunk-4ASG7VW3.js";
 export {
   GRIDSMITH_TOOLS,
   composeGridLayers,
@@ -36,5 +37,6 @@ export {
   mcpScribe,
   skinWeaver,
   sourceMiner,
+  ucodeWeaver,
   writeSkinManifest
 };
