@@ -12,7 +12,7 @@ from m6502 import Memory, Processor
 
 # Opcodes for the 6502 processor.
 
-from test_cpu_other import *  # other
+from .test_cpu_other import *  # other
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215854_test_cpu.py

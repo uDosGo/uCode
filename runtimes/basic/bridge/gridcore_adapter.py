@@ -16,6 +16,7 @@ Protocol (JSON-RPC 2.0 style):
 from __future__ import annotations
 
 import json
+import importlib.util
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -62,9 +63,46 @@ def _load_vault_config() -> Dict[str, Any]:
 _LENS_PROGRAMS: Dict[str, str] = {
     "repton": "repton_lens",
     "elite": "elite_lens",
+    "nethack": "nethack_lens",
+    "eamon": "eamon_lens",
 }
 
-_LENS_MODULE_PATH = Path(__file__).resolve().parent.parent
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+_LENS_MODULE_FILES: Dict[str, Path] = {
+    "repton": _REPO_ROOT / "programs" / "repton" / "lens" / "repton_lens.py",
+    "elite": _REPO_ROOT / "programs" / "elite" / "lens" / "elite_lens.py",
+    "nethack": _REPO_ROOT / "programs" / "nethack" / "lens" / "nethack_lens.py",
+    "eamon": _REPO_ROOT / "programs" / "eamon" / "lens" / "eamon_lens.py",
+}
+
+
+class _NullEmulator:
+    """Fallback emulator used for dry capture paths in tests and tooling."""
+
+    def read_byte(self, _addr: int) -> int:
+        return 0
+
+    def read_uint16(self, _addr: int) -> int:
+        return 0
+
+    def read_uint32(self, _addr: int) -> int:
+        return 0
+
+
+def _resolve_extractor_class(program_name: str):
+    module_name = _LENS_PROGRAMS.get(program_name.lower())
+    module_file = _LENS_MODULE_FILES.get(program_name.lower())
+    if not module_name or not module_file or not module_file.exists():
+        return None
+
+    extractor_class_name = f"{module_name.title().replace('_', '')}Extractor"
+    spec = importlib.util.spec_from_file_location(module_name, module_file)
+    if spec is None or spec.loader is None:
+        return None
+
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return getattr(module, extractor_class_name, None)
 
 
 def list_programs() -> List[str]:
@@ -72,16 +110,12 @@ def list_programs() -> List[str]:
 
 
 def capture_program_state(program_name: str) -> Optional[Dict[str, Any]]:
-    module_name = _LENS_PROGRAMS.get(program_name.lower())
-    if not module_name:
+    extractor_class = _resolve_extractor_class(program_name)
+    if not extractor_class:
         return None
+
     try:
-        import importlib
-        mod = importlib.import_module(module_name)
-        extractor_class = getattr(mod, f"{module_name.title().replace('_', '')}Extractor", None)
-        if not extractor_class:
-            return None
-        extractor = extractor_class(emu=None)
+        extractor = extractor_class(emu=_NullEmulator())
         if hasattr(extractor, 'capture_all'):
             return extractor.capture_all()
         return {}

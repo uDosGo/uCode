@@ -66,11 +66,11 @@ Priority: gridcore → viewport-renderer → gridsmith
 Priority: basic runtime → amos runtime → shared
 ```
 
-| Runtime          | Task                             | Check                                                        |
-| ---------------- | -------------------------------- | ------------------------------------------------------------ |
-| `runtimes/basic` | Fix Python 3.14 dataclass compat | `pip install -e runtimes/basic && python -c "import ucode1"` |
-| `runtimes/amos`  | Verify editable install          | `pip install -e runtimes/amos && python -c "import ucode2"`  |
-| `shared/`        | Extract common runtime support   | Review existing cross-references                             |
+| Runtime          | Task                             | Check                                                        | Status (2026-07-08 audit)                                                                     |
+| ---------------- | -------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `runtimes/basic` | Fix Python 3.14 dataclass compat | `pip install -e runtimes/basic && python -c "import ucode1"` | Complete in isolated venv (`.venv-amos-check`) after dataclass cleanup and split-import fixes |
+| `runtimes/amos`  | Verify editable install          | `pip install -e runtimes/amos && python -c "import ucode2"`  | Complete in isolated venv (`.venv-amos-check`)                                                |
+| `shared/`        | Extract common runtime support   | Review existing cross-references                             | Pending                                                                                       |
 
 ### Phase 3: Integration (COMPLETE)
 
@@ -81,7 +81,7 @@ uCode packages → GridSmith MCP → uCore consumption
 - GridSmith CLI works standalone (16 tools)
 - GridSmith MCP tools registered with uCore (JSON-RPC on port 8670)
 - uCore can import `@udos/viewport-renderer` widgets
-- LENS program registry wired (Repton + Elite)
+- LENS program registry wired (Repton + Elite + NetHack + Eamon)
 
 ### Phase 4: Program Adaptation (sprint.2026-07-10)
 
@@ -89,33 +89,33 @@ uCode packages → GridSmith MCP → uCore consumption
 Priority: Repton → Elite → Apple Panic → NetHack → uConstruct → Eamon → Knight Orc
 ```
 
-| Program | Pipeline | BBC BASIC | Status |
-|---------|:--:|:--:|--------|
-| Repton | Full | 253 lines | Playable skeleton |
-| Elite | Full | Pending | 20 LENS extractors ready |
-| Apple Panic | GDD | 281 lines | Digging/trapping mechanics |
-| NetHack | Research | Pending | C to BBC BASIC strategy |
-| uConstruct | Scaffold | Pending | Tile editor design |
-| Eamon | Research | Pending | Applesoft BASIC port plan |
-| Knight Orc | GDD | 64 lines | Text adventure skeleton |
+| Program     | Pipeline | BBC BASIC | Status                                                     |
+| ----------- | :------: | :-------: | ---------------------------------------------------------- |
+| Repton      |   Full   | 275 lines | Enemy patrol AI, traps, and Reptol logic implemented       |
+| Elite       |   Full   | 287 lines | NPC ship movement/combat and galaxy navigation implemented |
+| Apple Panic |   GDD    | 281 lines | Digging/trapping mechanics                                 |
+| NetHack     | Research | 52 lines  | Research + skeleton + LENS extractor implemented           |
+| uConstruct  | Scaffold | 49 lines  | Scaffold complete; tile editor still design-phase          |
+| Eamon       | Research | 63 lines  | Research + skeleton + LENS extractor implemented           |
+| Knight Orc  |   GDD    | 64 lines  | Text adventure skeleton                                    |
 
 ### Phase 5: Viewport Demo and Runtime Testing (sprint.2026-07-10)
 
-| Task | File | Status |
-|------|------|--------|
-| TerminalWidget dispatch demo | `packages/viewport-renderer/demo/index.html` | Pending |
-| TeletextWidget CEEFAX loader | `packages/viewport-renderer/demo/index.html` | Pending |
-| Mock emulator for LENS testing | `runtimes/basic/tests/test_bridge.py` | Pending |
-| End-to-end LENS CAPTURE test | `runtimes/basic/bridge/gridcore_adapter.py` | Pending |
+| Task                           | File                                                                                      | Status                                                                                |
+| ------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| TerminalWidget dispatch demo   | `packages/viewport-renderer/demo/index.html`                                              | Complete                                                                              |
+| TeletextWidget CEEFAX loader   | `packages/viewport-renderer/demo/index.html`                                              | Complete                                                                              |
+| Mock emulator for LENS testing | `runtimes/basic/tests/test_lens_capture.py`                                               | Complete                                                                              |
+| End-to-end LENS CAPTURE test   | `runtimes/basic/tests/test_lens_capture.py` + `runtimes/basic/bridge/gridcore_adapter.py` | Complete (runtime extractor import wiring and capture paths validated; 18 tests pass) |
 
 ### Phase 6: Learning Resources and Documentation (sprint.2026-07-10)
 
-| Task | File | Status |
-|------|------|--------|
-| Skills Framework tutorial | `docs/learning-pathway/` | Pending |
-| Program archive / library registry | `programs/README.md` | Exists |
-| DEV_PLAN.md update (phases 4-6) | `docs/DEV_PLAN.md` | Done |
-| 6 Skills Framework skills documented | `docs/specs/SKILLS_FRAMEWORK.md` | Exists |
+| Task                                 | File                             | Status   |
+| ------------------------------------ | -------------------------------- | -------- |
+| Skills Framework tutorial            | `docs/learning-pathway/`         | Complete |
+| Program archive / library registry   | `programs/README.md`             | Complete |
+| DEV_PLAN.md update (phases 4-6)      | `docs/DEV_PLAN.md`               | Complete |
+| 6 Skills Framework skills documented | `docs/specs/SKILLS_FRAMEWORK.md` | Complete |
 
 ---
 

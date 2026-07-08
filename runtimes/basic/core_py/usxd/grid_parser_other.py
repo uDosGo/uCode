@@ -27,10 +27,6 @@ class GridFormat(Enum):
     CSV = "csv"              # CSV format
 
 
-@dataclass
-
-
-
 @dataclass(kw_only=True)
 class GridCell:
     """Represents a cell in a grid"""
@@ -71,9 +67,6 @@ class GridCell:
         return result
 
     @classmethod
-
-
-    @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'GridCell':
         """Create from dictionary"""
         return cls(
@@ -85,10 +78,6 @@ class GridCell:
             row=data.get('row', -1),
             col=data.get('col', -1)
         )
-
-
-@dataclass
-
 
 
 @dataclass
@@ -115,9 +104,6 @@ class GridComponent:
         }
 
     @classmethod
-
-
-    @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'GridComponent':
         """Create from dictionary"""
         cells = []
@@ -131,10 +117,6 @@ class GridComponent:
             cells=cells,
             metadata=data.get('metadata', {})
         )
-
-
-@dataclass
-
 
 
 @dataclass
@@ -222,9 +204,6 @@ class ParsedGrid:
         return '\n'.join(lines)
 
     @classmethod
-
-
-    @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ParsedGrid':
         """Create from dictionary"""
         grid_data = data.get('grid', [])
@@ -251,9 +230,6 @@ class ParsedGrid:
             metadata=data.get('metadata', {}),
             format=GridFormat(data.get('format', 'simple'))
         )
-
-    @classmethod
-
 
     @classmethod
     def from_json(cls, json_str: str) -> 'ParsedGrid':

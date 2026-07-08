@@ -67,10 +67,6 @@ class StylePreset(Enum):
 
 
 @dataclass
-
-
-
-@dataclass
 class ThinUIProperties:
     """Properties for ThinUI component rendering"""
     component_type: ComponentType = ComponentType.CONTAINER
@@ -129,9 +125,6 @@ class ThinUIProperties:
         if self.children:
             result['children'] = [child.to_dict() for child in self.children]
         return result
-
-    @classmethod
-
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ThinUIProperties':
@@ -210,9 +203,6 @@ class ComponentMapping:
             'conditions': self.conditions,
             'priority': self.priority
         }
-
-    @classmethod
-
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ComponentMapping':

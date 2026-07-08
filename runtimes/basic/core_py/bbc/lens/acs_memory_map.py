@@ -38,8 +38,8 @@ from typing import Dict, List, Optional, Any, Tuple
 # ── Memory Region Definitions ──────────────────────────────────────
 
 
-from acs_memory_map_other import *  # other
-from acs_memory_map_map import *  # map
+from .acs_memory_map_other import *  # other
+from .acs_memory_map_map import *  # map
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215806_acs_memory_map.py

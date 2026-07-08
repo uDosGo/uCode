@@ -15,6 +15,7 @@ from typing import Optional, List, Dict, Any, Tuple, Union, Callable
 import json
 from enum import Enum
 from .grid_parser import GridCell, GridComponent, ParsedGrid, GridFormat, ASCIIGridParser
+from .component_mapper_other import ComponentType, ThinUIProperties
 
 
 

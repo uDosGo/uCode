@@ -22,9 +22,9 @@ import re
 
 
 
-from bridge_other import *  # other
+from .bridge_other import *  # other
 from bridge_ceefax import *  # ceefax
-from bridge_map import *  # map
+from .bridge_map import *  # map
 from bridge_bridge import *  # bridge
 from bridge_process import *  # process
 

@@ -47,7 +47,7 @@ from typing import Optional
 # Add core_py to path
 
 from ceefax_cli_ceefax import *  # ceefax
-from ceefax_cli_other import *  # other
+from .ceefax_cli_other import *  # other
 from ceefax_cli_mcp import *  # mcp
 
 # Original file backed up to:

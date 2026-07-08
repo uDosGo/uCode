@@ -18,8 +18,8 @@ from .grid_parser import GridCell, GridComponent, ParsedGrid, GridFormat, ASCIIG
 
 
 
-from component_mapper_other import *  # other
-from component_mapper_map import *  # map
+from .component_mapper_other import *  # other
+from .component_mapper_map import *  # map
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215514_component_mapper.py

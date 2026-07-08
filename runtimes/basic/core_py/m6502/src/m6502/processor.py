@@ -10,7 +10,7 @@ from . import Memory
 
 
 from processor_process import *  # process
-from processor_other import *  # other
+from .processor_other import *  # other
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215456_processor.py

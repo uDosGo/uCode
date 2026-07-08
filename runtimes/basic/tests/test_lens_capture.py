@@ -4,7 +4,7 @@ Integration tests for the LENS program registry and capture/restore
 infrastructure in gridcore_adapter.py.
 
 Verifies that:
-- LENS program registry lists Repton and Elite
+- LENS program registry lists Repton, Elite, NetHack, and Eamon
 - LENS CAPTURE/LIST/RESTORE commands work through dispatch_command
 - Mock emulator can exercise extractor properties
 - Error handling works for unknown programs
@@ -24,11 +24,13 @@ import gridcore_adapter  # noqa: E402
 class TestLensRegistry:
     """Verify the LENS program registry is configured correctly."""
 
-    def test_list_programs_returns_repton_and_elite(self):
+    def test_list_programs_returns_expected_programs(self):
         programs = gridcore_adapter.list_programs()
         assert "repton" in programs, f"Expected 'repton' in programs, got: {programs}"
         assert "elite" in programs, f"Expected 'elite' in programs, got: {programs}"
-        assert len(programs) == 2, f"Expected 2 programs, got: {len(programs)}"
+        assert "nethack" in programs, f"Expected 'nethack' in programs, got: {programs}"
+        assert "eamon" in programs, f"Expected 'eamon' in programs, got: {programs}"
+        assert len(programs) >= 4, f"Expected at least 4 programs, got: {len(programs)}"
 
     def test_list_programs_is_sorted(self):
         programs = gridcore_adapter.list_programs()
@@ -52,6 +54,8 @@ class TestLensCommands:
         combined = " ".join(output)
         assert "repton" in combined, f"Expected 'repton' in LENS HELP: {combined}"
         assert "elite" in combined, f"Expected 'elite' in LENS HELP: {combined}"
+        assert "nethack" in combined, f"Expected 'nethack' in LENS HELP: {combined}"
+        assert "eamon" in combined, f"Expected 'eamon' in LENS HELP: {combined}"
 
     def test_lens_list_shows_programs(self):
         result = gridcore_adapter.dispatch_command("LENS LIST")
@@ -60,15 +64,21 @@ class TestLensCommands:
         combined = " ".join(output)
         assert "repton" in combined, f"Expected 'repton' in LENS LIST: {combined}"
         assert "elite" in combined, f"Expected 'elite' in LENS LIST: {combined}"
+        assert "nethack" in combined, f"Expected 'nethack' in LENS LIST: {combined}"
+        assert "eamon" in combined, f"Expected 'eamon' in LENS LIST: {combined}"
 
     def test_lens_capture_repton(self):
-        """Capture should attempt extractor import and report status."""
+        """Capture should load extractor and report snapshot success."""
         result = gridcore_adapter.dispatch_command("LENS CAPTURE repton")
         output = result["output"]
-        # The import may succeed or fail depending on Python path,
-        # but the command should always return a string result
         assert isinstance(output, str), f"Expected string output, got: {type(output)}"
-        assert "repton" in output.lower(), f"Expected 'repton' in output: {output}"
+        assert "snapshot taken" in output.lower(), f"Expected successful snapshot: {output}"
+
+    def test_lens_capture_nethack(self):
+        result = gridcore_adapter.dispatch_command("LENS CAPTURE nethack")
+        output = result["output"]
+        assert isinstance(output, str), f"Expected string output, got: {type(output)}"
+        assert "snapshot taken" in output.lower(), f"Expected successful snapshot: {output}"
 
     def test_lens_capture_unknown_program(self):
         result = gridcore_adapter.dispatch_command("LENS CAPTURE nonexistent")
@@ -88,14 +98,10 @@ class TestCaptureProgramState:
         state = gridcore_adapter.capture_program_state("totally_fake_program")
         assert state is None, f"Expected None for unknown program, got: {state}"
 
-    def test_returns_none_for_program_without_extractor_module(self):
-        """A program in registry whose module doesn't exist returns None."""
-        # Elite's module exists but can't import without proper path setup.
-        # The function should return None gracefully.
+    def test_returns_state_for_registered_program(self):
         state = gridcore_adapter.capture_program_state("elite")
-        # May return None (if module not importable) or a dict (if it can import)
-        assert state is None or isinstance(state, dict), \
-            f"Expected None or dict, got: {type(state)}"
+        assert isinstance(state, dict), f"Expected dict, got: {type(state)}"
+        assert len(state) > 0, f"Expected non-empty state, got: {state}"
 
 
 class TestMockEmulator:

@@ -23,7 +23,7 @@ from .palette import CharacterPalette, SlotEntry
 
 
 
-from grid_editor_other import *  # other
+from .grid_editor_other import *  # other
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215758_grid_editor.py

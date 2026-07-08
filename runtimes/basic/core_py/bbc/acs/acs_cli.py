@@ -47,7 +47,7 @@ from typing import Optional, Dict, Any
 
 # Add core_py to path
 
-from acs_cli_other import *  # other
+from .acs_cli_other import *  # other
 from acs_cli_mcp import *  # mcp
 
 # Original file backed up to:

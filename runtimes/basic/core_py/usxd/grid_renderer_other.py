@@ -53,10 +53,6 @@ class Key(Enum):
 
 
 @dataclass
-
-
-
-@dataclass
 class Style:
     """Terminal styling options"""
     fg_color: Optional[str] = None
@@ -199,10 +195,6 @@ class Style:
         g6 = (g * 5) // 255
         b6 = (b * 5) // 255
         return 16 + 36 * r6 + 6 * g6 + b6
-
-
-@dataclass
-
 
 
 @dataclass

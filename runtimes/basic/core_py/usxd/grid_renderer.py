@@ -26,7 +26,7 @@ from .component_mapper import ComponentMapper, ComponentType, ThinUIProperties, 
 
 
 
-from grid_renderer_other import *  # other
+from .grid_renderer_other import *  # other
 
 # Original file backed up to:
 #   /Users/fredbook/.snackbar/backups/file-splitter/20260618_215502_grid_renderer.py
