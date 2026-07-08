@@ -2,7 +2,7 @@
 version: "1.0.0"
 created: "2026-07-08T11:43:00Z"
 updated: "2026-07-08T12:29:00Z"
-status: active
+status: closed
 
 sprint:
   name: "sprint.2026-07-10"
@@ -24,7 +24,8 @@ sprint:
     - id: "task-073"
       title: "Viewport demo: Wire TerminalWidget with runtime bridge dispatch"
       file: "packages/viewport-renderer/demo/index.html"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-074"
       title: "Runtime bridge: End-to-end LENS CAPTURE test with mock emulator"
@@ -59,17 +60,20 @@ sprint:
     - id: "task-079"
       title: "Viewport demo: Wire TeletextWidget with CEEFAX page loader"
       file: "packages/viewport-renderer/demo/index.html"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-080"
       title: "Runtime bridge: Python mock emulator for LENS extractor testing"
-      file: "runtimes/basic/tests/test_bridge.py"
-      status: pending
+      file: "runtimes/basic/tests/test_lens_capture.py"
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-081"
       title: "Docs: Update learning pathway with Skills Framework tutorial"
       file: "docs/learning-pathway/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: low
     - id: "task-082"
       title: "Docs: Update DEV_PLAN.md with Phases 4-6"

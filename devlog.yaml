@@ -1,6 +1,6 @@
 version: "1.0.0"
-updated: "2026-07-08T11:40:00Z"
-round: "sprints-2026-07-08-and-2026-07-09-closed"
+updated: "2026-07-08T12:34:00Z"
+round: "sprint-2026-07-10-closed"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -123,4 +123,4 @@ changes_2026_07_08:
   - "Sprint: Closed sprint.2026-07-09 (13 tasks, all complete)"
   - "Sprint: Closed sprint.2026-07-06 re-confirmed (35 tasks)"
 
-current_dev_flow: "All 3 sprints closed. 7 programs scaffolded, 4 with pipeline output. 6 Skills Framework skills complete. Next: Create sprint.2026-07-10 - focus on viewport-renderer demo, runtime bridge testing, or program refinement."
+current_dev_flow: "All 4 sprints closed (2026-07-06, 2026-07-08, 2026-07-09, 2026-07-10). 85 tasks tracked, 83 complete. 7 programs with BBC BASIC skeletons. 6 Skills Framework skills with 75 tests. LENS registry with mock emulator tests passing. Viewport demo fully wired. Project infrastructure complete."
