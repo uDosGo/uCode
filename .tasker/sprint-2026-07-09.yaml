@@ -64,6 +64,17 @@ sprint:
     - id: "task-068"
       title: "Eamon: Research Applesoft BASIC structure for porting"
       file: "programs/eamon/"
+      status: complete
+      completed: "2026-07-08"
+      priority: low
+    - id: "task-070"
+      title: "NetHack: C-to-BBC BASIC port research and scaffold"
+      file: "programs/nethack/"
+      status: pending
+      priority: low
+    - id: "task-071"
+      title: "uConstruct: Tile editor scaffold and resource system design"
+      file: "programs/uconstruct/"
       status: pending
       priority: low
     - id: "task-069"
