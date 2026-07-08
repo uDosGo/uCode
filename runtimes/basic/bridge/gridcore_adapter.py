@@ -57,6 +57,38 @@ def _load_vault_config() -> Dict[str, Any]:
     return {}
 
 
+# ── LENS Program Registry ────────────────────────────────────────
+
+_LENS_PROGRAMS: Dict[str, str] = {
+    "repton": "repton_lens",
+    "elite": "elite_lens",
+}
+
+_LENS_MODULE_PATH = Path(__file__).resolve().parent.parent
+
+
+def list_programs() -> List[str]:
+    return sorted(_LENS_PROGRAMS.keys())
+
+
+def capture_program_state(program_name: str) -> Optional[Dict[str, Any]]:
+    module_name = _LENS_PROGRAMS.get(program_name.lower())
+    if not module_name:
+        return None
+    try:
+        import importlib
+        mod = importlib.import_module(module_name)
+        extractor_class = getattr(mod, f"{module_name.title().replace('_', '')}Extractor", None)
+        if not extractor_class:
+            return None
+        extractor = extractor_class(emu=None)
+        if hasattr(extractor, 'capture_all'):
+            return extractor.capture_all()
+        return {}
+    except Exception:
+        return None
+
+
 def vault_lookup(key: str) -> str:
     """Look up a single key from the vault."""
     vault = _load_vault_config()
@@ -179,8 +211,28 @@ def dispatch_command(command: str) -> Dict[str, Any]:
         return {"output": ["Skins: bbc, teletext, inverse, classic, dark, retro"]}
 
     # ── LENS ──
-    if upper == "LENS":
-        return {"output": "LENS: viewport capture/restore. Usage: LENS CAPTURE | LENS RESTORE"}
+    if upper == "LENS" or upper == "LENS HELP":
+        programs = list_programs()
+        if programs:
+            return {"output": ["LENS viewport capture/restore for registered programs:", ""] + [f"  {p}" for p in programs] + ["", "Usage: LENS CAPTURE <program> | LENS RESTORE <program> | LENS LIST"]}
+        return {"output": "LENS: viewport capture/restore. Usage: LENS CAPTURE | LENS RESTORE | LENS LIST"}
+
+    if upper == "LENS LIST":
+        programs = list_programs()
+        if programs:
+            return {"output": ["Registered LENS programs:"] + [f"  - {p}" for p in programs]}
+        return {"output": "No LENS programs registered."}
+
+    if upper.startswith("LENS CAPTURE "):
+        program_name = upper[13:].strip()
+        state = capture_program_state(program_name)
+        if state:
+            return {"output": f"LENS capture: {program_name} state snapshot taken ({len(state)} keys)."}
+        return {"output": f"LENS capture failed: program '{program_name}' not found. Use LENS LIST to see registered programs."}
+
+    if upper.startswith("LENS RESTORE "):
+        program_name = upper[13:].strip()
+        return {"output": f"LENS restore: {program_name} state restored (simulated)."}
 
     # Unknown
     return {"output": f"Unknown command: {command}. Type HELP for available commands."}
