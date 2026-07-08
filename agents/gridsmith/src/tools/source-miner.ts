@@ -206,11 +206,14 @@ function scanFile(
       continue
     }
 
-    // EQU / = assignment – supports $xxxx, &xxxx, and bare hex
-    const equMatch = line.match(/^(\w+)\s+(?:EQU|=)\s*[$&]?([0-9A-Fa-f]+)/i)
+    // EQU / = assignment – supports $xxxx, &xxxx, and bare hex; captures inline comments
+    const equMatch = line.match(/^(\w+)\s+(?:EQU|=)\s*[$&]?([0-9A-Fa-f]+)\s*(?:[;\\]\s*(.*))?/i)
     if (equMatch) {
       const label = equMatch[1]
       const addr = parseInt(equMatch[2], 16)
+      // Use inline comment if present, otherwise use buffered comment
+      const inlineComment = equMatch[3]?.trim()
+      if (inlineComment) commentBuffer = inlineComment
       const addrHex = '0x' + addr.toString(16).padStart(4, '0')
       // Skip common assembler constants
       if (/^(PAGE|OS|VIA|SHEILA|CRTC|ACIA|ADC|TUBE|ULA|USER|INTON|ROMSEL|SYSTEM)/i.test(label)) {

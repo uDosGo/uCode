@@ -604,10 +604,12 @@ function scanFile(filePath, fileContent, currentOrg) {
       addressCounter = 0;
       continue;
     }
-    const equMatch = line.match(/^(\w+)\s+(?:EQU|=)\s*[$&]?([0-9A-Fa-f]+)/i);
+    const equMatch = line.match(/^(\w+)\s+(?:EQU|=)\s*[$&]?([0-9A-Fa-f]+)\s*(?:[;\\]\s*(.*))?/i);
     if (equMatch) {
       const label = equMatch[1];
       const addr = parseInt(equMatch[2], 16);
+      const inlineComment = equMatch[3]?.trim();
+      if (inlineComment) commentBuffer = inlineComment;
       const addrHex = "0x" + addr.toString(16).padStart(4, "0");
       if (/^(PAGE|OS|VIA|SHEILA|CRTC|ACIA|ADC|TUBE|ULA|USER|INTON|ROMSEL|SYSTEM)/i.test(label)) {
         commentBuffer = "";
@@ -1048,7 +1050,7 @@ function extractorToProvider(mem, programName) {
     const name = `${programName}_${snaked}`.replace(/^[^a-z_]+/, "");
     switch (entry.type) {
       case "byte":
-        if (entry.description && /stat(e|us)|flag|mode|bit/i.test(entry.description)) {
+        if (entry.description && /stat(e|us)|flag|mode|bit/i.test(entry.description) || /status|flag|mode/i.test(entry.label)) {
           providers.push({
             name,
             type: "bitmask",

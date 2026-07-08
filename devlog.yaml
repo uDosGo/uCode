@@ -1,6 +1,6 @@
 version: "1.0.0"
-updated: "2026-07-06T16:59:00Z"
-round: "skills-framework-phase-4 inspire-engine"
+updated: "2026-07-06T17:12:00Z"
+round: "pipeline-validation-and-sprint-close"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -97,4 +97,14 @@ changes_2026_07_06_s5:
   - "GridSmith: MCP handler for inspire_engine in JSON-RPC server"
   - "GridSmith: Test suite 66 tests passing (27 core + 39 skill tests across 5 skills)"
 
-current_dev_flow: "Skills Framework all 5 skills built (Source-Miner, LENS-Craft, SKIN-Weaver, MCP-Scribe, Inspire-Engine). 15 GridSmith tools, 66 tests. 46 tasks tracked. Sprint complete."
+changes_2026_07_06_s6:
+  - "Pipeline: End-to-end integration test (Source-Miner → LENS-Craft → MCP-Scribe)"
+  - "Pipeline: Realistic Elite-style 6502 fixture with EQU, subroutines, SKIP, assets"
+  - "Pipeline: Verifies bitmask detection from label (SHIP_STATUS) and inline comments"
+  - "Source-Miner: Fixed inline comment capture on EQU lines (SHIP_STATUS EQU &0920 ; comment)"
+  - "LENS-Craft: Bitmask detection now checks both label and description for status/flag/mode"
+  - "GridSmith: Test suite 70 tests passing across 7 suites"
+  - "Sprint: Closed sprint.2026-07-06 (46 tasks, all complete)"
+  - "Sprint: Created sprint.2026-07-08 (Repton adaptation, 11 tasks)"
+
+current_dev_flow: "Sprint.2026-07-08 active. Next: Repton adaptation (build order #1). Clone 6502 source, run full skills pipeline."

@@ -17,7 +17,7 @@ import {
   skinWeaver,
   sourceMiner,
   writeSkinManifest
-} from "../chunk-7NKWRBKE.js";
+} from "../chunk-Q3OEJYCI.js";
 
 // src/mcp/server.ts
 import { createServer } from "http";

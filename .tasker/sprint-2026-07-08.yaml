@@ -1,0 +1,76 @@
+# uCode Dev Flow — sprint.2026-07-08
+version: "1.0.0"
+created: "2026-07-07T17:12:00Z"
+updated: "2026-07-07T17:12:00Z"
+status: active
+
+sprint:
+  name: "sprint.2026-07-08"
+  goals:
+    - "End-to-end pipeline validation (Source-Miner → LENS-Craft → MCP-Scribe)"
+    - "Repton program adaptation (build order #1, 2 weeks)"
+    - "Clone Repton 6502 source, run full skills pipeline"
+    - "Generate repton_lens.py extractor via LENS-Craft"
+    - "Generate Repton MCP command specs via MCP-Scribe"
+    - "Wire Repton LENS extractor into BBCSDL runtime bridge"
+    - "Apple Panic GDD → skeleton code (Inspire-Engine output)"
+    - "Archive sprint.2026-07-06 to docs/archive/"
+  items:
+    - id: "task-047"
+      title: "Pipeline integration test (70 tests pass, 7 suites)"
+      file: "agents/gridsmith/test/pipeline-integration.test.ts"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
+    - id: "task-048"
+      title: "Close sprint.2026-07-06, create sprint.2026-07-08"
+      file: ".tasker/dev-flow.yaml + .tasker/sprint-2026-07-08.yaml"
+      status: complete
+      completed: "2026-07-07"
+      priority: high
+    - id: "task-049"
+      title: "Repton: Clone/research 6502 source repository"
+      file: "programs/repton/"
+      status: pending
+      priority: high
+    - id: "task-050"
+      title: "Repton: Run Source-Miner on assembly source"
+      file: "programs/repton/src/"
+      status: pending
+      priority: high
+    - id: "task-051"
+      title: "Repton: Run LENS-Craft to generate repton_lens.py"
+      file: "programs/repton/lens/"
+      status: pending
+      priority: high
+    - id: "task-052"
+      title: "Repton: Run MCP-Scribe to generate MCP commands"
+      file: "programs/repton/mcp/"
+      status: pending
+      priority: high
+    - id: "task-053"
+      title: "Repton: Run SKIN-Weaver for sprite assets"
+      file: "programs/repton/skin/"
+      status: pending
+      priority: medium
+    - id: "task-054"
+      title: "Repton: Write BBC BASIC skeleton (game loop, controls)"
+      file: "programs/repton/src/repton.bbc"
+      status: pending
+      priority: high
+    - id: "task-055"
+      title: "Repton: Integrate LENS extractor with runtime bridge"
+      file: "runtimes/basic/bridge/gridcore_adapter.py"
+      status: pending
+      priority: medium
+    - id: "task-056"
+      title: "Apple Panic: Generate GDD via Inspire-Engine"
+      file: "programs/apple-panic/"
+      status: pending
+      priority: medium
+    - id: "task-057"
+      title: "Archive sprint.2026-07-06 dev flow to docs/archive/"
+      file: "docs/archive/sprint-2026-07-06.yaml"
+      status: complete
+      completed: "2026-07-07"
+      priority: low

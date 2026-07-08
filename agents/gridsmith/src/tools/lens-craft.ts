@@ -209,8 +209,9 @@ function extractorToProvider(
 
     switch (entry.type) {
       case 'byte':
-        // Check if it looks like a bitmask from description
-        if (entry.description && /stat(e|us)|flag|mode|bit/i.test(entry.description)) {
+        // Check if it looks like a bitmask from description or label
+        if ((entry.description && /stat(e|us)|flag|mode|bit/i.test(entry.description)) ||
+            /status|flag|mode/i.test(entry.label)) {
           providers.push({
             name,
             type: 'bitmask',

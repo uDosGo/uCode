@@ -16,7 +16,7 @@ import {
   skinWeaver,
   sourceMiner,
   writeSkinManifest
-} from "./chunk-7NKWRBKE.js";
+} from "./chunk-Q3OEJYCI.js";
 
 // src/cli.ts
 import { createGrid } from "@udos/gridcore";
