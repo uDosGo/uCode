@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-10
 version: "1.0.0"
 created: "2026-07-08T11:43:00Z"
-updated: "2026-07-08T12:11:00Z"
+updated: "2026-07-08T12:29:00Z"
 status: active
 
 sprint:
@@ -17,7 +17,7 @@ sprint:
   items:
     - id: "task-072"
       title: "Close sprint.2026-07-09, create sprint.2026-07-10"
-      file: ".tasker/sprint-2026-07-09.yaml + .tasker/sprint-2026-07-10.yaml"
+      file: ".tasker/"
       status: complete
       completed: "2026-07-08"
       priority: high
@@ -28,7 +28,7 @@ sprint:
       priority: high
     - id: "task-074"
       title: "Runtime bridge: End-to-end LENS CAPTURE test with mock emulator"
-      file: "runtimes/basic/bridge/gridcore_adapter.py + test"
+      file: "runtimes/basic/bridge/gridcore_adapter.py"
       status: pending
       priority: high
     - id: "task-075"
@@ -50,9 +50,10 @@ sprint:
       completed: "2026-07-08"
       priority: medium
     - id: "task-078"
-      title: "Elite: BBC BASIC skeleton (3D wireframe view + commodity trading)"
-      file: "programs/elite/src/"
-      status: pending
+      title: "Elite: BBC BASIC skeleton (station menu + commodity trading)"
+      file: "programs/elite/src/elite.bbc"
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-079"
       title: "Viewport demo: Wire TeletextWidget with CEEFAX page loader"
@@ -70,14 +71,14 @@ sprint:
       status: pending
       priority: low
     - id: "task-082"
-      title: "Docs: Update DEV_PLAN.md with Phase 4 (Program Adaptation) and Phase 5 (Learning Resources)"
+      title: "Docs: Update DEV_PLAN.md with Phases 4-6"
       file: "docs/DEV_PLAN.md"
       status: complete
       completed: "2026-07-08"
       priority: medium
     - id: "task-083"
       title: "Eamon: BBC BASIC skeleton via uCode-Weaver (text adventure parser)"
-      file: "programs/eamon/src/"
+      file: "programs/eamon/src/eamon.bbc"
       status: complete
       completed: "2026-07-08"
       priority: low

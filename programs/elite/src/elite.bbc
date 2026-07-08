@@ -1,0 +1,287 @@
+10 REM ====================================================
+   20 REM Elite - uCode Adaptation
+   30 REM BBC BASIC for SDL 2.0
+   40 REM Generated from skills pipeline (Source-Miner + LENS-Craft)
+   50 REM ====================================================
+   60
+   70 REM ---- Constants ----
+   80 MAX_FUEL% = 70
+   90 MAX_MISSILES% = 4
+  100 GALAXY_SIZE% = 256
+  110
+  120 REM ---- Game State (LENS-extractable) ----
+  130 ship_status% = 0  :REM 0=docked, 1=in flight, 2=docking, 3=jumping
+  140 ship_loc_x% = 0   :REM System X coordinate
+  150 ship_loc_y% = 0   :REM System Y coordinate
+  160 credits_lo% = 100
+  170 credits_hi% = 0
+  180 fuel% = MAX_FUEL%
+  190 ship_energy% = 255
+  200 ship_shields% = 128
+  210 laser_temp% = 0
+  220 missile_count% = MAX_MISSILES%
+  230
+  240 REM ---- Commodity Inventory (12 types, in tonnes) ----
+  250 DIM cargo%(11)
+  260 DIM price%(11)
+  270 DIM commodity_names$(11)
+  280 commodity_names$(0) = "Food"
+  290 commodity_names$(1) = "Textiles"
+  300 commodity_names$(2) = "Radioactives"
+  310 commodity_names$(3) = "Slaves"
+  320 commodity_names$(4) = "Liquor/Wines"
+  330 commodity_names$(5) = "Luxuries"
+  340 commodity_names$(6) = "Narcotics"
+  350 commodity_names$(7) = "Computers"
+  360 commodity_names$(8) = "Machinery"
+  370 commodity_names$(9) = "Alloys"
+  380 commodity_names$(10) = "Firearms"
+  390 commodity_names$(11) = "Furs"
+  400
+  410 REM ---- Current System ----
+  420 DIM system_seed%(5)
+  430 government% = 0
+  440 economy% = 0
+  450 tech_level% = 1
+  460 system_name$ = "Lave"
+  470
+  480 REM ---- Viewport ----
+  490 DIM viewport%(255)
+  500
+  510 REM ==================================================
+  520 REM Entry Point
+  530 REM ==================================================
+  540 PROCtitle_screen
+  550 PROCinit
+  560 REPEAT
+  570   IF ship_status% = 0 THEN PROCstation_menu ELSE PROCflight_loop
+  580   IF ship_energy% <= 0 THEN PROCship_destroyed
+  590 UNTIL FALSE
+  600 END
+  610
+  620 REM ==================================================
+  630 DEF PROCtitle_screen
+  640   CLS
+  650   PRINT "    ELITE"
+  660   PRINT "    uCode Adaptation"
+  670   PRINT
+  680   PRINT "    BBC BASIC for SDL 2.0"
+  690   PRINT
+  700   PRINT "    Press SPACE to start"
+  710   REPEAT UNTIL INKEY(0) = 32
+  720 ENDPROC
+  730
+  740 REM ==================================================
+  750 DEF PROCinit
+  760   ship_status% = 0 :REM Docked at Lave
+  770   credits_lo% = 100 : credits_hi% = 0
+  780   fuel% = MAX_FUEL%
+  790   ship_energy% = 255
+  800   ship_shields% = 128
+  810   missile_count% = MAX_MISSILES%
+  820   PROCgenerate_system(0)
+  830   PROCinit_commodities
+  840 ENDPROC
+  850
+  860 REM ==================================================
+  870 DEF PROCgenerate_system(seed_offset%)
+  880   LOCAL i%, s%
+  890   FOR i% = 0 TO 5
+  900     system_seed%(i%) = (seed_offset% + i% * 17) MOD 256
+  910   NEXT
+  920   government% = system_seed%(0) MOD 8
+  930   economy% = system_seed%(1) MOD 8
+  940   tech_level% = (system_seed%(2) MOD 15) + 1
+  950   IF tech_level% < 1 THEN tech_level% = 1
+  960 ENDPROC
+  970
+  980 REM ==================================================
+  990 DEF PROCinit_commodities
+ 1000   LOCAL i%
+ 1010   FOR i% = 0 TO 11
+ 1020     cargo%(i%) = 0
+ 1030     price%(i%) = 10 + (economy% * i% + government%) MOD 50
+ 1040   NEXT
+ 1050 ENDPROC
+ 1060
+ 1070 REM ==================================================
+ 1080 REM Station Menu (docked)
+ 1090 REM ==================================================
+ 1100 DEF PROCstation_menu
+ 1110   LOCAL K$
+ 1120   CLS
+ 1130   PRINT "CORIOLIS STATION - "; system_name$
+ 1140   PRINT "Government: "; government%
+ 1150   PRINT "Economy: "; economy%
+ 1160   PRINT "Tech Level: "; tech_level%
+ 1170   PRINT
+ 1180   PRINT "Credits: "; credits_hi% * 256 + credits_lo%; " cr"
+ 1190   PRINT
+ 1200   PRINT "1. Buy/Sell Commodities"
+ 1210   PRINT "2. View Cargo Hold"
+ 1220   PRINT "3. Launch from Station"
+ 1230   PRINT "4. Save Commander"
+ 1240   PRINT "5. Load Commander"
+ 1250   PRINT
+ 1260   PRINT "Choice? "
+ 1270   K$ = GET$
+ 1280   IF K$ = "1" THEN PROCcommodity_trading
+ 1290   IF K$ = "2" THEN PROCview_cargo
+ 1300   IF K$ = "3" THEN PROClaunch_ship
+ 1310   IF K$ = "4" THEN PROCsave_commander
+ 1320   IF K$ = "5" THEN PROCload_commander
+ 1330 ENDPROC
+ 1340
+ 1350 REM ==================================================
+ 1360 REM Commodity Trading Screen
+ 1370 REM ==================================================
+ 1380 DEF PROCcommodity_trading
+ 1390   LOCAL i%, K$
+ 1400   REPEAT
+ 1410     CLS
+ 1420     PRINT "COMMODITY MARKET"
+ 1430     PRINT "Item             Price  Cargo"
+ 1440     PRINT "------------------------------"
+ 1450     FOR i% = 0 TO 11
+ 1460       PRINT LEFT$(commodity_names$(i%) + "               ", 15);
+ 1470       PRINT RIGHT$(STR$(price%(i%)), 4); " cr  ";
+ 1480       PRINT RIGHT$(STR$(cargo%(i%)), 5); " T"
+ 1490     NEXT
+ 1500     PRINT
+ 1510     PRINT "Credits: "; credits_hi% * 256 + credits_lo%; " cr"
+ 1520     PRINT
+ 1530     PRINT "B)uy, S)ell, Q)uit"
+ 1540     K$ = GET$
+ 1550     IF K$ = "B" OR K$ = "b" THEN PROCbuy_commodity
+ 1560     IF K$ = "S" OR K$ = "s" THEN PROCsell_commodity
+ 1570   UNTIL K$ = "Q" OR K$ = "q"
+ 1580 ENDPROC
+ 1590
+ 1600 REM ==================================================
+ 1610 DEF PROCbuy_commodity
+ 1620   LOCAL i%, amount%, cost%, total%, total_hi%
+ 1630   PRINT "Buy which item (0-11)? "
+ 1640   INPUT i%
+ 1650   IF i% < 0 OR i% > 11 THEN ENDPROC
+ 1660   PRINT "How many tonnes? "
+ 1670   INPUT amount%
+ 1680   IF amount% < 1 THEN ENDPROC
+ 1690   total% = price%(i%) * amount%
+ 1700   total_hi% = total% DIV 256
+ 1710   total% = total% MOD 256
+ 1720   total% = credits_lo% - total%
+ 1730   IF total% < 0 THEN total_hi% = total_hi% + 1 : total% = total% + 256
+ 1740   total_hi% = credits_hi% - total_hi%
+ 1750   IF total_hi% < 0 THEN PRINT "Not enough credits!" : ENDPROC
+ 1760   credits_lo% = total%
+ 1770   credits_hi% = total_hi%
+ 1780   cargo%(i%) = cargo%(i%) + amount%
+ 1790   PRINT "Bought "; amount%; " tonnes of "; commodity_names$(i%)
+ 1800 ENDPROC
+ 1810
+ 1820 REM ==================================================
+ 1830 DEF PROCsell_commodity
+ 1840   LOCAL i%, amount%, earn%
+ 1850   PRINT "Sell which item (0-11)? "
+ 1860   INPUT i%
+ 1870   IF i% < 0 OR i% > 11 THEN ENDPROC
+ 1880   PRINT "How many tonnes? "
+ 1890   INPUT amount%
+ 1900   IF amount% < 1 OR amount% > cargo%(i%) THEN ENDPROC
+ 1910   earn% = price%(i%) * amount%
+ 1920   credits_lo% = credits_lo% + earn%
+ 1930   IF credits_lo% > 255 THEN credits_lo% = credits_lo% - 256 : credits_hi% = credits_hi% + 1
+ 1940   cargo%(i%) = cargo%(i%) - amount%
+ 1950   PRINT "Sold "; amount%; " tonnes of "; commodity_names$(i%)
+ 1960 ENDPROC
+ 1970
+ 1980 REM ==================================================
+ 1990 DEF PROCview_cargo
+ 2000   LOCAL i%
+ 2010   CLS
+ 2020   PRINT "Cargo Hold"
+ 2030   FOR i% = 0 TO 11
+ 2040     IF cargo%(i%) > 0 THEN PRINT commodity_names$(i%); ": "; cargo%(i%); " T"
+ 2050   NEXT
+ 2060   PRINT "Press any key"
+ 2070   LOCAL K$ : K$ = GET$
+ 2080 ENDPROC
+ 2090
+ 2100 REM ==================================================
+ 2110 DEF PROClaunch_ship
+ 2120   ship_status% = 1
+ 2130   PRINT "Launching..."
+ 2140 ENDPROC
+ 2150
+ 2160 REM ==================================================
+ 2170 DEF PROCsave_commander
+ 2180   PRINT "Commander saved (simulated)."
+ 2190 ENDPROC
+ 2200
+ 2210 REM ==================================================
+ 2220 DEF PROCload_commander
+ 2230   PRINT "Commander loaded (simulated)."
+ 2240 ENDPROC
+ 2250
+ 2260 REM ==================================================
+ 2270 REM Flight Loop (in space)
+ 2280 REM ==================================================
+ 2290 DEF PROCflight_loop
+ 2300   LOCAL K%
+ 2310   PROCrender_flight_view
+ 2320   PROCdisplay_hud
+ 2330   K% = INKEY(0)
+ 2340   IF K% = ASC("D") OR K% = ASC("d") THEN ship_status% = 2 : PROCdock_ship
+ 2350   IF K% = ASC("J") OR K% = ASC("j") THEN ship_status% = 3 : PROCjump_warp
+ 2360   IF K% = ASC("F") OR K% = ASC("f") THEN PROCfire_laser
+ 2370 ENDPROC
+ 2380
+ 2390 REM ==================================================
+ 2400 DEF PROCrender_flight_view
+ 2410   CLS
+ 2420   PRINT "."
+ 2430   REM TODO: 3D wireframe projection
+ 2440 ENDPROC
+ 2450
+ 2460 REM ==================================================
+ 2470 DEF PROCdisplay_hud
+ 2480   PRINT "Fuel: "; fuel%; "  Energy: "; ship_energy%
+ 2490   PRINT "Shields: "; ship_shields%; "  Missiles: "; missile_count%
+ 2500   PRINT "[D]ock [J]ump [F]ire"
+ 2510 ENDPROC
+ 2520
+ 2530 REM ==================================================
+ 2540 DEF PROCdock_ship
+ 2550   fuel% = MAX_FUEL%
+ 2560   ship_energy% = 255
+ 2570   ship_shields% = 128
+ 2580   ship_status% = 0
+ 2590   PROCgenerate_system(ship_loc_x% + ship_loc_y%)
+ 2600   PROCinit_commodities
+ 2610 ENDPROC
+ 2620
+ 2630 REM ==================================================
+ 2640 DEF PROCjump_warp
+ 2650   IF fuel% < 1 THEN PRINT "No fuel!" : ship_status% = 1 : ENDPROC
+ 2660   fuel% = fuel% - 1
+ 2670   ship_loc_x% = RND(255)
+ 2680   ship_loc_y% = RND(255)
+ 2690   system_name$ = "System " + STR$(ship_loc_x%) + "," + STR$(ship_loc_y%)
+ 2700   ship_status% = 1
+ 2710 ENDPROC
+ 2720
+ 2730 REM ==================================================
+ 2740 DEF PROCfire_laser
+ 2750   IF laser_temp% > 200 THEN PRINT "Laser overheated!" : ENDPROC
+ 2760   laser_temp% = laser_temp% + 10
+ 2770   PRINT "Pew!"
+ 2780 ENDPROC
+ 2790
+ 2800 REM ==================================================
+ 2810 DEF PROCship_destroyed
+ 2820   CLS
+ 2830   PRINT "GAME OVER"
+ 2840   PRINT "Your ship was destroyed."
+ 2850   PRINT "Score: "; credits_hi% * 256 + credits_lo%
+ 2860   END
+ 2870 ENDPROC
