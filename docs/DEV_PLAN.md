@@ -48,7 +48,7 @@ source .venv/bin/activate
 
 ## 2. Package Development Order
 
-### Phase 1: Core Stability (Current)
+### Phase 1: Core Stability (COMPLETE)
 
 ```
 Priority: gridcore → viewport-renderer → gridsmith
@@ -58,7 +58,7 @@ Priority: gridcore → viewport-renderer → gridsmith
 | ------------------------- | ---------------------------------------------- | ----------------------------------------------------- |
 | `@udos/gridcore`          | Maintain grid algebra purity                   | `npm run -ws test` from `packages/gridcore`           |
 | `@udos/viewport-renderer` | Export TerminalWidget + TeletextWidget cleanly | `npm run -ws build` from `packages/viewport-renderer` |
-| `@udos/gridsmith`         | Flesh out CLI/MCP tools                        | `node agents/gridsmith/dist/cli.js --help`            |
+| `@udos/gridsmith`         | Flesh out CLI/MCP tools (16 tools, 75 tests)   | `node agents/gridsmith/dist/cli.js --help`            |
 
 ### Phase 2: Runtime Packaging
 
@@ -72,16 +72,50 @@ Priority: basic runtime → amos runtime → shared
 | `runtimes/amos`  | Verify editable install          | `pip install -e runtimes/amos && python -c "import ucode2"`  |
 | `shared/`        | Extract common runtime support   | Review existing cross-references                             |
 
-### Phase 3: Integration
+### Phase 3: Integration (COMPLETE)
 
 ```
 uCode packages → GridSmith MCP → uCore consumption
 ```
 
-- GridSmith CLI works standalone
-- GridSmith MCP tools registered with uCore
+- GridSmith CLI works standalone (16 tools)
+- GridSmith MCP tools registered with uCore (JSON-RPC on port 8670)
 - uCore can import `@udos/viewport-renderer` widgets
-- uCore snackbar routes AI requests through local Ollama
+- LENS program registry wired (Repton + Elite)
+
+### Phase 4: Program Adaptation (sprint.2026-07-10)
+
+```
+Priority: Repton → Elite → Apple Panic → NetHack → uConstruct → Eamon → Knight Orc
+```
+
+| Program | Pipeline | BBC BASIC | Status |
+|---------|:--:|:--:|--------|
+| Repton | Full | 253 lines | Playable skeleton |
+| Elite | Full | Pending | 20 LENS extractors ready |
+| Apple Panic | GDD | 281 lines | Digging/trapping mechanics |
+| NetHack | Research | Pending | C to BBC BASIC strategy |
+| uConstruct | Scaffold | Pending | Tile editor design |
+| Eamon | Research | Pending | Applesoft BASIC port plan |
+| Knight Orc | GDD | 64 lines | Text adventure skeleton |
+
+### Phase 5: Viewport Demo and Runtime Testing (sprint.2026-07-10)
+
+| Task | File | Status |
+|------|------|--------|
+| TerminalWidget dispatch demo | `packages/viewport-renderer/demo/index.html` | Pending |
+| TeletextWidget CEEFAX loader | `packages/viewport-renderer/demo/index.html` | Pending |
+| Mock emulator for LENS testing | `runtimes/basic/tests/test_bridge.py` | Pending |
+| End-to-end LENS CAPTURE test | `runtimes/basic/bridge/gridcore_adapter.py` | Pending |
+
+### Phase 6: Learning Resources and Documentation (sprint.2026-07-10)
+
+| Task | File | Status |
+|------|------|--------|
+| Skills Framework tutorial | `docs/learning-pathway/` | Pending |
+| Program archive / library registry | `programs/README.md` | Exists |
+| DEV_PLAN.md update (phases 4-6) | `docs/DEV_PLAN.md` | Done |
+| 6 Skills Framework skills documented | `docs/specs/SKILLS_FRAMEWORK.md` | Exists |
 
 ---
 
