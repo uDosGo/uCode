@@ -2,7 +2,7 @@
 version: "1.0.0"
 created: "2026-07-08T11:03:00Z"
 updated: "2026-07-08T11:04:00Z"
-status: active
+status: closed
 
 sprint:
   name: "sprint.2026-07-09"
@@ -70,12 +70,14 @@ sprint:
     - id: "task-070"
       title: "NetHack: C-to-BBC BASIC port research and scaffold"
       file: "programs/nethack/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: low
     - id: "task-071"
       title: "uConstruct: Tile editor scaffold and resource system design"
       file: "programs/uconstruct/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: low
     - id: "task-069"
       title: "Apple Panic: Refine BBC BASIC skeleton with digging/trapping"
