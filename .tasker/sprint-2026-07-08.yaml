@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-08
 version: "1.0.0"
 created: "2026-07-07T17:12:00Z"
-updated: "2026-07-07T17:12:00Z"
+updated: "2026-07-08T10:46:00Z"
 status: active
 
 sprint:
@@ -36,17 +36,20 @@ sprint:
     - id: "task-050"
       title: "Repton: Run Source-Miner on assembly source"
       file: "programs/repton/src/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-051"
       title: "Repton: Run LENS-Craft to generate repton_lens.py"
       file: "programs/repton/lens/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-052"
       title: "Repton: Run MCP-Scribe to generate MCP commands"
       file: "programs/repton/mcp/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-053"
       title: "Repton: Run SKIN-Weaver for sprite assets"
