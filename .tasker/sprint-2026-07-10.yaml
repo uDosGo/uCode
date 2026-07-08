@@ -40,12 +40,14 @@ sprint:
     - id: "task-076"
       title: "NetHack: BBC BASIC skeleton via uCode-Weaver"
       file: "programs/nethack/src/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-077"
       title: "uConstruct: BBC BASIC skeleton via uCode-Weaver"
       file: "programs/uconstruct/src/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-078"
       title: "Elite: BBC BASIC skeleton (3D wireframe view + commodity trading)"
@@ -76,5 +78,6 @@ sprint:
     - id: "task-083"
       title: "Eamon: BBC BASIC skeleton via uCode-Weaver (text adventure parser)"
       file: "programs/eamon/src/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: low
