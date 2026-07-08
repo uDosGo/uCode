@@ -1,6 +1,6 @@
 version: "1.0.0"
-updated: "2026-07-06T17:12:00Z"
-round: "pipeline-validation-and-sprint-close"
+updated: "2026-07-08T11:40:00Z"
+round: "sprints-2026-07-08-and-2026-07-09-closed"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -107,4 +107,20 @@ changes_2026_07_06_s6:
   - "Sprint: Closed sprint.2026-07-06 (46 tasks, all complete)"
   - "Sprint: Created sprint.2026-07-08 (Repton adaptation, 11 tasks)"
 
-current_dev_flow: "Sprint.2026-07-08 active. Next: Repton adaptation (build order #1). Clone 6502 source, run full skills pipeline."
+changes_2026_07_08:
+  - "Skills: uCode-Weaver skill (agents/gridsmith/src/tools/ucode-weaver.ts) - BBC BASIC skeleton from GDD"
+  - "Skills: All 6 Skills Framework skills complete (Source-Miner, LENS-Craft, SKIN-Weaver, MCP-Scribe, Inspire-Engine, uCode-Weaver)"
+  - "GridSmith: 16 tools, 75 tests, 8 suites"
+  - "Repton: Full pipeline - 31 LENS extractors, 4 MCP commands, SKIN manifest, 253-line BBC BASIC skeleton"
+  - "Elite: Source fixture created, pipeline run - 20 LENS extractors, 9 MCP commands, 2 SKIN mappings"
+  - "Apple Panic: 281-line refined BBC BASIC with digging/trapping mechanics"
+  - "Knight Orc: 64-line BBC BASIC skeleton via uCode-Weaver"
+  - "Runtime: LENS program registry (Repton + Elite), LENS CAPTURE/LIST/RESTORE commands"
+  - "Eamon: Applesoft BASIC research document with data structures and porting strategy"
+  - "NetHack: C-to-BBC BASIC port research and scaffold"
+  - "uConstruct: Tile editor scaffold with resource system design"
+  - "Sprint: Closed sprint.2026-07-08 (13 tasks, 12 complete + 1 skipped)"
+  - "Sprint: Closed sprint.2026-07-09 (13 tasks, all complete)"
+  - "Sprint: Closed sprint.2026-07-06 re-confirmed (35 tasks)"
+
+current_dev_flow: "All 3 sprints closed. 7 programs scaffolded, 4 with pipeline output. 6 Skills Framework skills complete. Next: Create sprint.2026-07-10 - focus on viewport-renderer demo, runtime bridge testing, or program refinement."
