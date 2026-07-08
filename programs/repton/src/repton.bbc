@@ -1,0 +1,253 @@
+10 REM ====================================================
+   20 REM Repton - uCode Adaptation
+   30 REM BBC BASIC for SDL 2.0
+   40 REM Auto-generated skeleton from skills pipeline
+   50 REM ====================================================
+   60
+   70 REM ---- Constants ----
+   80 MAX_LIVES = 3
+   90 GRID_W = 32
+  100 GRID_H = 24
+  110
+  120 REM ---- Game State ----
+  130 DIM score%(1)           :REM score%(0)=low, score%(1)=high
+  140 lives%   = MAX_LIVES
+  150 level%   = 1
+  160 reptol%  = 0             :REM 0=idle, 1=collecting, 2=ate
+  170 time%    = 255
+  180 puzzle%  = 0             :REM 0=unsolved, 1=solved, 2=complete
+  190 diamonds% = 0
+  200 earth%   = 0
+  210
+  220 REM ---- Player Position ----
+  230 px% = 10
+  240 py% = 5
+  250 pd% = 0                  :REM 0=up, 1=right, 2=down, 3=left
+  260
+  270 REM ---- Level Grid ----
+  280 DIM grid%(GRID_W-1, GRID_H-1)
+  290
+  300 REM ---- Diamond Positions ----
+  310 MAX_DIAMONDS = 30
+  320 DIM dx%(MAX_DIAMONDS-1), dy%(MAX_DIAMONDS-1)
+  330
+  340 REM ---- Trap Positions ----
+  350 MAX_TRAPS = 10
+  360 DIM tx%(MAX_TRAPS-1), ty%(MAX_TRAPS-1)
+  370
+  380 REM ---- Enemy State ----
+  390 DIM ex%(3), ey%(3), ed%(3), ea%(3)
+  400
+  410 REM ==================================================
+  420 REM Entry Point
+  430 REM ==================================================
+  440 PROCinit
+  450 REPEAT
+  460   PROCinput
+  470   PROCmove_player
+  480   PROCmove_enemies
+  490   PROCcheck_diamonds
+  500   PROCcheck_traps
+  510   PROCcheck_enemies
+  520   PROCupdate_timer
+  530   PROCupdate_reptol
+  540   PROCrender
+  550   IF lives% = 0 THEN PROCgame_over
+  560   IF puzzle% = 2 THEN PROClevel_complete
+  570 UNTIL FALSE
+  580 END
+  590
+  600 REM ==================================================
+  610 REM Initialize Game
+  620 REM ==================================================
+  630 DEF PROCinit
+  640   PROCload_level(level%)
+  650   PROCplace_diamonds
+  660   PROCplace_traps
+  670   PROCspawn_enemies
+  680   PROCset_player_start
+  690 ENDPROC
+  700
+  710 REM ==================================================
+  720 REM Keyboard Input
+  730 REM ==================================================
+  740 DEF PROCinput
+  750   LOCAL K%
+  760   K% = INKEY(0)
+  770   IF K% = 138 THEN pd% = 0 : ENDPROC :REM Up
+  780   IF K% = 139 THEN pd% = 1 : ENDPROC :REM Right
+  790   IF K% = 140 THEN pd% = 2 : ENDPROC :REM Down
+  800   IF K% = 137 THEN pd% = 3 : ENDPROC :REM Left
+  810   IF K% = 32 THEN PROCaction : ENDPROC   :REM Space
+  820 ENDPROC
+  830
+  840 REM ==================================================
+  850 REM Move Player
+  860 REM ==================================================
+  870 DEF PROCmove_player
+  880   LOCAL nx%, ny%
+  890   nx% = px% : ny% = py%
+  900   IF pd% = 0 THEN ny% = ny% - 1
+  910   IF pd% = 1 THEN nx% = nx% + 1
+  920   IF pd% = 2 THEN ny% = ny% + 1
+  930   IF pd% = 3 THEN nx% = nx% - 1
+  940   IF nx% >= 0 AND nx% < GRID_W AND ny% >= 0 AND ny% < GRID_H THEN
+  950     IF grid%(nx%, ny%) <> 1 THEN px% = nx% : py% = ny%
+  960   ENDIF
+  970 ENDPROC
+  980
+  990 REM ==================================================
+ 1000 REM Player Action (dig/push)
+ 1010 REM ==================================================
+ 1020 DEF PROCaction
+ 1030   LOCAL ax%, ay%
+ 1040   ax% = px% : ay% = py%
+ 1050   IF pd% = 0 THEN ay% = ay% - 1
+ 1060   IF pd% = 1 THEN ax% = ax% + 1
+ 1070   IF pd% = 2 THEN ay% = ay% + 1
+ 1080   IF pd% = 3 THEN ax% = ax% - 1
+ 1090   IF ax% >= 0 AND ax% < GRID_W AND ay% >= 0 AND ay% < GRID_H THEN
+ 1100     IF grid%(ax%, ay%) = 1 THEN grid%(ax%, ay%) = 2 : REM dig earth
+ 1110   ENDIF
+ 1120 ENDPROC
+ 1130
+ 1140 REM ==================================================
+ 1150 REM Load Level Data
+ 1160 REM ==================================================
+ 1170 DEF PROCload_level(l%)
+ 1180   LOCAL x%, y%
+ 1190   FOR y% = 0 TO GRID_H - 1
+ 1200     FOR x% = 0 TO GRID_W - 1
+ 1210       grid%(x%, y%) = 0
+ 1220     NEXT
+ 1230   NEXT
+ 1240 ENDPROC
+ 1250
+ 1260 REM ==================================================
+ 1270 REM Place Diamonds
+ 1280 REM ==================================================
+ 1290 DEF PROCplace_diamonds
+ 1300 ENDPROC
+ 1310
+ 1320 REM ==================================================
+ 1330 REM Place Traps
+ 1340 REM ==================================================
+ 1350 DEF PROCplace_traps
+ 1360 ENDPROC
+ 1370
+ 1380 REM ==================================================
+ 1390 REM Spawn Enemies
+ 1400 REM ==================================================
+ 1410 DEF PROCspawn_enemies
+ 1420 ENDPROC
+ 1430
+ 1440 REM ==================================================
+ 1450 REM Set Player Start
+ 1460 REM ==================================================
+ 1470 DEF PROCset_player_start
+ 1480   px% = 10 : py% = 5
+ 1490 ENDPROC
+ 1500
+ 1510 REM ==================================================
+ 1520 REM Move Enemies
+ 1530 REM ==================================================
+ 1540 DEF PROCmove_enemies
+ 1550 ENDPROC
+ 1560
+ 1570 REM ==================================================
+ 1580 REM Collect Diamonds
+ 1590 REM ==================================================
+ 1600 DEF PROCcheck_diamonds
+ 1610   LOCAL i%
+ 1620   FOR i% = 0 TO MAX_DIAMONDS - 1
+ 1630     IF dx%(i%) = px% AND dy%(i%) = py% THEN
+ 1640       dx%(i%) = -1 : dy%(i%) = -1
+ 1650       diamonds% = diamonds% + 1
+ 1660       score%(0) = score%(0) + 10
+ 1670       IF score%(0) > 255 THEN score%(0) = score%(0) - 256 : score%(1) = score%(1) + 1
+ 1680     ENDIF
+ 1690   NEXT
+ 1700 ENDPROC
+ 1710
+ 1720 REM ==================================================
+ 1730 REM Trap Collision
+ 1740 REM ==================================================
+ 1750 DEF PROCcheck_traps
+ 1760 ENDPROC
+ 1770
+ 1780 REM ==================================================
+ 1790 REM Enemy Collision
+ 1800 REM ==================================================
+ 1810 DEF PROCcheck_enemies
+ 1820   LOCAL i%
+ 1830   FOR i% = 0 TO 3
+ 1840     IF ex%(i%) = px% AND ey%(i%) = py% THEN
+ 1850       lives% = lives% - 1
+ 1860       PROCset_player_start
+ 1870     ENDIF
+ 1880   NEXT
+ 1890 ENDPROC
+ 1900
+ 1910 REM ==================================================
+ 1920 REM Update Timer (triggers Reptol)
+ 1930 REM ==================================================
+ 1940 DEF PROCupdate_timer
+ 1950   IF time% > 0 THEN time% = time% - 1
+ 1960   IF time% = 0 THEN reptol% = 1
+ 1970 ENDPROC
+ 1980
+ 1990 REM ==================================================
+ 2000 REM Update Reptol (collects diamonds)
+ 2010 REM ==================================================
+ 2020 DEF PROCupdate_reptol
+ 2030   IF reptol% = 1 THEN
+ 2040     diamonds% = 0 : REM Reptol eats all diamonds
+ 2050     reptol% = 2
+ 2060   ENDIF
+ 2070 ENDPROC
+ 2080
+ 2090 REM ==================================================
+ 2100 REM Render Screen (Teletext MODE 7)
+ 2110 REM ==================================================
+ 2120 DEF PROCrender
+ 2130   LOCAL x%, y%
+ 2140   CLS
+ 2150   FOR y% = 0 TO GRID_H - 1
+ 2160     FOR x% = 0 TO GRID_W - 1
+ 2170       IF x% = px% AND y% = py% THEN PRINT "P";
+ 2180       IF grid%(x%, y%) = 1 THEN PRINT "#";
+ 2190       IF grid%(x%, y%) = 0 THEN PRINT ".";
+ 2200     NEXT
+ 2210     PRINT
+ 2220   NEXT
+ 2230   PRINT "Score: "; score%(1) * 256 + score%(0)
+ 2240   PRINT "Lives: "; lives%
+ 2250   PRINT "Diamonds: "; diamonds%
+ 2260   PRINT "Time: "; time%
+ 2270 ENDPROC
+ 2280
+ 2290 REM ==================================================
+ 2300 REM Game Over
+ 2310 REM ==================================================
+ 2320 DEF PROCgame_over
+ 2330   CLS
+ 2340   PRINT "GAME OVER"
+ 2350   PRINT "Score: "; score%(1) * 256 + score%(0)
+ 2360   END
+ 2370 ENDPROC
+ 2380
+ 2390 REM ==================================================
+ 2400 REM Level Complete
+ 2410 REM ==================================================
+ 2420 DEF PROClevel_complete
+ 2430   CLS
+ 2440   PRINT "LEVEL COMPLETE!"
+ 2450   level% = level% + 1
+ 2460   time% = 255
+ 2470   puzzle% = 0
+ 2480   PROCload_level(level%)
+ 2490   PROCplace_diamonds
+ 2500   PROCplace_traps
+ 2510   PROCspawn_enemies
+ 2520   PROCset_player_start
+ 2530 ENDPROC

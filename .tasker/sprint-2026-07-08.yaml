@@ -28,10 +28,11 @@ sprint:
       status: complete
       completed: "2026-07-07"
       priority: high
-    - id: "task-049"
-      title: "Repton: Clone/research 6502 source repository"
-      file: "programs/repton/"
-      status: pending
+    - id: "task-054"
+      title: "Repton: Write BBC BASIC skeleton (game loop, controls)"
+      file: "programs/repton/src/repton.bbc"
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-050"
       title: "Repton: Run Source-Miner on assembly source"
@@ -56,11 +57,6 @@ sprint:
       file: "programs/repton/skin/"
       status: pending
       priority: medium
-    - id: "task-054"
-      title: "Repton: Write BBC BASIC skeleton (game loop, controls)"
-      file: "programs/repton/src/repton.bbc"
-      status: pending
-      priority: high
     - id: "task-055"
       title: "Repton: Integrate LENS extractor with runtime bridge"
       file: "runtimes/basic/bridge/gridcore_adapter.py"
