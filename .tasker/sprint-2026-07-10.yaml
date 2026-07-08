@@ -28,8 +28,9 @@ sprint:
       priority: high
     - id: "task-074"
       title: "Runtime bridge: End-to-end LENS CAPTURE test with mock emulator"
-      file: "runtimes/basic/bridge/gridcore_adapter.py"
-      status: pending
+      file: "runtimes/basic/tests/test_lens_capture.py"
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-075"
       title: "Repton: Level 1 data (diamonds, traps, enemy placements)"
