@@ -1,0 +1,56 @@
+# uCode Dev Flow — sprint.2026-07-11
+version: "1.0.0"
+created: "2026-07-08T12:56:00Z"
+updated: "2026-07-08T12:56:00Z"
+status: active
+
+sprint:
+  name: "sprint.2026-07-11"
+  goals:
+    - "Phase 2: Runtime packaging (basic runtime, AMOS, shared)"
+    - "Repton game logic completion (enemy AI, Reptol, traps)"
+    - "Elite game logic (NPC ships, combat, star map)"
+    - "NetHack LENS extractor from port research"
+    - "Eamon LENS extractor from research"
+  items:
+    - id: "task-084"
+      title: "Close sprint.2026-07-10, create sprint.2026-07-11"
+      file: ".tasker/"
+      status: complete
+      completed: "2026-07-08"
+      priority: high
+    - id: "task-085"
+      title: "Repton: Enemy AI movement and patrol"
+      file: "programs/repton/src/repton.bbc"
+      status: pending
+      priority: high
+    - id: "task-086"
+      title: "Repton: Reptol logic and trap collision"
+      file: "programs/repton/src/repton.bbc"
+      status: pending
+      priority: high
+    - id: "task-087"
+      title: "Elite: NPC ship movement and combat"
+      file: "programs/elite/src/elite.bbc"
+      status: pending
+      priority: high
+    - id: "task-088"
+      title: "Elite: Star system map and galaxy navigation"
+      file: "programs/elite/src/elite.bbc"
+      status: pending
+      priority: medium
+    - id: "task-089"
+      title: "NetHack: LENS extractor (player stats, dungeon level)"
+      file: "programs/nethack/lens/"
+      status: pending
+      priority: medium
+    - id: "task-090"
+      title: "Eamon: LENS extractor from research data"
+      file: "programs/eamon/lens/"
+      status: pending
+      priority: medium
+    - id: "task-091"
+      title: "Runtime: Verify editable install for runtimes/amos"
+      file: "runtimes/amos/"
+      status: pending
+      priority: medium
