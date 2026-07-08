@@ -69,5 +69,6 @@ sprint:
     - id: "task-069"
       title: "Apple Panic: Refine BBC BASIC skeleton with digging/trapping"
       file: "programs/apple-panic/src/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
