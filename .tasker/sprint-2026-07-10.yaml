@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-10
 version: "1.0.0"
 created: "2026-07-08T11:43:00Z"
-updated: "2026-07-08T11:43:00Z"
+updated: "2026-07-08T12:11:00Z"
 status: active
 
 sprint:
@@ -34,7 +34,8 @@ sprint:
     - id: "task-075"
       title: "Repton: Level 1 data (diamonds, traps, enemy placements)"
       file: "programs/repton/src/repton.bbc"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-076"
       title: "NetHack: BBC BASIC skeleton via uCode-Weaver"
@@ -69,7 +70,8 @@ sprint:
     - id: "task-082"
       title: "Docs: Update DEV_PLAN.md with Phase 4 (Program Adaptation) and Phase 5 (Learning Resources)"
       file: "docs/DEV_PLAN.md"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-083"
       title: "Eamon: BBC BASIC skeleton via uCode-Weaver (text adventure parser)"
