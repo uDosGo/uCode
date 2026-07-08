@@ -1,7 +1,7 @@
 # uCode Dev Flow — sprint.2026-07-09
 version: "1.0.0"
 created: "2026-07-08T11:03:00Z"
-updated: "2026-07-08T11:03:00Z"
+updated: "2026-07-08T11:04:00Z"
 status: active
 
 sprint:
@@ -20,39 +20,46 @@ sprint:
       completed: "2026-07-08"
       priority: high
     - id: "task-061"
-      title: "Elite: Clone/research 6502 source repository"
+      title: "Elite: Create 6502 source fixture (repo unavailable)"
       file: "programs/elite/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-062"
       title: "Elite: Run Source-Miner on 6502 assembly"
       file: "programs/elite/src/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-063"
       title: "Elite: Run LENS-Craft to generate elite_lens.py"
       file: "programs/elite/lens/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-064"
       title: "Elite: Run MCP-Scribe to generate MCP commands"
       file: "programs/elite/mcp/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-065"
       title: "Elite: Run SKIN-Weaver for wireframe sprites"
       file: "programs/elite/skin/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-066"
       title: "Elite: Register elite_lens in runtime bridge"
       file: "runtimes/basic/bridge/gridcore_adapter.py"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-067"
       title: "Knight Orc: Generate BBC BASIC skeleton via uCode-Weaver"
       file: "programs/knight-orc/"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: medium
     - id: "task-068"
       title: "Eamon: Research Applesoft BASIC structure for porting"
