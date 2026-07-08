@@ -22,12 +22,14 @@ sprint:
     - id: "task-085"
       title: "Repton: Enemy AI movement and patrol"
       file: "programs/repton/src/repton.bbc"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-086"
       title: "Repton: Reptol logic and trap collision"
       file: "programs/repton/src/repton.bbc"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-087"
       title: "Elite: NPC ship movement and combat"

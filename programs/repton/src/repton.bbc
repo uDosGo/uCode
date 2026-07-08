@@ -13,7 +13,7 @@
   130 DIM score%(1)           :REM score%(0)=low, score%(1)=high
   140 lives%   = MAX_LIVES
   150 level%   = 1
-  160 reptol%  = 0             :REM 0=idle, 1=collecting, 2=ate
+  160 reptol%  = 0             :REM 0=idle, 1=triggered, 2=collecting
   170 time%    = 255
   180 puzzle%  = 0             :REM 0=unsolved, 1=solved, 2=complete
   190 diamonds% = 0
@@ -171,105 +171,130 @@
  1710 ENDPROC
  1720
  1730 REM ==================================================
- 1740 REM Move Enemies
+ 1740 REM Move Enemies (patrol AI, bounce off walls)
  1750 REM ==================================================
  1760 DEF PROCmove_enemies
- 1770 ENDPROC
- 1780
- 1790 REM ==================================================
- 1800 REM Collect Diamonds
- 1810 REM ==================================================
- 1820 DEF PROCcheck_diamonds
- 1830   LOCAL i%
- 1840   FOR i% = 0 TO MAX_DIAMONDS - 1
- 1850     IF dx%(i%) = px% AND dy%(i%) = py% THEN
- 1860       dx%(i%) = -1 : dy%(i%) = -1
- 1870       diamonds% = diamonds% + 1
- 1880       score%(0) = score%(0) + 10
- 1890       IF score%(0) > 255 THEN score%(0) = score%(0) - 256 : score%(1) = score%(1) + 1
- 1900     ENDIF
- 1910   NEXT
- 1920 ENDPROC
- 1930
- 1940 REM ==================================================
- 1950 REM Trap Collision
+ 1770   LOCAL i%, nx%, ny%
+ 1780   FOR i% = 0 TO 2
+ 1790     nx% = ex%(i%) : ny% = ey%(i%)
+ 1800     IF ed%(i%) = 0 THEN ny% = ny% - 1
+ 1810     IF ed%(i%) = 1 THEN nx% = nx% + 1
+ 1820     IF ed%(i%) = 2 THEN ny% = ny% + 1
+ 1830     IF ed%(i%) = 3 THEN nx% = nx% - 1
+ 1840     IF nx% >= 0 AND nx% < GRID_W AND ny% >= 0 AND ny% < GRID_H THEN
+ 1850       IF grid%(nx%, ny%) <> 1 THEN
+ 1860         ex%(i%) = nx% : ey%(i%) = ny%
+ 1870       ELSE
+ 1880         ed%(i%) = (ed%(i%) + 2) MOD 4
+ 1890       ENDIF
+ 1900     ELSE
+ 1910       ed%(i%) = (ed%(i%) + 2) MOD 4
+ 1920     ENDIF
+ 1930   NEXT
+ 1940 ENDPROC
+ 1950
  1960 REM ==================================================
- 1970 DEF PROCcheck_traps
- 1980 ENDPROC
- 1990
- 2000 REM ==================================================
- 2010 REM Enemy Collision
- 2020 REM ==================================================
- 2030 DEF PROCcheck_enemies
- 2040   LOCAL i%
- 2050   FOR i% = 0 TO 3
- 2060     IF ex%(i%) = px% AND ey%(i%) = py% THEN
- 2070       lives% = lives% - 1
- 2080       PROCset_player_start
- 2090     ENDIF
- 2100   NEXT
- 2110 ENDPROC
- 2120
- 2130 REM ==================================================
- 2140 REM Update Timer (triggers Reptol)
- 2150 REM ==================================================
- 2160 DEF PROCupdate_timer
- 2170   IF time% > 0 THEN time% = time% - 1
- 2180   IF time% = 0 THEN reptol% = 1
- 2190 ENDPROC
- 2200
- 2210 REM ==================================================
- 2220 REM Update Reptol (collects diamonds)
- 2230 REM ==================================================
- 2240 DEF PROCupdate_reptol
- 2250   IF reptol% = 1 THEN
- 2260     diamonds% = 0 : REM Reptol eats all diamonds
- 2270     reptol% = 2
- 2280   ENDIF
- 2290 ENDPROC
- 2300
- 2310 REM ==================================================
- 2320 REM Render Screen (Teletext MODE 7)
- 2330 REM ==================================================
- 2340 DEF PROCrender
- 2350   LOCAL x%, y%
- 2360   CLS
- 2370   FOR y% = 0 TO GRID_H - 1
- 2380     FOR x% = 0 TO GRID_W - 1
- 2390       IF x% = px% AND y% = py% THEN PRINT "P";
- 2400       IF grid%(x%, y%) = 1 THEN PRINT "#";
- 2410       IF grid%(x%, y%) = 0 THEN PRINT ".";
- 2420     NEXT
- 2430     PRINT
- 2440   NEXT
- 2450   PRINT "Score: "; score%(1) * 256 + score%(0)
- 2460   PRINT "Lives: "; lives%
- 2470   PRINT "Diamonds: "; diamonds%
- 2480   PRINT "Time: "; time%
- 2490 ENDPROC
- 2500
- 2510 REM ==================================================
- 2520 REM Game Over
- 2530 REM ==================================================
- 2540 DEF PROCgame_over
- 2550   CLS
- 2560   PRINT "GAME OVER"
- 2570   PRINT "Score: "; score%(1) * 256 + score%(0)
- 2580   END
- 2590 ENDPROC
- 2600
- 2610 REM ==================================================
- 2620 REM Level Complete
- 2630 REM ==================================================
- 2640 DEF PROClevel_complete
- 2650   CLS
- 2660   PRINT "LEVEL COMPLETE!"
- 2670   level% = level% + 1
- 2680   time% = 255
- 2690   puzzle% = 0
- 2700   PROCload_level(level%)
- 2710   PROCplace_diamonds
- 2720   PROCplace_traps
- 2730   PROCspawn_enemies
- 2740   PROCset_player_start
- 2750 ENDPROC
+ 1970 REM Trap Collision
+ 1980 REM ==================================================
+ 1990 DEF PROCcheck_traps
+ 2000   LOCAL i%
+ 2010   FOR i% = 0 TO MAX_TRAPS - 1
+ 2020     IF tx%(i%) = px% AND ty%(i%) = py% THEN lives% = lives% - 1 : PROCset_player_start
+ 2030   NEXT
+ 2040 ENDPROC
+ 2050
+ 2060 REM ==================================================
+ 2070 REM Enemy Collision
+ 2080 REM ==================================================
+ 2090 DEF PROCcheck_enemies
+ 2100   LOCAL i%
+ 2110   FOR i% = 0 TO 2
+ 2120     IF ex%(i%) = px% AND ey%(i%) = py% THEN lives% = lives% - 1 : PROCset_player_start
+ 2130   NEXT
+ 2140 ENDPROC
+ 2150
+ 2160 REM ==================================================
+ 2170 REM Update Timer (triggers Reptol)
+ 2180 REM ==================================================
+ 2190 DEF PROCupdate_timer
+ 2200   IF time% > 0 THEN time% = time% - 1
+ 2210   IF time% = 0 AND reptol% = 0 THEN reptol% = 1
+ 2220 ENDPROC
+ 2230
+ 2240 REM ==================================================
+ 2250 REM Update Reptol (moves toward nearest diamond and eats it)
+ 2260 REM ==================================================
+ 2270 DEF PROCupdate_reptol
+ 2280   LOCAL i%, target%, best_dist%, dist%
+ 2290   IF reptol% = 0 THEN ENDPROC
+ 2300   IF reptol% = 1 THEN reptol% = 2 : REM Activated, now collecting
+ 2310   IF reptol% = 2 THEN
+ 2320     REM Find nearest diamond
+ 2330     target% = -1 : best_dist% = 999
+ 2340     FOR i% = 0 TO MAX_DIAMONDS - 1
+ 2350       IF dx%(i%) >= 0 THEN
+ 2360         dist% = ABS(dx%(i%) - px%) + ABS(dy%(i%) - py%)
+ 2370         IF dist% < best_dist% THEN best_dist% = dist% : target% = i%
+ 2380       ENDIF
+ 2390     NEXT
+ 2400     IF target% >= 0 THEN
+ 2410       dx%(target%) = -1 : dy%(target%) = -1
+ 2420     ENDIF
+ 2430   ENDIF
+ 2440 ENDPROC
+ 2450
+ 2460 REM ==================================================
+ 2470 REM Render Screen (Teletext MODE 7)
+ 2480 REM ==================================================
+ 2490 DEF PROCrender
+ 2500   LOCAL x%, y%
+ 2510   CLS
+ 2520   FOR y% = 0 TO GRID_H - 1
+ 2530     FOR x% = 0 TO GRID_W - 1
+ 2540       IF x% = px% AND y% = py% THEN
+ 2550         PRINT "P";
+ 2560       ELSE
+ 2570         LOCAL drawn% : drawn% = FALSE
+ 2580         LOCAL ei%
+ 2590         FOR ei% = 0 TO 2
+ 2600           IF ex%(ei%) = x% AND ey%(ei%) = y% THEN PRINT "E"; : drawn% = TRUE : ei% = 3
+ 2610         NEXT
+ 2620         IF NOT drawn% THEN
+ 2630           IF grid%(x%, y%) = 1 THEN PRINT "#"; ELSE PRINT ".";
+ 2640         ENDIF
+ 2650       ENDIF
+ 2660     NEXT
+ 2670     PRINT
+ 2680   NEXT
+ 2690   PRINT "Score: "; score%(1) * 256 + score%(0)
+ 2700   PRINT "Lives: "; lives%
+ 2710   PRINT "Diamonds: "; diamonds%
+ 2720   PRINT "Time: "; time%
+ 2730   IF reptol% = 2 THEN PRINT "** REPTOL ACTIVE **"
+ 2740 ENDPROC
+ 2750
+ 2760 REM ==================================================
+ 2770 REM Game Over
+ 2780 REM ==================================================
+ 2790 DEF PROCgame_over
+ 2800   CLS
+ 2810   PRINT "GAME OVER"
+ 2820   PRINT "Score: "; score%(1) * 256 + score%(0)
+ 2830   END
+ 2840 ENDPROC
+ 2850
+ 2860 REM ==================================================
+ 2870 REM Level Complete
+ 2880 REM ==================================================
+ 2890 DEF PROClevel_complete
+ 2900   CLS
+ 2910   PRINT "LEVEL COMPLETE!"
+ 2920   level% = level% + 1
+ 2930   time% = 255
+ 2940   puzzle% = 0
+ 2950   PROCload_level(level%)
+ 2960   PROCplace_diamonds
+ 2970   PROCplace_traps
+ 2980   PROCspawn_enemies
+ 2990   PROCset_player_start
+ 3000 ENDPROC
