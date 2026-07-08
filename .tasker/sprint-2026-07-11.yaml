@@ -34,7 +34,8 @@ sprint:
     - id: "task-087"
       title: "Elite: NPC ship movement and combat"
       file: "programs/elite/src/elite.bbc"
-      status: pending
+      status: complete
+      completed: "2026-07-08"
       priority: high
     - id: "task-088"
       title: "Elite: Star system map and galaxy navigation"
