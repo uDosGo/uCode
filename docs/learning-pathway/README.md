@@ -45,6 +45,21 @@ Different backgrounds? Different goals? Pick the right path for you:
 
 See [LEARNING-PATHS.md](LEARNING-PATHS.md) for complete details on each path.
 
+## uCode Skills Framework
+
+The uCode Skills Framework provides 6 automated tools for adapting classic programs to uCode. All 6 skills are built and wired into the GridSmith CLI and MCP server.
+
+| Skill | Purpose | Tests |
+|-------|---------|-------|
+| Source-Miner | Scan 6502 assembly for LENS-extractable points | 9 |
+| LENS-Craft | Generate Python LENS extractors | 8 |
+| SKIN-Weaver | Convert assets to character maps | 8 |
+| MCP-Scribe | Generate MCP command specs | 8 |
+| Inspire-Engine | Generate game design documents | 6 |
+| uCode-Weaver | Generate BBC BASIC skeletons | 5 |
+
+Tutorial: [05-skills-framework.md](05-skills-framework.md)
+
 ## After Course 01
 
 Continue your progression with advanced Sonic tracks:

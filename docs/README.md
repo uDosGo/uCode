@@ -3,10 +3,27 @@
 ## Top-Level Specs
 | File | Domain |
 |------|--------|
-| [GRIDSMITH_DEV_PLAN.md](GRIDSMITH_DEV_PLAN.md) | GridSmith agent build-out plan (gaps, order, integration) |
-| [UCODE_RUNTIME_SPEC.md](UCODE_RUNTIME_SPEC.md) | BBC BASIC for SDL 2.0 runtime — architecture, migration plan, library registry |
-| [INTEGRATION.md](INTEGRATION.md) | uCore, Hivemind, MCP, Vault, OpenRouter integration reference |
-| [GRID_ALGEBRA_RELEASE_COLLATION.md](GRID_ALGEBRA_RELEASE_COLLATION.md) | Grid algebra release notes and collation summary |
+| [DEV_PLAN.md](DEV_PLAN.md) | Development plan, 6 phases, package order |
+| [GRIDSMITH_DEV_PLAN.md](GRIDSMITH_DEV_PLAN.md) | GridSmith agent build-out plan |
+| [UCODE_RUNTIME_SPEC.md](UCODE_RUNTIME_SPEC.md) | BBC BASIC for SDL 2.0 runtime |
+| [INTEGRATION.md](INTEGRATION.md) | uCore, Hivemind, MCP, Vault, OpenRouter |
+| [GRID_ALGEBRA_RELEASE_COLLATION.md](GRID_ALGEBRA_RELEASE_COLLATION.md) | Grid algebra release notes |
+
+## specs/ — Canonical Specifications
+| File | Content |
+|------|---------|
+| [SKILLS_FRAMEWORK.md](specs/SKILLS_FRAMEWORK.md) | 6 Skills Framework skills (all built) |
+| [UCODE_ADAPTATION_STRATEGY.md](specs/UCODE_ADAPTATION_STRATEGY.md) | Classic game adaptation strategy |
+
+## learning-pathway/ — Skills and Tutorials
+| File | Content |
+|------|---------|
+| [05-skills-framework.md](learning-pathway/05-skills-framework.md) | Skills Framework tutorial (all 6 skills) |
+
+## programs/ — Adapted Programs
+| File | Content |
+|------|---------|
+| [README.md](../programs/README.md) | 7 classic programs, pipeline status, skills |
 
 ---
 
@@ -18,7 +35,7 @@
 | [GRID_ALGEBRA_COLUMN_SPECS_DRAFT_2026-07-01.md](gridcore/GRID_ALGEBRA_COLUMN_SPECS_DRAFT_2026-07-01.md) | Draft: new column algebra with breakpoint tables |
 | [GRIDSMITH_WORKSPACE_ACTUAL_PATHS_PLAN.md](gridcore/GRIDSMITH_WORKSPACE_ACTUAL_PATHS_PLAN.md) | GridSmith workspace actual paths vs planned |
 | [GRIDUI_GRIDCORE_EXTRACTION_PLAN.md](gridcore/GRIDUI_GRIDCORE_EXTRACTION_PLAN.md) | Extracting GridCore library from GridUI surface |
-| [HANDOVER_UCODE_GRIDSMITH_BUILDOUT.md](gridcore/HANDOVER_UCODE_GRIDSMITH_BUILDOUT.md) | Handover notes: uCode ↔ GridSmith build |
+| [HANDOVER_UCODE_GRIDSMITH_BUILDOUT.md](gridcore/HANDOVER_UCODE_GRIDSMITH_BUILDOUT.md) | Handover notes: uCode GridSmith build |
 | [TERMINAL_TELETEXT_GRID_WORK_TAG.md](gridcore/TERMINAL_TELETEXT_GRID_WORK_TAG.md) | Terminal teletext grid work tag (Ceefax integration) |
 | [12_v2_render_theme_and_gui_pipeline.md](gridcore/12_v2_render_theme_and_gui_pipeline.md) | v2 render themes and GUI pipeline |
 | [13_v2_workflow_automation_runtime_split.md](gridcore/13_v2_workflow_automation_runtime_split.md) | v2 workflow automation and runtime split |
@@ -27,19 +44,19 @@
 
 ---
 
-## spatial/ — Spatial Algebra & Voxel Mapping
+## spatial/ — Spatial Algebra and Voxel Mapping
 
 | File | Content |
 |------|---------|
-| [UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md](spatial/UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md) | 🔒 Spatial Algebra locked spec v1.2 |
-| [UDOS_UCELL_VOXEL_MAPPING_v1.md](spatial/UDOS_UCELL_VOXEL_MAPPING_v1.md) | 🔒 uCell ↔ Voxel mapping spec v1 |
+| [UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md](spatial/UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md) | Spatial Algebra locked spec v1.2 |
+| [UDOS_UCELL_VOXEL_MAPPING_v1.md](spatial/UDOS_UCELL_VOXEL_MAPPING_v1.md) | uCell Voxel mapping spec v1 |
 | [GRID_ALGEBRA_ARCHITECTURE.md](spatial/GRID_ALGEBRA_ARCHITECTURE.md) | Grid Algebra architecture document |
 | [GRIDUI_SPEC.md](spatial/GRIDUI_SPEC.md) | GridUI canonical specification |
 | [grid-spatial-event-model-candidate.md](spatial/grid-spatial-event-model-candidate.md) | Grid spatial event model candidate design |
 
 ---
 
-## basic/ — BASIC Runtime & uCode1
+## basic/ — BASIC Runtime and uCode1
 
 | File | Content |
 |------|---------|
@@ -110,4 +127,4 @@ Historical documents preserved for reference. Not actively maintained.
 
 ---
 
-*Index generated 2026-07-01 — managed as part of the uCode docs round workflow.*
+*Index updated 2026-07-08 — 4 sprints closed, 6 skills built, 7 programs scaffolded, 85 tasks tracked*

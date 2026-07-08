@@ -6,13 +6,13 @@
 
 | Program | Approach | Effort | Est. Weeks | Status |
 |---------|----------|--------|------------|--------|
-| [Elite](elite/) | Adapt 6502 source (BeebAsm) | Medium | 3 | 🏗 Scaffold |
-| [NetHack](nethack/) | Adapt C source → BBC BASIC | Medium | 3 | 🏗 Scaffold |
-| [Repton](repton/) | Adapt 6502 source + clones | Small | 2 | 🏗 Scaffold |
-| [Knight Orc](knight-orc/) | Rewrite (inspired by KAOS engine) | Large | 10 | 🏗 Scaffold |
-| [Apple Panic](apple-panic/) | Rewrite (inspired by Space Panic) | Small | 2 | 🏗 Scaffold |
-| [uConstruct](uconstruct/) | Rewrite (inspired by ACS, 1984) | Large | 10 | 🏗 Scaffold |
-| [Eamon](eamon/) | Adapt Applesoft BASIC source | Medium | 3 | 🏗 Scaffold |
+| [Elite](elite/) | Adapt 6502 source (BeebAsm) | Medium | 3 | ✅ Pipeline done, 287-line BBC BASIC |
+| [NetHack](nethack/) | Adapt C source → BBC BASIC | Medium | 3 | ✅ Research + 52-line skeleton |
+| [Repton](repton/) | Adapt 6502 source + clones | Small | 2 | ✅ Pipeline done, 275-line playable level 1 |
+| [Knight Orc](knight-orc/) | Rewrite (inspired by KAOS engine) | Large | 10 | ✅ GDD + 64-line skeleton |
+| [Apple Panic](apple-panic/) | Rewrite (inspired by Space Panic) | Small | 2 | ✅ GDD + 281-line skeleton |
+| [uConstruct](uconstruct/) | Rewrite (inspired by ACS, 1984) | Large | 10 | ✅ Scaffold + 49-line skeleton |
+| [Eamon](eamon/) | Adapt Applesoft BASIC source | Medium | 3 | ✅ Research + 63-line skeleton |
 
 ## Program Structure
 
@@ -33,21 +33,27 @@ programs/<name>/
 
 ## Build Order
 
-1. **Repton** (smallest, fastest win — validates 6502 pipeline)
-2. **Apple Panic** (small rewrite — validates BBC BASIC game loop)
-3. **Eamon** (medium port — validates Applesoft→BBC BASIC porting)
-4. **Elite** (medium adaptation — validates BeebAsm + LENS/MCP)
-5. **NetHack** (medium adaptation — validates C→BBC BASIC port)
-6. **uConstruct** (large rewrite — validates tile-based builder UI)
-7. **Knight Orc** (large rewrite — validates full game design pipeline)
+1. **Repton** ✅ Pipeline complete, playable level 1
+2. **Apple Panic** ✅ BBC BASIC skeleton with digging/trapping
+3. **Eamon** ✅ Research done, BBC BASIC skeleton generated
+4. **Elite** ✅ Pipeline complete, station economy + flight loop
+5. **NetHack** ✅ Research done, BBC BASIC skeleton generated
+6. **uConstruct** ✅ Scaffold done, BBC BASIC skeleton generated
+7. **Knight Orc** ✅ GDD + BBC BASIC skeleton generated
+
+All 7 programs now have BBC BASIC skeletons via the Skills Framework pipeline.
 
 ## Skills Required
 
 | Skill | Used By | Status |
 |-------|---------|--------|
-| Source-Miner | Elite, Repton | Spec defined |
-| LENS-Craft | All 7 | Spec defined |
-| MCP-Scribe | All 7 | Spec defined |
-| SKIN-Weaver | All 7 | Spec defined |
-| Inspire-Engine | Knight Orc, Apple Panic, uConstruct | Spec defined |
-| uCode-Weaver | uConstruct, Apple Panic, Knight Orc | Spec defined |
+| Source-Miner | Elite, Repton | Built (9 tests) |
+| LENS-Craft | All 7 | Built (8 tests) |
+| MCP-Scribe | All 7 | Built (8 tests) |
+| SKIN-Weaver | All 7 | Built (8 tests) |
+| Inspire-Engine | Knight Orc, Apple Panic, uConstruct | Built (6 tests) |
+| uCode-Weaver | All 7 | Built (5 tests) |
+
+## Pipeline
+
+All 6 skills accessible via GridSmith CLI or MCP server. See `docs/learning-pathway/05-skills-framework.md` for tutorial.
