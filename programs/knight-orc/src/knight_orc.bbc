@@ -1,0 +1,415 @@
+10 REM ====================================================
+   20 REM Knight Orc - uCode Interactive Fiction
+   30 REM BBC BASIC for SDL 2.0
+   40 REM ====================================================
+   50 REM A dark fantasy interactive fiction with branching
+   60 REM narrative, inventory puzzles, NPC encounters,
+   70 REM and a time-of-day system.
+   80 REM ====================================================
+   90 
+  100 REM ---- Constants ----
+  110 MAX_LOCATIONS%=12
+  120 MAX_ITEMS%=15
+  130 MAX_NPCS%=6
+  140 
+  150 REM ---- Time System ----
+  160 hour%=0  :REM Dawn=0, Day=1, Dusk=2, Night=3
+  170 turn_count%=0
+  180 
+  190 REM ---- Player State (LENS-extractable) ----
+  200 location%=1
+  210 hp%=20 :max_hp%=20
+  220 gold%=0
+  230 weapon$="rusty sword"
+  240 weapon_dmg%=3
+  250 armour%=5
+  260 inv_count%=0
+  270 DIM inventory$(10)
+  280 
+  290 REM ---- Narrative State ----
+  300 freed_prisoner%=FALSE
+  310 obtained_amulet%=FALSE
+  320 defeated_orc%=FALSE
+  330 talked_to_wizard%=FALSE
+  340 bridge_repaired%=FALSE
+  350 quest_stage%=0  :REM 0=start, 1=village, 2=prison, 3=tower, 4=bridge, 5=final
+  360 
+  370 REM ---- Location Data ----
+  380 DIM loc_name$(MAX_LOCATIONS%)
+  390 DIM loc_desc$(MAX_LOCATIONS%)
+  400 DIM loc_n%(MAX_LOCATIONS%), loc_s%(MAX_LOCATIONS%)
+  410 DIM loc_e%(MAX_LOCATIONS%), loc_w%(MAX_LOCATIONS%)
+  420 
+  430 REM ---- Item Data ----
+  440 DIM item_loc%(MAX_ITEMS%)
+  450 DIM item_name$(MAX_ITEMS%)
+  460 DIM item_takeable%(MAX_ITEMS%)
+  470 DIM item_visible%(MAX_ITEMS%)
+  480 DIM item_present%(MAX_ITEMS%)
+  490 
+  500 DIM npc_loc%(MAX_NPCS%)
+  510 DIM npc_name$(MAX_NPCS%)
+  520 DIM npc_hp%(MAX_NPCS%)
+  530 DIM npc_alive%(MAX_NPCS%)
+  540 DIM npc_hostile%(MAX_NPCS%)
+  550 DIM npc_talked%(MAX_NPCS%)
+  560 
+  570 msg$=""
+  580 
+  590 REM ---- Entry Point ----
+  600 PROCinit_world
+  610 PROCinit_player
+  620 CLS
+  630 PRINT "=== KNIGHT ORC ==="
+  640 PRINT "A dark fantasy of betrayal and revenge."
+  650 PRINT "Type HELP for commands."
+  660 PRINT
+  670 PROCroom_look
+  680 REPEAT
+  690   IF FNgame_over THEN PROCgame_over
+  700   PROCcommand_loop
+  710 UNTIL FALSE
+  720 END
+  730 
+  740 DEF PROCinit_world
+  750   REM ---- Locations ----
+  760   LOC%=1:loc_name$(LOC%)="Village Square":loc_desc$(LOC%)="A quiet square with a fountain. The inn glows warmly."
+  770   loc_n%(LOC%)=0:loc_s%(LOC%)=0:loc_e%(LOC%)=2:loc_w%(LOC%)=0
+  780   LOC%=2:loc_name$(LOC%)="Inn":loc_desc$(LOC%)="A cozy inn. The innkeeper nods at you."
+  790   loc_n%(LOC%)=0:loc_s%(LOC%)=0:loc_e%(LOC%)=3:loc_w%(LOC%)=1
+  800   LOC%=3:loc_name$(LOC%)="Dark Forest Edge":loc_desc$(LOC%)="Ancient trees loom. A path leads north."
+  810   loc_n%(LOC%)=4:loc_s%(LOC%)=0:loc_e%(LOC%)=0:loc_w%(LOC%)=2
+  820   LOC%=4:loc_name$(LOC%)="Prison Ruins":loc_desc$(LOC%)="Crumbling stone walls. A prisoner cries for help."
+  830   loc_n%(LOC%)=0:loc_s%(LOC%)=3:loc_e%(LOC%)=5:loc_w%(LOC%)=0
+  840   LOC%=5:loc_name$(LOC%)="Wizard's Tower":loc_desc$(LOC%)="A tall spire crackling with arcane energy."
+  850   loc_n%(LOC%)=6:loc_s%(LOC%)=0:loc_e%(LOC%)=0:loc_w%(LOC%)=4
+  860   LOC%=6:loc_name$(LOC%)="Broken Bridge":loc_desc$(LOC%)="A chasm. The bridge has collapsed."
+  870   loc_n%(LOC%)=0:loc_s%(LOC%)=5:loc_e%(LOC%)=7:loc_w%(LOC%)=0
+  880   LOC%=7:loc_name$(LOC%)="Orc Fortress Gate":loc_desc$(LOC%)="The orc stronghold. The gate is guarded."
+  890   loc_n%(LOC%)=0:loc_s%(LOC%)=0:loc_e%(LOC%)=0:loc_w%(LOC%)=6
+  900 
+  910   REM ---- Items ----
+  920   PROCadd_item(1,8,"gold coin",TRUE,TRUE)
+  930   PROCadd_item(2,7,"silver amulet",TRUE,FALSE)
+  940   PROCadd_item(3,4,"rusty key",TRUE,TRUE)
+  950   PROCadd_item(4,5,"magic scroll",TRUE,TRUE)
+  960   PROCadd_item(5,6,"wooden plank",TRUE,TRUE)
+  970   PROCadd_item(6,7,"iron key",TRUE,TRUE)
+  980   PROCadd_item(7,7,"orc banner",FALSE,TRUE)
+  990 
+ 1000   REM ---- NPCs ----
+ 1010   PROCadd_npc(1,2,"Innkeeper",0,TRUE,FALSE)
+ 1020   PROCadd_npc(2,4,"Prisoner",0,TRUE,FALSE)
+ 1030   PROCadd_npc(3,5,"Old Wizard",0,TRUE,FALSE)
+ 1040   PROCadd_npc(4,7,"Orc Guard",10,TRUE,TRUE)
+ 1050   PROCadd_npc(5,7,"Orc Chieftain",20,TRUE,TRUE)
+ 1060 ENDPROC
+ 1070 
+ 1080 DEF PROCadd_item(id%,room%,name$,takeable%,visible%)
+ 1090   item_loc%(id%)=room%
+ 1100   item_name$(id%)=name$
+ 1110   item_takeable%(id%)=takeable%
+ 1120   item_visible%(id%)=visible%
+ 1130   item_present%(id%)=1
+ 1140 ENDPROC
+ 1150 
+ 1160 DEF PROCadd_npc(id%,room%,name$,hp%,alive%,hostile%)
+ 1170   npc_loc%(id%)=room%
+ 1180   npc_name$(id%)=name$
+ 1190   npc_hp%(id%)=hp%
+ 1200   npc_alive%(id%)=alive%
+ 1210   npc_hostile%(id%)=hostile%
+ 1220   npc_talked%(id%)=FALSE
+ 1230 ENDPROC
+ 1240 
+ 1250 DEF PROCinit_player
+ 1260   location%=1:hp%=20:max_hp%=20
+ 1270   gold%=0:armour%=5
+ 1280   weapon$="rusty sword":weapon_dmg%=3
+ 1290   inv_count%=0
+ 1300   hour%=1:turn_count%=0
+ 1310 ENDPROC
+ 1320 
+ 1330 DEF PROCcommand_loop
+ 1340   LOCAL cmd$,verb$,noun$
+ 1350   PRINT "> ";
+ 1360   INPUT "" cmd$
+ 1370   cmd$=FNupper$(cmd$)
+ 1380   IF cmd$="" THEN ENDPROC
+ 1390   verb$=FNfirst_word(cmd$)
+ 1400   noun$=FNrest_words(cmd$)
+ 1410 
+ 1420   IF verb$="NORTH" OR verb$="N" THEN PROCmove("N")
+ 1430   IF verb$="SOUTH" OR verb$="S" THEN PROCmove("S")
+ 1440   IF verb$="EAST" OR verb$="E" THEN PROCmove("E")
+ 1450   IF verb$="WEST" OR verb$="W" THEN PROCmove("W")
+ 1460   IF verb$="LOOK" OR verb$="L" THEN PROCroom_look
+ 1470   IF verb$="INVENTORY" OR verb$="I" THEN PROCinventory
+ 1480   IF verb$="TAKE" OR verb$="GET" THEN PROCtake(noun$)
+ 1490   IF verb$="DROP" THEN PROCdrop(noun$)
+ 1500   IF verb$="TALK" THEN PROCtalk
+ 1510   IF verb$="ATTACK" OR verb$="FIGHT" THEN PROCattack(noun$)
+ 1520   IF verb$="USE" THEN PROCuse(noun$)
+ 1530   IF verb$="EXAMINE" OR verb$="EX" THEN PROCexamine(noun$)
+ 1540   IF verb$="WAIT" THEN PROClens_snapshot:ENDPROC
+ 1550   IF verb$="QUIT" OR verb$="Q" THEN PROCquit
+ 1560   IF verb$="HELP" OR verb$="?" THEN PROChelp
+ 1570   IF verb$="STATS" THEN PROCstats
+ 1580 
+ 1590   PROClens_snapshot
+ 1600 ENDPROC
+ 1610 
+ 1620 DEF PROCmove(dir$)
+ 1630   LOCAL dest%
+ 1640   IF dir$="N" THEN dest%=loc_n%(location%)
+ 1650   IF dir$="S" THEN dest%=loc_s%(location%)
+ 1660   IF dir$="E" THEN dest%=loc_e%(location%)
+ 1670   IF dir$="W" THEN dest%=loc_w%(location%)
+ 1680 
+ 1690   REM Gate guard check
+ 1700   IF location%=6 AND dir$="E" AND npc_alive%(4) THEN
+ 1711     msg$="The orc guard blocks the gate!":ENDPROC
+ 1720   ENDIF
+ 1730   IF dest%=0 THEN msg$="You can't go that way.":ENDPROC
+ 1740   location%=dest%
+ 1750   turn_count%=turn_count%+1
+ 1760   IF turn_count% MOD 10 = 0 THEN hour%=(hour%+1) MOD 4
+ 1770   PROCroom_look
+ 1780 ENDPROC
+ 1790 
+ 1800 DEF PROCroom_look
+ 1810   LOCAL i%
+ 1820   IF hour%=0 THEN PRINT "--- Dawn ---"
+ 1830   IF hour%=1 THEN PRINT "--- Day ---"
+ 1840   IF hour%=2 THEN PRINT "--- Dusk ---"
+ 1850   IF hour%=3 THEN PRINT "--- Night ---"
+ 1860   PRINT loc_name$(location%)
+ 1870   PRINT loc_desc$(location%)
+ 1880   FOR i%=1 TO MAX_ITEMS%
+ 1890     IF item_loc%(i%)=location% AND item_present%(i%) AND item_visible%(i%) THEN
+ 1900       PRINT "You see ";item_name$(i%);" here."
+ 1910     ENDIF
+ 1920   NEXT
+ 1930   FOR i%=1 TO MAX_NPCS%
+ 1940     IF npc_loc%(i%)=location% AND npc_alive%(i%) THEN
+ 1950       PRINT npc_name$(i%);" is here.";
+ 1960       IF npc_hostile%(i%) THEN PRINT " (hostile)" ELSE PRINT
+ 1970     ENDIF
+ 1980   NEXT
+ 1990   PRINT "Exits: ";
+ 2000   IF loc_n%(location%)>0 THEN PRINT "N ";
+ 2010   IF loc_s%(location%)>0 THEN PRINT "S ";
+ 2020   IF loc_e%(location%)>0 THEN PRINT "E ";
+ 2030   IF loc_w%(location%)>0 THEN PRINT "W ";
+ 2040   PRINT
+ 2050   REM Narrative hooks
+ 2060   IF location%=4 AND NOT freed_prisoner% THEN PRINT "A prisoner calls: Please, help me!"
+ 2070   IF location%=5 AND NOT talked_to_wizard% THEN PRINT "The wizard studies you with ancient eyes."
+ 2080   IF location%=6 AND NOT bridge_repaired% THEN PRINT "The bridge is destroyed."
+ 2090 ENDPROC
+ 2100 
+ 2110 DEF PROCinventory
+ 2120   LOCAL i%
+ 2130   PRINT "You carry:"
+ 2140   IF inv_count%=0 THEN PRINT "  (nothing)"
+ 2150   FOR i%=1 TO inv_count%
+ 2160     PRINT "  ";inventory$(i%)
+ 2170   NEXT
+ 2180   PRINT "Weapon: ";weapon$;" (dmg ";weapon_dmg%;")"
+ 2190   PRINT "Armour: ";armour%
+ 2200   PRINT "Gold: ";gold%
+ 2210 ENDPROC
+ 2220 
+ 2230 DEF PROCtake(name$)
+ 2240   LOCAL i%
+ 2250   IF inv_count%>=10 THEN msg$="Your hands are full!":ENDPROC
+ 2260   FOR i%=1 TO MAX_ITEMS%
+ 2270     IF item_loc%(i%)=location% AND item_present%(i%) THEN
+ 2280       IF name$="" OR INSTR(FNupper$(item_name$(i%)),name$) THEN
+ 2290         IF NOT item_takeable%(i%) THEN msg$="You can't take that.":ENDPROC
+ 2300         inv_count%=inv_count%+1
+ 2310         inventory$(inv_count%)=item_name$(i%)
+ 2320         item_present%(i%)=0
+ 2330         msg$="Taken: "+item_name$(i%)
+ 2340         REM Narrative triggers
+ 2350         IF name$="AMULET" THEN obtained_amulet%=TRUE:quest_stage%=3
+ 2360         ENDPROC
+ 2370       ENDIF
+ 2380     ENDIF
+ 2390   NEXT
+ 2400 ENDPROC
+ 2410 
+ 2420 DEF PROCdrop(name$)
+ 2430   LOCAL i%,j%
+ 2440   FOR i%=1 TO inv_count%
+ 2450     IF INSTR(FNupper$(inventory$(i%)),FNupper$(name$)) THEN
+ 2460       msg$="Dropped: "+inventory$(i%)
+ 2470       FOR j%=1 TO MAX_ITEMS%
+ 2480         IF NOT item_present%(j%) THEN item_loc%(j%)=location%:item_name$(j%)=inventory$(i%):item_takeable%(j%)=1:item_visible%(j%)=1:item_present%(j%)=1:j%=MAX_ITEMS%
+ 2490       NEXT
+ 2500       inventory$(i%)=""
+ 2510       FOR j%=i% TO inv_count%-1:inventory$(j%)=inventory$(j%+1):NEXT
+ 2520       inv_count%=inv_count%-1:ENDPROC
+ 2530     ENDIF
+ 2540   NEXT
+ 2550   msg$="You don't have that."
+ 2560 ENDPROC
+ 2570 
+ 2580 DEF PROCtalk
+ 2590   LOCAL i%
+ 2600   FOR i%=1 TO MAX_NPCS%
+ 2610     IF npc_loc%(i%)=location% AND npc_alive%(i%) THEN
+ 2620       IF npc_hostile%(i%) THEN msg$="They growl at you.":ENDPROC
+ 2630       npc_talked%(i%)=TRUE
+ 2640       IF i%=1 THEN msg$="Innkeeper: Beware the orc fortress to the east.":ENDPROC
+ 2650       IF i%=2 THEN freed_prisoner%=TRUE:msg$="Prisoner: Thank you! The wizard has the amulet.":quest_stage%=2:ENDPROC
+ 2660       IF i%=3 THEN
+ 2673         talked_to_wizard%=TRUE
+ 2680         IF obtained_amulet% THEN msg$="Wizard: The amulet! Use it at the fortress.":quest_stage%=4
+ 2690         ELSE msg$="Wizard: Find the silver amulet in the fortress."
+ 2700         ENDPROC
+ 2710       ENDIF
+ 2720     ENDIF
+ 2730   NEXT
+ 2740   msg$="Nobody here to talk to."
+ 2750 ENDPROC
+ 2760 
+ 2770 DEF PROCattack(name$)
+ 2780   LOCAL i%
+ 2790   FOR i%=1 TO MAX_NPCS%
+ 2800     IF npc_loc%(i%)=location% AND npc_alive%(i%) AND npc_hostile%(i%) THEN
+ 2810       PROCcombat(i%):ENDPROC
+ 2820     ENDIF
+ 2830   NEXT
+ 2840   msg$="Nothing hostile here."
+ 2850 ENDPROC
+ 2860 
+ 2870 DEF PROCcombat(npc_id%)
+ 2880   LOCAL mhp%,mdmg%,roll%,pdmg%
+ 2890   mhp%=npc_hp%(npc_id%):mdmg%=5
+ 2900   PRINT "Combat with ";npc_name$(npc_id%);"!"
+ 2910   WHILE mhp%>0 AND hp%>0
+ 2920     roll%=RND(20)+(weapon_dmg%-3)
+ 2930     IF roll%>=14 THEN mhp%=mhp%-RND(weapon_dmg%):PRINT "Hit!"
+ 2940     IF RND(20)>=12-armour%DIV2 THEN hp%=hp%-RND(mdmg%):PRINT "Hit by ";npc_name$(npc_id%);"!"
+ 2950   ENDWHILE
+ 2960   IF hp%<=0 THEN ENDPROC
+ 2970   npc_alive%(npc_id%)=FALSE
+ 2980   gold%=gold%+50
+ 2990   IF npc_id%=4 THEN defeated_orc%=TRUE:msg$="Orc guard defeated!":quest_stage%=4
+ 3000   IF npc_id%=5 THEN msg$="The Orc Chieftain falls! QUEST COMPLETE!":quest_stage%=5
+ 3010 ENDPROC
+ 3020 
+ 3030 DEF PROCuse(name$)
+ 3040   IF INSTR(name$,"KEY") AND INSTR(name$,"IRON") AND location%=7 AND npc_alive%(4) THEN msg$="The key unlocks the gate!":npc_alive%(4)=FALSE:msg$="Gate unlocked!"::ENDPROC
+ 3050   IF INSTR(name$,"PLANK") AND location%=6 AND NOT bridge_repaired% THEN bridge_repaired%=TRUE:msg$="You repair the bridge!":quest_stage%=4:ENDPROC
+ 3060   IF INSTR(name$,"AMULET") AND location%=7 AND NOT npc_alive%(4) THEN msg$="The amulet glows. You feel its power.":weapon_dmg%=10:ENDPROC
+ 3070   IF INSTR(name$,"SCROLL") THEN hp%=max_hp%:msg$="The scroll heals you!":ENDPROC
+ 3080   msg$="Nothing happens."
+ 3090 ENDPROC
+ 3100 
+ 3110 DEF PROCexamine(name$)
+ 3120   LOCAL i%
+ 3130   FOR i%=1 TO MAX_ITEMS%
+ 3140     IF item_loc%(i%)=location% AND item_present%(i%) THEN
+ 3150       IF INSTR(FNupper$(item_name$(i%)),name$) THEN PRINT "It looks ";:RESTORE 3400:PRINT FNgossip(i%):ENDPROC
+ 3160     ENDIF
+ 3170   NEXT
+ 3180   msg$="Nothing to see."
+ 3190 ENDPROC
+ 3200 
+ 3210 DEF PROCstats
+ 3220   PRINT "--- Knight Orc Stats ---"
+ 3230   PRINT "HP: ";hp%;"/";max_hp%
+ 3240   PRINT "Armour: ";armour%
+ 3250   PRINT "Weapon: ";weapon$;" (dmg ";weapon_dmg%;")"
+ 3260   PRINT "Gold: ";gold%
+ 3270   PRINT "Quest stage: ";quest_stage%
+ 3280   PRINT "Time: ";
+ 3290   IF hour%=0 THEN PRINT "Dawn"
+ 3300   IF hour%=1 THEN PRINT "Day"
+ 3310   IF hour%=2 THEN PRINT "Dusk"
+ 3320   IF hour%=3 THEN PRINT "Night"
+ 3330   PRINT "Turns: ";turn_count%
+ 3340 ENDPROC
+ 3350 
+ 3360 DEF FNgame_over
+ 3370   IF hp%<=0 THEN msg$="You have fallen...":=TRUE
+ 3380   IF quest_stage%=5 AND location%=7 AND NOT npc_alive%(5) THEN msg$="QUEST COMPLETE!":=TRUE
+ 3390   =FALSE
+ 3400 
+ 3410 DEF PROCgame_over
+ 3420   CLS
+ 3430   IF hp%<=0 THEN
+ 3440     PRINT "YOU DIED"
+ 3450     PRINT "Quest stage: ";quest_stage%
+ 3460     PRINT "Gold: ";gold%
+ 3470     PRINT "Narrative: ";
+ 3480     IF freed_prisoner% THEN PRINT "Freed prisoner. "; ELSE PRINT "Prisoner remains. ";
+ 3490     IF talked_to_wizard% THEN PRINT "Spoke to wizard. ";
+ 3500     IF defeated_orc% THEN PRINT "Defeated the guard. ";
+ 3510     IF bridge_repaired% THEN PRINT "Bridge repaired. ";
+ 3520   ELSE
+ 3530     PRINT "QUEST COMPLETE!"
+ 3540     PRINT "The orc fortress falls. The land is free!"
+ 3550     PRINT "Gold: ";gold%
+ 3560     PRINT "Turns: ";turn_count%
+ 3570   ENDIF
+ 3580   PRINT:PRINT "Press any key..."
+ 3590   REPEAT UNTIL INKEY(0)>=0
+ 3600   END
+ 3610 ENDPROC
+ 3620 
+ 3630 DEF PROChelp
+ 3640   PRINT "Commands: N/S/E/W, LOOK, INVENTORY"
+ 3650   PRINT "  TAKE <item>, DROP <item>"
+ 3660   PRINT "  TALK, ATTACK, USE <item>"
+ 3670   PRINT "  EXAMINE, WAIT, STATS, QUIT"
+ 3680 ENDPROC
+ 3690 
+ 3700 DEF PROCquit
+ 3710   PRINT "Goodbye, knight."
+ 3720   END
+ 3730 ENDPROC
+ 3740 
+ 3750 DEF PROClens_snapshot
+ 3760   LOCAL L$,i%
+ 3770   L$="{"
+ 3780   L$=L$+"""location"":"+STR$(location%)+","
+ 3790   L$=L$+"""hp"":"+STR$(hp%)+","
+ 3800   L$=L$+"""gold"":"+STR$(gold%)+","
+ 3810   L$=L$+"""weapon"":"""+weapon$+""","
+ 3820   L$=L$+"""armour"":"+STR$(armour%)+","
+ 3830   L$=L$+"""quest_stage"":"+STR$(quest_stage%)+","
+ 3840   L$=L$+"""turn_count"":"+STR$(turn_count%)+","
+ 3850   L$=L$+"""hour"":"+STR$(hour%)+","
+ 3860   L$=L$+"""freed_prisoner"":"+STR$(freed_prisoner%)+","
+ 3870   L$=L$+"""obtained_amulet"":"+STR$(obtained_amulet%)+","
+ 3880   L$=L$+"""defeated_orc"":"+STR$(defeated_orc%)+","
+ 3890   L$=L$+"""bridge_repaired"":"+STR$(bridge_repaired%)+","
+ 3900   L$=L$+"""inventory"":["
+ 3910   FOR i%=1 TO inv_count%
+ 3920     IF i%>1 THEN L$=L$+","
+ 3930     L$=L$+""""+inventory$(i%)+""""
+ 3940   NEXT
+ 3950   L$=L$+"]}"
+ 3960   PRINT L$
+ 3970 ENDPROC
+ 3980 
+ 3990 DEF FNupper$(s$)
+ 4000   LOCAL i%,c%,r$:r$=""
+ 4010   FOR i%=1 TO LEN(s$):c%=ASC(MID$(s$,i%,1)):IF c%>=97 AND c%<=122 THEN c%=c%-32
+ 4020   r$=r$+CHR$(c%):NEXT:=r$
+ 4030 
+ 4040 DEF FNfirst_word(s$)
+ 4050   LOCAL p%:p%=INSTR(s$," "):IF p%=0 THEN =s$
+ 4060   =LEFT$(s$,p%-1)
+ 4070 
+ 4080 DEF FNrest_words(s$)
+ 4090   LOCAL p%:p%=INSTR(s$," "):IF p%=0 THEN =""
+ 4100   =MID$(s$,p%+1)
+ 4110 
+ 4120 DEF FNgossip(idx%)
+ 4130   DATA "valuable.","shiny.","old and worn."
+ 4140   DATA "heavy.","delicate.","mysterious."
+ 4150   RETURN

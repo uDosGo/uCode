@@ -26,11 +26,11 @@ class TestLensRegistry:
 
     def test_list_programs_returns_expected_programs(self):
         programs = gridcore_adapter.list_programs()
-        assert "repton" in programs, f"Expected 'repton' in programs, got: {programs}"
-        assert "elite" in programs, f"Expected 'elite' in programs, got: {programs}"
-        assert "nethack" in programs, f"Expected 'nethack' in programs, got: {programs}"
-        assert "eamon" in programs, f"Expected 'eamon' in programs, got: {programs}"
-        assert len(programs) >= 4, f"Expected at least 4 programs, got: {len(programs)}"
+        expected = ["apple-panic", "eamon", "elite", "knight-orc",
+                    "nethack", "repton", "uconstruct"]
+        for p in expected:
+            assert p in programs, f"Expected '{p}' in programs, got: {programs}"
+        assert len(programs) >= 7, f"Expected at least 7 programs, got: {len(programs)}"
 
     def test_list_programs_is_sorted(self):
         programs = gridcore_adapter.list_programs()
@@ -52,20 +52,16 @@ class TestLensCommands:
         output = result["output"]
         assert isinstance(output, list), f"Expected list output, got: {type(output)}"
         combined = " ".join(output)
-        assert "repton" in combined, f"Expected 'repton' in LENS HELP: {combined}"
-        assert "elite" in combined, f"Expected 'elite' in LENS HELP: {combined}"
-        assert "nethack" in combined, f"Expected 'nethack' in LENS HELP: {combined}"
-        assert "eamon" in combined, f"Expected 'eamon' in LENS HELP: {combined}"
+        for p in gridcore_adapter.list_programs():
+            assert p in combined, f"Expected '{p}' in LENS HELP: {combined}"
 
     def test_lens_list_shows_programs(self):
         result = gridcore_adapter.dispatch_command("LENS LIST")
         output = result["output"]
         assert isinstance(output, list), f"Expected list output, got: {type(output)}"
         combined = " ".join(output)
-        assert "repton" in combined, f"Expected 'repton' in LENS LIST: {combined}"
-        assert "elite" in combined, f"Expected 'elite' in LENS LIST: {combined}"
-        assert "nethack" in combined, f"Expected 'nethack' in LENS LIST: {combined}"
-        assert "eamon" in combined, f"Expected 'eamon' in LENS LIST: {combined}"
+        for p in gridcore_adapter.list_programs():
+            assert p in combined, f"Expected '{p}' in LENS LIST: {combined}"
 
     def test_lens_capture_repton(self):
         """Capture should load extractor and report snapshot success."""
@@ -102,6 +98,35 @@ class TestCaptureProgramState:
         state = gridcore_adapter.capture_program_state("elite")
         assert isinstance(state, dict), f"Expected dict, got: {type(state)}"
         assert len(state) > 0, f"Expected non-empty state, got: {state}"
+
+    def test_capture_all_new_programs(self):
+        new_programs = ["uconstruct", "knight-orc", "apple-panic"]
+        for prog in new_programs:
+            state = gridcore_adapter.capture_program_state(prog)
+            assert state is not None, f"Expected state for '{prog}', got None"
+            assert isinstance(state, dict)
+            assert len(state) > 0, f"Empty state for '{prog}'"
+
+    def test_uconstruct_state_has_map_fields(self):
+        state = gridcore_adapter.capture_program_state("uconstruct")
+        assert state["map_width"] == 15
+        assert state["map_height"] == 15
+        assert state["selected_tile"] == 6
+        assert "tile_counts" in state
+
+    def test_knight_orc_state_has_narrative_flags(self):
+        state = gridcore_adapter.capture_program_state("knight-orc")
+        assert state["quest_stage"] == 0
+        assert not state["freed_prisoner"]
+        assert not state["defeated_orc"]
+        assert "inventory" in state
+
+    def test_apple_panic_state_has_arcade_fields(self):
+        state = gridcore_adapter.capture_program_state("apple-panic")
+        assert state["lives"] == 3
+        assert state["level"] == 1
+        assert state["score"] == 0
+        assert state["enemy_count"] == 3
 
 
 class TestMockEmulator:

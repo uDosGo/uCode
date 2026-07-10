@@ -65,6 +65,9 @@ _LENS_PROGRAMS: Dict[str, str] = {
     "elite": "elite_lens",
     "nethack": "nethack_lens",
     "eamon": "eamon_lens",
+    "uconstruct": "uconstruct_lens",
+    "knight-orc": "knight_orc_lens",
+    "apple-panic": "apple_panic_lens",
 }
 
 _REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -73,6 +76,9 @@ _LENS_MODULE_FILES: Dict[str, Path] = {
     "elite": _REPO_ROOT / "programs" / "elite" / "lens" / "elite_lens.py",
     "nethack": _REPO_ROOT / "programs" / "nethack" / "lens" / "nethack_lens.py",
     "eamon": _REPO_ROOT / "programs" / "eamon" / "lens" / "eamon_lens.py",
+    "uconstruct": _REPO_ROOT / "programs" / "uconstruct" / "lens" / "uconstruct_lens.py",
+    "knight-orc": _REPO_ROOT / "programs" / "knight-orc" / "lens" / "knight_orc_lens.py",
+    "apple-panic": _REPO_ROOT / "programs" / "apple-panic" / "lens" / "apple_panic_lens.py",
 }
 
 

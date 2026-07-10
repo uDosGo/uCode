@@ -1,6 +1,18 @@
-version: "1.0.0"
-updated: "2026-07-08T12:34:00Z"
-round: "sprint-2026-07-10-closed"
+version: "1.0.1"
+updated: "2026-07-10T14:30:00Z"
+round: "sprint-2026-07-10-handover-complete"
+
+changes_2026_07_08:
+  - "uConstruct: 296-line BBC BASIC tile map editor with save/load, 7 tile types, LENS snapshot"
+  - "NetHack: 266-line BBC BASIC dungeon crawler (4 rooms, combat, inventory, LENS live state)"
+  - "Eamon: 431-line BBC BASIC text adventure (VERB NOUN parser, 8 rooms, NPCs, combat, puzzles)"
+  - "Knight Orc: 415-line BBC BASIC interactive fiction (branching narrative, time system, 5 NPCs)"
+  - "Apple Panic: 19 regression tests for scoring, difficulty, enemy behavior (core existed at 281 lines)"
+  - "Shared runtime extraction: udos_shared package with grid models, coords, exceptions (24 tests)"
+  - "ucode1 core_py/grid re-exports from udos_shared — both runtimes use shared code"
+  - "LENS registry expanded: 7 programs (repton, elite, nethack, eamon, uconstruct, knight-orc, apple-panic)"
+  - "Integration/E2E confidence: LENS capture tests for all 7 programs with semantic state assertions"
+  - "303 tests passing across all packages (shared, uconstruct, nethack, eamon, knight-orc, apple-panic, runtime)"
 
 changes_2026_07_01:
   - "Docs: imported GRIDSMITH_DEV_PLAN.md, UCODE_RUNTIME_SPEC.md, INTEGRATION.md"
@@ -107,20 +119,4 @@ changes_2026_07_06_s6:
   - "Sprint: Closed sprint.2026-07-06 (46 tasks, all complete)"
   - "Sprint: Created sprint.2026-07-08 (Repton adaptation, 11 tasks)"
 
-changes_2026_07_08:
-  - "Skills: uCode-Weaver skill (agents/gridsmith/src/tools/ucode-weaver.ts) - BBC BASIC skeleton from GDD"
-  - "Skills: All 6 Skills Framework skills complete (Source-Miner, LENS-Craft, SKIN-Weaver, MCP-Scribe, Inspire-Engine, uCode-Weaver)"
-  - "GridSmith: 16 tools, 75 tests, 8 suites"
-  - "Repton: Full pipeline - 31 LENS extractors, 4 MCP commands, SKIN manifest, 253-line BBC BASIC skeleton"
-  - "Elite: Source fixture created, pipeline run - 20 LENS extractors, 9 MCP commands, 2 SKIN mappings"
-  - "Apple Panic: 281-line refined BBC BASIC with digging/trapping mechanics"
-  - "Knight Orc: 64-line BBC BASIC skeleton via uCode-Weaver"
-  - "Runtime: LENS program registry (Repton + Elite), LENS CAPTURE/LIST/RESTORE commands"
-  - "Eamon: Applesoft BASIC research document with data structures and porting strategy"
-  - "NetHack: C-to-BBC BASIC port research and scaffold"
-  - "uConstruct: Tile editor scaffold with resource system design"
-  - "Sprint: Closed sprint.2026-07-08 (13 tasks, 12 complete + 1 skipped)"
-  - "Sprint: Closed sprint.2026-07-09 (13 tasks, all complete)"
-  - "Sprint: Closed sprint.2026-07-06 re-confirmed (35 tasks)"
-
-current_dev_flow: "All 4 sprints closed (2026-07-06, 2026-07-08, 2026-07-09, 2026-07-10). 85 tasks tracked, 83 complete. 7 programs with BBC BASIC skeletons. 6 Skills Framework skills with 75 tests. LENS registry with mock emulator tests passing. Viewport demo fully wired. Project infrastructure complete."
+current_dev_flow: "All 4 sprints closed (2026-07-06, 2026-07-08, 2026-07-09, 2026-07-10). 85 tasks tracked, 83 complete. 7 programs fully playable with BBC BASIC. 6 Skills Framework skills with 75 tests. LENS registry with 7 programs and semantic state assertions. 307 tests passing across all packages."

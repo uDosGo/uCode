@@ -4,20 +4,23 @@
 # Provides functionality for grid-based data structures without Rust dependencies.
 
 """
-Grid Core - Python Implementation
+Grid Core
 
-Provides:
-- Grid data structures (Grid, GridCell, GridRegion)
-- Coordinate systems (Cartesian, Hexagonal, Isometric)
-- Grid operations (slice, rotate, flip, transform)
-- Spatial indexing and neighbors
-- Pathfinding utilities
-- Layer/stack management
-
-This is the Python replacement for the Rust grid-core crate.
+Shared models and coordinate systems come from udos_shared.
+Runtime-specific operations (neighbors, pathfinding, layers, monodraw)
+remain in this package.
 """
 
-from .coords import (
+# Re-export shared core models from udos_shared
+from udos_shared import (
+    Coordinate,
+    CoordSystem,
+    Grid,
+    GridCell,
+    GridRegion,
+    GridSize,
+)
+from udos_shared import (
     CoordinateSystem,
     axial_to_cube,
     cartesian_to_offset,
@@ -26,11 +29,15 @@ from .coords import (
     offset_to_cartesian,
     offset_to_cube,
 )
-from .exceptions import (
+from udos_shared import (
     CoordinateError,
     GridBoundsError,
     GridError,
     GridSizeError,
+)
+
+# Runtime-specific (not in shared)
+from .exceptions import (
     GridTypeError,
     LayerError,
     PathNotFoundError,
@@ -39,14 +46,6 @@ from .layers import (
     GridLayer,
     GridStack,
     LayerType,
-)
-from .models import (
-    Coordinate,
-    CoordSystem,
-    Grid,
-    GridCell,
-    GridRegion,
-    GridSize,
 )
 from .monodraw import (
     edit_grid_interactive,
