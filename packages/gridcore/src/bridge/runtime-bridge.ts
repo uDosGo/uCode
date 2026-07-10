@@ -160,6 +160,10 @@ function defaultDispatcher(command: string): CommandResult {
 
 // ── RuntimeBridge ─────────────────────────────────────────────────
 
+// Re-export for consumers
+export { PythonProcessBridge } from './python-process-bridge'
+export type { PythonBridgeOptions } from './python-process-bridge'
+
 export class RuntimeBridge {
   private mode: BridgeMode
   private dispatcher: CommandDispatcher
